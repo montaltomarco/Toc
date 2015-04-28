@@ -1,0 +1,14 @@
+<resources>
+    <string name="title_activity_login">Log In</string>
+
+    <!-- Strings related to login -->
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Mot de passe</string>
+    <string name="action_log_in">Se connecter</string>
+    <string name="action_sign_in_short">S'inscrire</string>
+
+    <string name="error_invalid_email">Adresse Email invalide</string>
+    <string name="error_invalid_password">Mot de passe invalide</string>
+    <string name="error_incorrect_password">Mot de passe incorrect</string>
+    <string name="error_field_required">Champ obligatoire</string>
+</resources>
