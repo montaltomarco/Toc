@@ -5,10 +5,18 @@
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Mot de passe</string>
     <string name="action_log_in">Se connecter</string>
-    <string name="action_sign_in_short">S'inscrire</string>
+    <string name="action_sign_in_short">S\'inscrire</string>
 
     <string name="error_invalid_email">Adresse Email invalide</string>
     <string name="error_invalid_password">Mot de passe invalide</string>
     <string name="error_incorrect_password">Mot de passe incorrect</string>
     <string name="error_field_required">Champ obligatoire</string>
+
+    <!-- Strings related to signin-->
+    <string name="prompt_password_confirm">Confirmez votre mot de passe</string>
+    <string name="name">Nom</string>
+    <string name="first_name">Prénom</string>
+    <string name="adress">Adresse</string>
+    <string name="age">Age</string>
+
 </resources>

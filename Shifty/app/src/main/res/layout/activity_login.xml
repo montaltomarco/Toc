@@ -34,14 +34,16 @@
                 android:layout_width="184dp" android:layout_height="wrap_content"
                 android:layout_marginTop="16dp" android:text="@string/action_log_in"
                 android:textStyle="bold"
-                android:layout_gravity="center_horizontal" />
+                android:layout_gravity="center_horizontal"
+                android:onClick="connectToService" />
 
             <Button
                 android:layout_width="184dp"
                 android:layout_height="wrap_content"
                 android:text="S&apos;inscrire"
                 android:id="@+id/sign_in_button"
-                android:layout_gravity="center_horizontal" />
+                android:layout_gravity="center_horizontal"
+                android:onClick="signInPage" />
 
         </LinearLayout>
     </ScrollView>
