@@ -38,14 +38,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="fr.insa_lyon.shifty.MainActivity" />
         </activity>
-        <activity
-            android:name=".DrawerActivity"
-            android:label="@string/title_activity_drawer"
-            android:parentActivityName=".MainActivity" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="fr.insa_lyon.shifty.MainActivity" />
-        </activity>
     </application>
 
 </manifest>
