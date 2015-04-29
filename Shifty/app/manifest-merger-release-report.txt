@@ -79,14 +79,6 @@ ADDED from AndroidManifest.xml:33:9
 		ADDED from AndroidManifest.xml:36:13
 	android:name
 		ADDED from AndroidManifest.xml:34:13
-activity#fr.insa_lyon.shifty.DrawerActivity
-ADDED from AndroidManifest.xml:41:9
-	android:label
-		ADDED from AndroidManifest.xml:43:13
-	android:parentActivityName
-		ADDED from AndroidManifest.xml:44:13
-	android:name
-		ADDED from AndroidManifest.xml:42:13
 uses-sdk
 INJECTED from AndroidManifest.xml:0:0 reason: use-sdk injection requested
 MERGED from com.android.support:appcompat-v7:21.0.3:15:5

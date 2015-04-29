@@ -43,7 +43,7 @@
                 android:text="S&apos;inscrire"
                 android:id="@+id/sign_in_button"
                 android:layout_gravity="center_horizontal"
-                android:onClick="signInPage" />
+                android:onClick="signInSwitch" />
 
         </LinearLayout>
     </ScrollView>

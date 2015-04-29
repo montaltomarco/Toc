@@ -25,4 +25,34 @@
             android:layout_centerHorizontal="true" />
     </RelativeLayout>
 
+    <ImageButton
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:id="@+id/ButtonContact"
+        android:background="@drawable/mindmap"
+        android:nestedScrollingEnabled="false"
+        android:layout_alignTop="@+id/ButtonInscription"
+        android:layout_alignParentStart="true"
+        android:onClick="ButtonOnClick" />
+
+    <ImageButton
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:id="@+id/ButtonInscription"
+        android:background="@drawable/checklist"
+        android:nestedScrollingEnabled="false"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:onClick="ButtonOnClick" />
+
+    <ImageButton
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:id="@+id/ButtonLogin"
+        android:background="@drawable/database"
+        android:nestedScrollingEnabled="false"
+        android:layout_alignTop="@+id/ButtonInscription"
+        android:layout_alignParentEnd="true"
+        android:onClick="ButtonOnClick" />
+
 </RelativeLayout>

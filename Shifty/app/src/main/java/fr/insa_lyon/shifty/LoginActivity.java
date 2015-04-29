@@ -265,7 +265,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 
     /* OnClick method for the signin button, switches to the signInActivity*/
 
-    private void signInSwitch()
+    public void signInSwitch()
     {
         Intent signInScreen = new Intent(getApplicationContext(),SignInActivity.class);
         startActivity(signInScreen);

@@ -1,5 +1,6 @@
 package fr.insa_lyon.shifty;
 
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
@@ -46,6 +47,22 @@ public class MainActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+    /* Button handler */
+    public void ButtonOnClick(View v) {
+        switch (v.getId()) {
+            case R.id.ButtonContact:
+                //Intent nextView = new Intent(getApplicationContext(),)
+                break;
+            case R.id.ButtonInscription:
+                Intent nextView = new Intent(getApplicationContext(),SignInActivity.class);
+                startActivity(nextView);
+                break;
+            case R.id.ButtonLogin:
+                Intent nextViewLog = new Intent(getApplicationContext(),LoginActivity.class);
+                startActivity(nextViewLog);
+                break;
+        }
     }
 
     /**
