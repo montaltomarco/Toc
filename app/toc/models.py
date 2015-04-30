@@ -26,7 +26,7 @@ class Personne(models.Model):
 class Itineraire(models.Model):
     start_pos = models.ForeignKey(Lieu,related_name="start_pos")
     end_pos = models.ForeignKey(Lieu,related_name="end_pos")
-    sections = models.ManyToOneField(Section)
+    #sections = models.ManyToOneField(Section)
     personnes = models.ManyToManyField(Personne)
 
     def __str__(self):
@@ -56,9 +56,21 @@ class Data_velo(models.Model):
 class Station_velov(Lieu):
     number_station = models.IntegerField()
 
+class Ligne_TCL(models.Model):
+    codeTitan = models.CharField(max_length = 20)
+    ligne = models.CharField(max_length = 20)
+    sens = models.CharField(max_length = 20)
+    indice = models.CharField(max_length = 100)
+    infos = models.CharField(max_length = 100)
+    libelle = models.CharField(max_length=20)
+    arrets = models.ManyToManyField('Arret_TCL')
+    stations_velov = models.ManyToManyField(Station_velov)
+
+    def __str__(self):
+        return self.codeTitan+" "+self.libelle
 
 class Arret_TCL(Lieu):
-    id = models.IntegerField()
+    #id = models.IntegerField()
     nom = models.CharField(max_length = 100)
     lignes = models.ManyToManyField(Ligne_TCL)
     pmr = models.BooleanField()
@@ -66,19 +78,6 @@ class Arret_TCL(Lieu):
 
     def __str__(self):
         return self.nom+" "+super(Arret_TCL,self).__str__()
-
-class Ligne_TCL(models.Model):
-    codeTitan = models.CharField(max_length = 20)
-    ligne = models.CharField(max_field = 20)
-    sens = models.CharField(max_field = 20)
-    indice = models.CharField(max_field = 100)
-    infos = models.CharField(max_field = 100)
-    libelle = models.CharField(max_field=20)
-    arrets = models.ManyToManyField(Arret_TCL)
-    stations_velov = models.ManyToManyField(Station_velov)
-
-    def __str__(self):
-        return self.codeTitan+" "+self.libelle
 
 class Vecteur(models.Model):
     depart = models.ManyToManyField(Lieu,related_name="depart")
@@ -143,20 +142,18 @@ class Section(models.Model):
 
 class PropositionItineraire(models.Model):
     #parent = models.ForeignKey(DemandeItineraire)
-    moyen = models.ManyToMany(MoyenTransport)
+    moyen = models.ManyToManyField(MoyenTransport)
     itineraire = models.ForeignKey(Itineraire)
 
+class Trajet(models.Model):
+    departTraj = models.ManyToManyField(Lieu,related_name="departTraj")
+    arriveeTraj = models.ManyToManyField(Lieu,related_name="arriveeTraj")
+    moyens_transports_demande = models.ManyToManyField(MoyenTransport)
 
 #Classe utilisee pour le calcul d'un itineraire
 #la classe doit etre remplie avec les donnees de la
 #requete itineraire client
 class DemandeItineraire(models.Model):
     trajet = models.ForeignKey(Trajet)
-    listeProposition = models.OneToMany(PropositionItineraire)
-
-
-class Trajet(models.Model):
-    depart = models.ManyToManyField(Lieu,related_name="depart")
-    arrivee = models.ManyToManyField(Lieu,related_name="arrivee")
-    moyens_transports_demande = models.ManyToManyField(MoyenTransport)
+    #listeProposition = models.OneToMany(PropositionItineraire)
 
