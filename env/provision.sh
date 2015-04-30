@@ -2,16 +2,24 @@
 sudo apt-get update
 sudo apt-get install build-essential python-dev python-pip curl -y
 
-
 # install NginX, uWSGI and Redis
 sudo apt-get install nginx-full uwsgi uwsgi-plugin-python redis-server -y
 
-
-# install flask
+# install django
 sudo pip install django
-# install sqlalchemy
+
+# install postgresql
 sudo apt-get install libmysqlclient-dev python-mysqldb -y
 sudo pip install mysql-python
+sudo apt-get install libpq-dev -y
+sudo pip install psycopg2
+sudo apt-get install postgresql -y
+
+sudo cp /vagrant/conf/pg_hba.conf /etc/postgresql/*/main/pg_hba.conf
+sudo service postgresql restart
+sudo createdb db_data -U postgres
+sudo su - postgres -c "psql -U postgres -d db_data -c \"alter user postgres with password 'postgres';\""
+sudo service postgresql restart
 
 export PYTHONPATH=/app/TocApplication
 echo 'export PYTHONPATH=/app/TocApplication/' >> ~/.bashrc
