@@ -1,5 +1,6 @@
 from django.db import models
 from math import *
+from collections import *
 
 # Create your models here.
 
@@ -113,7 +114,7 @@ class Arret_TCL(Lieu):
     def __str__(self):
         return self.nom+" "+super(Arret_TCL,self).__str__()
 
-#Definit un carre autour d'un point d'origine afin de fournir des coordonnées
+#Definit un carre autour d'un point d'origine afin de fournir des coordonnees
 #de polygone en vue d'une recherche (stations Velov environnantes par exemple)
 class Carre_recherche(models.Model):
     origine = models.ForeignKey(Lieu)
@@ -139,10 +140,10 @@ class Carre_recherche(models.Model):
         oY = self.origine.lat
         #delta POSITIF entre l'origine et
         #le bord Nord, Sud, Est ou Ouest du carre
-        o_to_N = metres_to_coordY(rayon + offsetY)
-        o_to_S = metres_to_coordY(rayon - offsetY)
-        o_to_E = metres_to_coordX(rayon + offsetX)
-        o_to_W = metres_to_coordX(rayon - offsetX)
+        o_to_N = metres_to_coordY(self.rayon + self.offsetY)
+        o_to_S = metres_to_coordY(self.rayon - self.offsetY)
+        o_to_E = metres_to_coordX(self.rayon + self.offsetX)
+        o_to_W = metres_to_coordX(self.rayon - self.offsetX)
         self.begX = oX - o_to_W
         self.begY = oY - o_to_S
         self.endX = oX + o_to_E
@@ -163,8 +164,8 @@ class Vecteur(models.Model):
         self.calculer_distance()
 
     def calculer_distance(self):
-        deltaT = abs(self.depart.lat - self.depart.lat)*111.120
-        deltaL = abs(self.arrivee.lon - self.depart.lon)*75.75
+        deltaT = coordY_to_metres(abs(self.depart.lat - self.depart.lat))
+        deltaL = coordX_to_metres(abs(self.arrivee.lon - self.depart.lon))
         self.distance = sqrt(deltaT**2+deltaL**2)
         return self.distance
 
@@ -186,43 +187,59 @@ class Moyen_velov(MoyenTransport):
     rayon_recherche_beg = [0,500,1000,1500]
     rayon_recherche_end = [500,1000,1500,3000]
     def calculerItineraire(self,itineraire,user):
+        stations_dep = self.getStationsZone(itineraire,user,True)
+        stations_arr = self.getStationsZone(itineraire,user,False)
+        if len(stations_dep)==0 or len(stations_arr)==0 :
+            return False
+
+        #TODO a optimiser
+        dist_stations_dep = {}
+        for station in stations_dep:
+            vect = Vecteur(station,itineraire.start_pos)
+            dist_stations_dep[vect.calculer_distance()] = station
+
+        dist_stations_arr = {}
+        for station in stations_arr:
+            vect = Vecteur(station,itineraire.end_pos)
+            dist_stations_dep[vect.calculer_distance()] = station
+
+        ord_stations_dep = OrderedDict(sorted(dist_stations_dep.items(), key=lambda t: t[0]))
+        ord_stations_arr = OrderedDict(sorted(dist_stations_arr.items(), key=lambda t: t[0]))
+
+        #TODO
+        #Calculer le chemin entre les deux stations no1
+        #calculer_chemin(ord_stations_dep.popleft(),ord_stations_arr.popleft())
+
+        return True
+
+    def getStationsZone(self,itineraire,user,depart):
         stations_libres_trouvees = False
         step = 0;
+        zone_rech = Carre_recherche()
+        zone_rech.origine = itineraire.start_pos
+        dX = (itineraire.end_pos.lon - itineraire.start_pos.lon)
+        dY = (itineraire.end_pos.lat - itineraire.start_pos.lat)
+        if not(depart):
+            dX = -dX
+            dY = -dY
+
+        dX_norme = dX / sqrt(dX**2+dY**2)
+        dY_norme = dY / sqrt(dX**2+dY**2)
+
+        #TODO
+        vPied = 1
+        vVelo = 5
+
         while not(stations_libres_trouvees and step<len(self.rayon_recherche_end)):
-            zone_rech = Carre_recherche()
-            zone_rech.origine = itineraire.start_pos
             zone_rech.rayon = self.rayon_recherche_end[step]
-            dX = (itineraire.end_pos.lon - itineraire.start_pos.lon)
-            dY = (itineraire.end_pos.lat - itineraire.start_pos.lat)
-            dX_norme = dX / sqrt(dX**2+dY**2)
-            dY_norme = dY / sqrt(dX**2+dY**2)
-            #TODO
-            vPied = 1
-            vVelo = 5
-            #DEPRECATED
-            # if dX!=0:
-            #     factX = dX/abs(dX)
-            # else:
-            #     factX = 0
-            #
-            # if dY!=0:
-            #     factY = dY/abs(dY)
-            # else:
-            #     factY = 0
             zone_rech.offsetX = dX_norme*itineraire.distance_directe*(vVelo-vPied)/(vVelo+vPied)
             zone_rech.offsetY = dY_norme*itineraire.distance_directe*(vVelo-vPied)/(vVelo+vPied)
 
             zone_rech.calculerCarre()
-
             stations_proches = reseau_velov.getStation(zone_rech,True)
-            if len(stations_proches) > 0 :
-                stations_libres_trouvees = True
-        if not(stations_libres_trouvees):
-            return False
 
-        for station in stations_proches:
-            
-        return True
+        return stations_proches
+
 
 class Moyen_pied(MoyenTransport):
     def calculerItineraire(self,itineraire):
@@ -292,7 +309,7 @@ class Trajet(models.Model):
 #requete itineraire client
 class DemandeItineraire(models.Model):
     trajet = models.ForeignKey(Trajet)
-    listeProposition = models.ManyToMany(PropositionItineraire)
+    listeProposition = models.ManyToManyField(PropositionItineraire)
     personne = models.ForeignKey(Personne)
 
     def obtenir_propositions(self):
