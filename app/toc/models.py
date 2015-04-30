@@ -1,7 +1,34 @@
 from django.db import models
-from math import sqrt
+from math import *
 
 # Create your models here.
+
+#coordX etant une coordonnee GPS sens W/E en degres decimaux
+def coordX_to_metres(deltaX):
+    return deltaX*75750
+
+#coordX etant une coordonnee GPS sens N/S en degres decimaux
+def coordY_to_metres(deltaY):
+    return deltaY*111120
+
+def metres_to_coordX(distance):
+    return distance/7575
+
+def metres_to_coordY(distance):
+    return distance/111120
+
+#Definit un reseau de stations et de lignes
+# comme le reseau d'arret TCL ou le reseau de velov
+class Reseau(models.Model):
+    nombreDeStation = models.IntegerField()
+
+    def getStation(self,zoneRecherche,station_depart):
+        stations = [Station_velov(),Station_velov(),Station_velov()]
+        return stations
+
+reseau_velov = Reseau()
+reseau_TCL = Reseau()
+
 class Lieu(models.Model):
 	lat = models.FloatField('Latitude')
 	lon = models.FloatField('Longitude')
@@ -10,7 +37,7 @@ class Lieu(models.Model):
 		return self.adresse.encode('utf-8', errors='replace')
 
 class Section(models.Model):
-	type_transport = models.CharField(max_length=200)
+	moyen_transport = models.ForeignKey("MoyenTransport")
 	en_cours = models.BooleanField('en_cours')
 	distance = models.IntegerField()
 	taux_pollution = models.FloatField('Pollution')
@@ -26,8 +53,13 @@ class Personne(models.Model):
 class Itineraire(models.Model):
     start_pos = models.ForeignKey(Lieu,related_name="start_pos")
     end_pos = models.ForeignKey(Lieu,related_name="end_pos")
-    #sections = models.ManyToOneField(Section)
+    sections = models.ManyToManyField(Section)
     personnes = models.ManyToManyField(Personne)
+    distance_directe = models.IntegerField(default=0)
+
+    def calculer_distance_directe(self):
+        #self.personne.getVitesse(Moyen_pied())
+        return sqrt(coordX_to_metres(self.trajet.depart_traj.lon-self.trajet.arrivee_traj.lon)**2+coordY_to_metres(self.trajet.depart_traj.lat-self.trajet.arrivee_traj.lat)**2)
 
     def __str__(self):
 		return self.start_pos.name
@@ -57,6 +89,7 @@ class Station_velov(Lieu):
     number_station = models.IntegerField()
 
 class Ligne_TCL(models.Model):
+    reseau = models.ForeignKey(Reseau)
     codeTitan = models.CharField(max_length = 20)
     ligne = models.CharField(max_length = 20)
     sens = models.CharField(max_length = 20)
@@ -70,6 +103,7 @@ class Ligne_TCL(models.Model):
         return self.codeTitan+" "+self.libelle
 
 class Arret_TCL(Lieu):
+    reseau = models.ForeignKey(Reseau)
     #id = models.IntegerField()
     nom = models.CharField(max_length = 100)
     lignes = models.ManyToManyField(Ligne_TCL)
@@ -78,6 +112,42 @@ class Arret_TCL(Lieu):
 
     def __str__(self):
         return self.nom+" "+super(Arret_TCL,self).__str__()
+
+#Definit un carre autour d'un point d'origine afin de fournir des coordonnées
+#de polygone en vue d'une recherche (stations Velov environnantes par exemple)
+class Carre_recherche(models.Model):
+    origine = models.ForeignKey(Lieu)
+    #rayon en metres
+    rayon = models.IntegerField()
+    #offset POSITIF exprimant un decalage vers l'EST en metres
+    offsetX = models.IntegerField()
+    #offset POSITIF exprimant le decalage vers le NORD en metres
+    offsetY = models.IntegerField()
+
+    #begX : extreme OUEST en coord
+    begX = models.FloatField()
+    #begY : extreme SUD en coord
+    begY = models.FloatField()
+
+    #endX : extreme EST en coord
+    endX = models.FloatField()
+    #endY : extreme NORD en coord
+    endY = models.FloatField()
+
+    def calculerCarre(self):
+        oX = self.origine.lon
+        oY = self.origine.lat
+        #delta POSITIF entre l'origine et
+        #le bord Nord, Sud, Est ou Ouest du carre
+        o_to_N = metres_to_coordY(rayon + offsetY)
+        o_to_S = metres_to_coordY(rayon - offsetY)
+        o_to_E = metres_to_coordX(rayon + offsetX)
+        o_to_W = metres_to_coordX(rayon - offsetX)
+        self.begX = oX - o_to_W
+        self.begY = oY - o_to_S
+        self.endX = oX + o_to_E
+        self.endY = oY + o_to_N
+
 
 class Vecteur(models.Model):
     depart = models.ManyToManyField(Lieu,related_name="depart")
@@ -108,6 +178,64 @@ class MoyenTransport(models.Model):
         self.nom = nomP
         self.code = codeP
         self.parent = parentP
+
+    def calculerItineraire(self,itineraire):
+        return False
+
+class Moyen_velov(MoyenTransport):
+    rayon_recherche_beg = [0,500,1000,1500]
+    rayon_recherche_end = [500,1000,1500,3000]
+    def calculerItineraire(self,itineraire,user):
+        stations_libres_trouvees = False
+        step = 0;
+        while not(stations_libres_trouvees and step<len(self.rayon_recherche_end)):
+            zone_rech = Carre_recherche()
+            zone_rech.origine = itineraire.start_pos
+            zone_rech.rayon = self.rayon_recherche_end[step]
+            dX = (itineraire.end_pos.lon - itineraire.start_pos.lon)
+            dY = (itineraire.end_pos.lat - itineraire.start_pos.lat)
+            dX_norme = dX / sqrt(dX**2+dY**2)
+            dY_norme = dY / sqrt(dX**2+dY**2)
+            #TODO
+            vPied = 1
+            vVelo = 5
+            #DEPRECATED
+            # if dX!=0:
+            #     factX = dX/abs(dX)
+            # else:
+            #     factX = 0
+            #
+            # if dY!=0:
+            #     factY = dY/abs(dY)
+            # else:
+            #     factY = 0
+            zone_rech.offsetX = dX_norme*itineraire.distance_directe*(vVelo-vPied)/(vVelo+vPied)
+            zone_rech.offsetY = dY_norme*itineraire.distance_directe*(vVelo-vPied)/(vVelo+vPied)
+
+            zone_rech.calculerCarre()
+
+            stations_proches = reseau_velov.getStation(zone_rech,True)
+            if len(stations_proches) > 0 :
+                stations_libres_trouvees = True
+        if not(stations_libres_trouvees):
+            return False
+
+        for station in stations_proches:
+            
+        return True
+
+class Moyen_pied(MoyenTransport):
+    def calculerItineraire(self,itineraire):
+        return True
+
+class Moyen_TCL(MoyenTransport):
+    def calculerItineraire(self,itineraire):
+        return True
+
+class DistanceInterStation(models.Model):
+    stationDepart = models.ForeignKey(Station_velov,related_name="stationDepart")
+    stationArrivee = models.ForeignKey(Station_velov,related_name="stationArrivee")
+    distance = models.IntegerField(default=0)
 
 #Exprime la vitesse de l'utilisateur dans un moyen de transport donne
 #les vitesses sont exprimees en metres par seconde
@@ -145,15 +273,31 @@ class PropositionItineraire(models.Model):
     moyen = models.ManyToManyField(MoyenTransport)
     itineraire = models.ForeignKey(Itineraire)
 
+    def update_moyen(self):
+        for section in self.itineraire.sections:
+            self.add(section.moyen_transport)
+
 class Trajet(models.Model):
-    departTraj = models.ManyToManyField(Lieu,related_name="departTraj")
-    arriveeTraj = models.ManyToManyField(Lieu,related_name="arriveeTraj")
+    depart_traj = models.ManyToManyField(Lieu,related_name="departTraj")
+    arrivee_traj = models.ManyToManyField(Lieu,related_name="arriveeTraj")
     moyens_transports_demande = models.ManyToManyField(MoyenTransport)
+
+    def est_non_nul(self):
+        if abs(self.depart_traj.lon-self.arrivee_traj.lon)<0.000001 and abs(self.depart_traj.lat-self.arrivee_traj.lat)<0.000001:
+            return False
+        return True
 
 #Classe utilisee pour le calcul d'un itineraire
 #la classe doit etre remplie avec les donnees de la
 #requete itineraire client
 class DemandeItineraire(models.Model):
     trajet = models.ForeignKey(Trajet)
-    #listeProposition = models.OneToMany(PropositionItineraire)
+    listeProposition = models.ManyToMany(PropositionItineraire)
+    personne = models.ForeignKey(Personne)
+
+    def obtenir_propositions(self):
+        #Le trajet est nul
+        if not(self.trajet.est_non_nul()):
+            return False
+        return True
 
