@@ -51,5 +51,6 @@ sudo apt-get install lynx
 #install Werkzeug
 sudo pip install Werkzeug
 
-#setup the BDD
+#cp run script to home folder
+sudo cp /vagrant/run.sh /home/vagrant
 echo "That's all folks!"
