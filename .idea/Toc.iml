@@ -1,8 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module type="PYTHON_MODULE" version="4">
   <component name="NewModuleRootManager">
+<<<<<<< HEAD
+    <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/app" isTestSource="false" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+=======
     <content url="file://$MODULE_DIR$" />
     <orderEntry type="jdk" jdkName="Python 3.2.5 (C:\Python32\python.exe)" jdkType="Python SDK" />
+>>>>>>> 810b4e7be0fe39e1e9718c48bf2171d2d2b82bb1
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
 </module>
