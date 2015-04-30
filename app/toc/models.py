@@ -5,6 +5,8 @@ class Lieu(models.Model):
 	lat = models.FloatField('Latitude')
 	lon = models.FloatField('Longitude')
 	adresse = models.CharField(max_length=200)
+	def __str__(self):
+		return self.adresse.encode('utf-8', errors='replace')
 
 class Portion_de_route(models.Model):
 	type_transport = models.CharField(max_length=200)
@@ -36,11 +38,16 @@ class Data_velo(models.Model):
 	number = models.IntegerField()
   	contract_name = models.CharField(max_length=200)
   	name = models.CharField(max_length=200)
-  	position = models.ForeignKey(Lieu)
+  	lat = models.FloatField()
+  	lon = models.FloatField()
+  	adresse = models.CharField(max_length=200)
   	banking = models.BooleanField('banking')
   	bonus = models.BooleanField('bonus')
   	status = models.CharField(max_length=200)
   	bike_stands = models.IntegerField()
   	available_bike_stands = models.IntegerField()
   	available_bikes = models.IntegerField()
-  	last_update = models.DateTimeField()
+  	last_update = models.IntegerField()
+  	def __str__(self):
+		return self.name.encode('utf-8', errors='replace')
+
