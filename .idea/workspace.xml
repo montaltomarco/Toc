@@ -2,8 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a71fd814-642f-4b9f-961b-e32286459d71" name="Default" comment="">
-<<<<<<< HEAD
-<<<<<<< HEAD
       <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/env/conf/app.nginx" />
       <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/env/conf/app.redis" />
       <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/toc/urls.py" />
@@ -16,18 +14,14 @@
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/app/urls.py" afterPath="$PROJECT_DIR$/app/app/urls.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/toc/views.py" afterPath="$PROJECT_DIR$/app/toc/views.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-=======
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Shifty/Shifty.iml" afterPath="$PROJECT_DIR$/Shifty/Shifty.iml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Shifty/app/app.iml" afterPath="$PROJECT_DIR$/Shifty/app/app.iml" />
->>>>>>> dfc573f92d925d0521f06b362388f285d08094d2
-=======
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/Toc.iml" afterPath="$PROJECT_DIR$/.idea/Toc.iml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <list id="8ad005d5-20fd-4bcc-8918-4cf2d66c7d70" name="Failed commit: Default" comment="Modele mis à jour avec les arrets TCL et les distances">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/toc/models.py" afterPath="$PROJECT_DIR$/app/toc/models.py" />
->>>>>>> 810b4e7be0fe39e1e9718c48bf2171d2d2b82bb1
     </list>
     <ignored path="Toc.iws" />
     <ignored path=".idea/workspace.xml" />

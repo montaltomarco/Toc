@@ -13,9 +13,7 @@
     <ConfirmationsSetting value="0" id="Add" />
     <ConfirmationsSetting value="0" id="Remove" />
   </component>
-<<<<<<< HEAD
   <component name="ProjectRootManager" version="2" project-jdk-name="Python 2.7.6 (/usr/bin/python)" project-jdk-type="Python SDK" />
-=======
   <component name="ProjectModuleManager">
     <modules />
   </component>
@@ -26,7 +24,6 @@
     <property name="options.splitter.main.proportions" value="0.3" />
     <property name="options.splitter.details.proportions" value="0.2" />
   </component>
->>>>>>> 810b4e7be0fe39e1e9718c48bf2171d2d2b82bb1
   <component name="PyConsoleOptionsProvider">
     <option name="myPythonConsoleState">
       <console-settings />
