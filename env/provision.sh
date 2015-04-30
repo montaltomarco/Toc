@@ -7,15 +7,6 @@ sudo apt-get install nginx-full uwsgi uwsgi-plugin-python redis-server -y
 
 # install django
 sudo pip install django
-<<<<<<< HEAD
-sudo pip install sqlalchemy-migrate
-sudo apt-get install python-dev
-sudo apt-get install postgresql
-
-
-sudo apt-get install libpq-dev
-sudo pip install psycopg2
-=======
 
 # install postgresql
 sudo apt-get install libmysqlclient-dev python-mysqldb -y
@@ -29,7 +20,6 @@ sudo service postgresql restart
 sudo createdb db_data -U postgres
 sudo su - postgres -c "psql -U postgres -d db_data -c \"alter user postgres with password 'postgres';\""
 sudo service postgresql restart
->>>>>>> 810b4e7be0fe39e1e9718c48bf2171d2d2b82bb1
 
 export PYTHONPATH=/app/toc
 echo 'export PYTHONPATH=/app/toc/' >> ~/.bashrc
@@ -61,9 +51,6 @@ sudo apt-get install lynx
 #install Werkzeug
 sudo pip install Werkzeug
 
-<<<<<<< HEAD
-=======
 #cp run script to home folder
 sudo cp /vagrant/run.sh /home/vagrant
->>>>>>> 810b4e7be0fe39e1e9718c48bf2171d2d2b82bb1
 echo "That's all folks!"
