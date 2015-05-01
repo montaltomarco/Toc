@@ -28,17 +28,17 @@
     <ImageButton
         android:layout_width="150dp"
         android:layout_height="150dp"
-        android:id="@+id/ButtonContact"
+        android:id="@+id/ButtonSignIn"
         android:background="@drawable/mindmap"
         android:nestedScrollingEnabled="false"
-        android:layout_alignTop="@+id/ButtonInscription"
+        android:layout_alignTop="@+id/ButtonLog"
         android:layout_alignParentStart="true"
         android:onClick="ButtonOnClick" />
 
     <ImageButton
         android:layout_width="150dp"
         android:layout_height="150dp"
-        android:id="@+id/ButtonInscription"
+        android:id="@+id/ButtonLog"
         android:background="@drawable/checklist"
         android:nestedScrollingEnabled="false"
         android:layout_centerVertical="true"
@@ -48,11 +48,40 @@
     <ImageButton
         android:layout_width="150dp"
         android:layout_height="150dp"
-        android:id="@+id/ButtonLogin"
+        android:id="@+id/ButtonCont"
         android:background="@drawable/database"
         android:nestedScrollingEnabled="false"
-        android:layout_alignTop="@+id/ButtonInscription"
+        android:layout_alignTop="@+id/ButtonLog"
         android:layout_alignParentEnd="true"
         android:onClick="ButtonOnClick" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Inscription"
+        android:id="@+id/textView"
+        android:layout_below="@+id/ButtonSignIn"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="41dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Connexion"
+        android:id="@+id/textView2"
+        android:layout_below="@+id/ButtonLog"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Contactez-nous !"
+        android:id="@+id/textView3"
+        android:layout_below="@+id/ButtonCont"
+        android:layout_alignParentEnd="true"
+        android:layout_marginRight="25dp" />
 
 </RelativeLayout>
