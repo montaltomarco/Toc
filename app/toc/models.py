@@ -52,6 +52,12 @@ class Data_velo(models.Model):
   	def __str__(self):
 		return self.name.encode('utf-8', errors='replace')
 
+class Data_meteo(models.Model):
+	timestamps = models.IntegerField()
+  	pluie = models.FloatField()
+  	pluie_convective = models.FloatField()
+  	def __str__(self):
+		return 'Timestamps = ' + str(self.timestamps) + ' Pluie = ' + str(self.pluie) + ' Pluie Convective= ' + str(self.pluie_convective)
 
 class Station_velov(Lieu):
     number_station = models.IntegerField()
