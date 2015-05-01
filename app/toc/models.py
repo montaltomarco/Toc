@@ -279,7 +279,7 @@ class VitesseUtilisateur(models.Model):
         self.vitesseMin = vitesseMinKMH/3.6
         return self.vitesse
 
-class Section(models.Model):
+class TrajetSection(models.Model):
     consomation_co2 = models.FloatField('CO2')
     moyen = models.ForeignKey(MoyenTransport)
     distance = models.IntegerField()
