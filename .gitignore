@@ -1,0 +1,4 @@
+# Mac compilation
+.idea/
+
+env/flask.log

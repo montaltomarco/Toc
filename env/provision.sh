@@ -21,8 +21,8 @@ sudo createdb db_data -U postgres
 sudo su - postgres -c "psql -U postgres -d db_data -c \"alter user postgres with password 'postgres';\""
 sudo service postgresql restart
 
-export PYTHONPATH=/app/TocApplication
-echo 'export PYTHONPATH=/app/TocApplication/' >> ~/.bashrc
+export PYTHONPATH=/app/toc
+echo 'export PYTHONPATH=/app/toc/' >> ~/.bashrc
 sudo easy_install supervisor
 sudo cp /vagrant/conf/supervisord.sh /etc/init.d/supervisord
 sudo sed -i 's/\r//g' /etc/init.d/supervisord
@@ -36,14 +36,14 @@ sudo ln -s /vagrant/conf/app.uwsgi /etc/uwsgi/apps-available/app.ini
 sudo ln -s /etc/uwsgi/apps-available/app.ini /etc/uwsgi/apps-enabled/app.ini
 
 # configure NginX
-#sudo rm /etc/nginx/sites-enabled/default
-#sudo rm /etc/nginx/sites-available/default
-#sudo ln -s /vagrant/conf/app.nginx /etc/nginx/sites-available/app
-#sudo ln -s /etc/nginx/sites-available/app /etc/nginx/sites-enabled/app
+sudo rm /etc/nginx/sites-enabled/default
+sudo rm /etc/nginx/sites-available/default
+sudo ln -s /vagrant/conf/app.nginx /etc/nginx/sites-available/app
+sudo ln -s /etc/nginx/sites-available/app /etc/nginx/sites-enabled/app
 
 # configure Redis
-#sudo cp /vagrant/conf/app.redis /etc/redis/redis.conf
-#sudo ln -s /vagrant/conf/app.redis /etc/redis/redis.conf
+# sudo cp /vagrant/conf/app.redis /etc/redis/redis.conf
+# sudo ln -s /vagrant/conf/app.redis /etc/redis/redis.conf
 
 # install lynx browser for testing
 sudo apt-get install lynx
