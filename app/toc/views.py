@@ -1,8 +1,12 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.views.decorators.http import require_http_methods
-from django.template import RequestContext
 from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse
+import json
+
+#Utils
+from utils import getCoordByNames
 
 # Create your views here.
 
@@ -23,8 +27,17 @@ def login(request):
 def getRoute(request):
     fromCoord = request.GET.get('from', '')
     toCoord = request.GET.get('to', '')
-    transport = request.GET.get('transport', '')
-    return HttpResponse("Calcul route page <br> fromCood is : "+ fromCoord + ", toCoord is : " + toCoord + ", transport is : " + transport)
+    transports = request.GET.get('transports', '')
+
+    response_data = {}
+
+    lieux = getCoordByNames(firstAddress=fromCoord, secondAddress=toCoord)
+
+    #getRouteByCoord()
+    #Test
+    response_data['adr'] = lieux['firstAdress'].adresse
+    response_data['lat'] = lieux['firstAdress'].lat
+    return JsonResponse(response_data)
 
 @require_http_methods(["GET"])
 def getCoordByAddressNames(request):
