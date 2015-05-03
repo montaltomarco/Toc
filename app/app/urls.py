@@ -3,7 +3,7 @@ from django.contrib import admin
 
 urlpatterns = [
 
-    url(r'^toc/', include('toc.urls')),
+    url(r'^shifty/', include('toc.urls')),
     url(r'^admin/', include(admin.site.urls)),
 
 ]

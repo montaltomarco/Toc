@@ -7,14 +7,13 @@ from django.views.decorators.csrf import csrf_exempt
 # Create your views here.
 
 def index(request):
-    return HttpResponse("Index Page.")
+    return HttpResponse("Index Page. Welcome to Shifty")
 
 @require_http_methods(["GET", "POST"])
 @csrf_exempt
 def login(request):
     if request.method == 'GET':
-        test = request.GET.get('name', '')
-        return HttpResponse(test + " Error : Login Page Requires POST DATA <br>  " + request.get_full_path() + " " + request.method)
+        return HttpResponse(" Error : Login Page Requires POST DATA <br>  ")
     elif request.method == 'POST':
         nickname = request.POST.get('nickname', '')
         password = request.POST.get('password', '')
