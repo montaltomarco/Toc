@@ -43,6 +43,9 @@ def getRoute(request):
 def getCoordByAddressNames(request):
     firstAddress = request.GET.get('firstAddress', '')
     secondAddress = request.GET.get('secondAddress', '')
+
+
+
     return HttpResponse("Get Coord By Address Names page<br> firstAddress is : "+ firstAddress + ", secondAddress is : " + secondAddress)
 
 @require_http_methods(["GET"])
