@@ -16,6 +16,7 @@ sudo pip install psycopg2
 sudo apt-get install postgresql -y
 
 sudo cp /vagrant/conf/pg_hba.conf /etc/postgresql/*/main/pg_hba.conf
+sudo cp /vagrant/conf/postgresql.conf /etc/postgresql/*/main/postgresql.conf
 sudo service postgresql restart
 sudo createdb db_data -U postgres
 sudo su - postgres -c "psql -U postgres -d db_data -c \"alter user postgres with password 'postgres';\""
