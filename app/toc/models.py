@@ -24,18 +24,26 @@ class Reseau(models.Model):
     nombreDeStation = models.IntegerField()
 
     def getStation(self,zoneRecherche,station_depart):
-
-        stations = [Station_velov(), Station_velov(), Station_velov()]
-        return stations
+        querySet = Station_velov.models.filter(
+            lat__range = (zoneRecherche.begY,zoneRecherche.endY)
+        ).filter(lon__range = (zoneRecherche.begX,zoneRecherche.endX))
+        return querySet.objects
 
 reseau_velov = Reseau()
 reseau_TCL = Reseau()
 
+class Lieu(models.Model):
+	lat = models.FloatField('Latitude')
+	lon = models.FloatField('Longitude')
+	adresse = models.CharField(max_length=200)
+	def __str__(self):
+		return self.adresse.encode('utf-8', errors='replace')
+
 class Parcours_temporel(models.Model):
-    approx_dep = models.ForeignKey(Lieu,"approx_dep")
-    approx_arr = models.ForeignKey(Lieu,"approx_arr")
-    exact_dep = models.ForeignKey(Lieu,"exact_dep")
-    exact_arr = models.ForeignKey(Lieu,"exact_arr")
+    approx_dep = models.ForeignKey(Lieu,related_name="approx_dep")
+    approx_arr = models.ForeignKey(Lieu,related_name="approx_arr")
+    exact_dep = models.ForeignKey(Lieu,related_name="exact_dep")
+    exact_arr = models.ForeignKey(Lieu,related_name="exact_arr")
 
     exact_calc = models.BooleanField()
     approx_calc = models.BooleanField()
@@ -94,12 +102,6 @@ class Parcours_pied(Parcours_temporel):
         else:
             return self.get_temps_approx(user)
 
-class Lieu(models.Model):
-	lat = models.FloatField('Latitude')
-	lon = models.FloatField('Longitude')
-	adresse = models.CharField(max_length=200)
-	def __str__(self):
-		return self.adresse.encode('utf-8', errors='replace')
 
 class Section(models.Model):
 	moyen_transport = models.ForeignKey("MoyenTransport")
