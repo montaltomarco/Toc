@@ -1,0 +1,8 @@
+# Mac compilation
+.idea/
+
+env/flask.log
+
+app/toc/*.pyc
+
+env/.vagrant
