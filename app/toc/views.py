@@ -4,6 +4,7 @@ from django.views.decorators.http import require_http_methods
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 import json
+import requests
 
 #Utils
 from utils import getCoordByNames
@@ -25,15 +26,17 @@ def login(request):
 
 @require_http_methods(["GET"])
 def getRoute(request):
-    fromCoord = request.GET.get('from', '')
-    toCoord = request.GET.get('to', '')
+    fromCoordX = request.GET.get('fromX', '')
+    fromCoordY = request.GET.get('fromY', '')
+    toCoordX = request.GET.get('toX', '')
+    toCoordY = request.GET.get('toY', '')
     transports = request.GET.get('transports', '')
+
+    r = (requests.get('http://open.mapquestapi.com/directions/v2/route?key=Fmjtd%7Cluur290anu%2Crl%3Do5-908a0y&from=45.7695736,4.8534248&to=49.46223865,3.82243905078971&routeType=bicycle&manMaps=false&shapeFormat=raw&generalize=0&unit=k').text)
 
     response_data = {}
 
-
-
-    return JsonResponse(response_data)
+    return JsonResponse(r)
 
 @require_http_methods(["GET"])
 def getCoordByAddressNames(request):
