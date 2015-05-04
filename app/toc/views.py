@@ -3,8 +3,8 @@ from django.http import HttpResponse
 from django.views.decorators.http import require_http_methods
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
-import json
 import requests
+import json
 
 #Utils
 from utils import getCoordByNames
@@ -43,11 +43,10 @@ def getCoordByAddressNames(request):
     firstAddress = request.GET.get('firstAddress', '')
     secondAddress = request.GET.get('secondAddress', '')
 
-    response_data = {}
-
     response_data = getCoordByNames(firstAddress=firstAddress, secondAddress=secondAddress)
 
-    return JsonResponse(response_data)
+    return HttpResponse(response_data)
+
     #return HttpResponse("Get Coord By Address Names page<br> firstAddress is : "+ firstAddress + ", secondAddress is : " + secondAddress)
 
 @require_http_methods(["GET"])
