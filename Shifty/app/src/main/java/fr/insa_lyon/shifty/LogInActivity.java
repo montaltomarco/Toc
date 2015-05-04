@@ -1,24 +1,26 @@
 package fr.insa_lyon.shifty;
 
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 
-public class SignInActivity extends ActionBarActivity {
+public class LogInActivity extends ActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sign_in);
+        setContentView(R.layout.activity_log_in);
     }
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_sign_in, menu);
+        getMenuInflater().inflate(R.menu.menu_log_in, menu);
         return true;
     }
 
@@ -37,8 +39,19 @@ public class SignInActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void ButtonOnClickSign()
-    {
-        // TODO : Connexion logic
+    /* Button handler */
+    public void ButtonOnClickLog(View v) {
+        Intent nextView;
+        switch (v.getId()) {
+            case R.id.connexionButton:
+                // TODO : Connexion Logic
+                nextView = new Intent(getApplicationContext(),HomeActivity.class);
+                startActivity(nextView);
+                break;
+            case R.id.inscriptionButton:
+                nextView = new Intent(getApplicationContext(), SignInActivity.class);
+                startActivity(nextView);
+                break;
+        }
     }
 }
