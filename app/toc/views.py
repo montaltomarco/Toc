@@ -31,19 +31,21 @@ def getRoute(request):
 
     response_data = {}
 
-    lieux = getCoordByNames(firstAddress=fromCoord, secondAddress=toCoord)
 
-    #getRouteByCoord()
-    #Test
-    response_data['adr'] = lieux['firstAdress'].adresse
-    response_data['lat'] = lieux['firstAdress'].lat
+
     return JsonResponse(response_data)
 
 @require_http_methods(["GET"])
 def getCoordByAddressNames(request):
     firstAddress = request.GET.get('firstAddress', '')
     secondAddress = request.GET.get('secondAddress', '')
-    return HttpResponse("Get Coord By Address Names page<br> firstAddress is : "+ firstAddress + ", secondAddress is : " + secondAddress)
+
+    response_data = {}
+
+    response_data = getCoordByNames(firstAddress=firstAddress, secondAddress=secondAddress)
+
+    return JsonResponse(response_data)
+    #return HttpResponse("Get Coord By Address Names page<br> firstAddress is : "+ firstAddress + ", secondAddress is : " + secondAddress)
 
 @require_http_methods(["GET"])
 def setSelectedRoute(request):

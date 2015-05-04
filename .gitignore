@@ -2,4 +2,6 @@
 .idea/
 
 env/flask.log
-*.pyc
+**/*.pyc
+
+env/.vagrant
