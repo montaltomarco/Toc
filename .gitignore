@@ -3,3 +3,4 @@
 
 env/flask.log
 *.pyc
+env/.vagrant/machines/default/virtualbox/*
