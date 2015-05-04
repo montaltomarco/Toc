@@ -3,15 +3,35 @@ from django.http import HttpResponse
 from django.views.decorators.http import require_http_methods
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
-import json
+from models import *
 
 #Utils
 from utils import getCoordByNames
+from models import *
 
 # Create your views here.
 
 def index(request):
-    return HttpResponse("Index Page. Welcome to Shifty")
+    lieu1 = Lieu()
+    lieu2 = Lieu()
+    lieu1.lon = 4.874211
+    lieu1.lat = 45.7765506
+    lieu2.lon = 4.848370
+    lieu2.lat = 45.743943
+    lieu1.save()
+    lieu2.save()
+    itineraire = Itineraire()
+    itineraire.start_pos = lieu1
+    itineraire.end_pos = lieu2
+    user = Personne()
+    moyen_velov = Moyen_velov()
+    moyen_velov.nom = "Velov"
+    moyen_velov.code = "VLV"
+    moyen_velov.save()
+    moyen_velov.calculerItineraire(itineraire,user)
+
+
+    return HttpResponse("e")
 
 @require_http_methods(["GET", "POST"])
 @csrf_exempt
