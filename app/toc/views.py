@@ -6,7 +6,11 @@ from django.http import HttpResponse
 from django.views.decorators.http import require_http_methods
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
+<<<<<<< HEAD
+from stations_metrodb import refresh_database
+=======
 import requests
+>>>>>>> e623507e970b9c90b5eb7ea428244d48db20f666
 import json
 
 #Utils
