@@ -2,5 +2,5 @@
 .idea/
 
 env/flask.log
-*.pyc
-env/.vagrant/machines/default/virtualbox/
+**/*.pyc
+env/.vagrant/machines/default/virtualbox/**
