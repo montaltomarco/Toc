@@ -2,7 +2,6 @@ package fr.insa_lyon.shifty;
 
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,7 +9,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.os.Build;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -50,17 +48,18 @@ public class MainActivity extends ActionBarActivity {
     }
     /* Button handler */
     public void ButtonOnClick(View v) {
+        Intent nextView;
         switch (v.getId()) {
-            case R.id.ButtonContact:
-                //Intent nextView = new Intent(getApplicationContext(),)
-                break;
-            case R.id.ButtonInscription:
-                Intent nextView = new Intent(getApplicationContext(),SignInActivity.class);
+            case R.id.ButtonSignIn:
+                nextView= new Intent(getApplicationContext(),SignInActivity.class);
                 startActivity(nextView);
                 break;
-            case R.id.ButtonLogin:
-                Intent nextViewLog = new Intent(getApplicationContext(),LoginActivity.class);
-                startActivity(nextViewLog);
+            case R.id.ButtonLog:
+                nextView = new Intent(getApplicationContext(),LogInActivity.class);
+                startActivity(nextView);
+                break;
+            case R.id.ButtonCont:
+
                 break;
         }
     }
