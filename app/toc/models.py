@@ -44,11 +44,11 @@ reseau_velov = Reseau()
 reseau_TCL = Reseau()
 
 class Lieu(models.Model):
-	lat = models.FloatField('Latitude')
-	lon = models.FloatField('Longitude')
-	adresse = models.CharField(max_length=200)
-	def __str__(self):
-		return self.adresse.encode('utf-8', errors='replace')
+    lat = models.FloatField('Latitude')
+    lon = models.FloatField('Longitude')
+    adresse = models.CharField(max_length=200)
+    def __str__(self):
+        return self.adresse.encode('utf-8', errors='replace')
 
 class Parcours_temporel():
     #approx_dep = Lieu()# = models.ForeignKey(Lieu,related_name="approx_dep")
@@ -175,7 +175,7 @@ class Station_velov(Lieu):
     nb_places = models.IntegerField()
 
 class Ligne_TCL(models.Model):
-    reseau = models.ForeignKey(Reseau)
+    #reseau = models.ForeignKey(Reseau)
     codeTitan = models.CharField(max_length = 20)
     ligne = models.CharField(max_length = 20)
     sens = models.CharField(max_length = 20)
@@ -189,10 +189,11 @@ class Ligne_TCL(models.Model):
         return self.codeTitan+" "+self.libelle
 
 class Arret_TCL(Lieu):
-    reseau = models.ForeignKey(Reseau)
+    #reseau = models.ForeignKey(Reseau)
     #id = models.IntegerField()
+    id_station = models.IntegerField()
     nom = models.CharField(max_length = 100)
-    lignes = models.ManyToManyField(Ligne_TCL)
+    #lignes = models.ManyToManyField(Ligne_TCL)
     pmr = models.BooleanField()
     escalator = models.BooleanField()
 
@@ -467,4 +468,3 @@ class DemandeItineraire(models.Model):
         if not(self.trajet.est_non_nul()):
             return False
         return True
-
