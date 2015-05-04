@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        jar="E:\Projects\HQ\Shifty\app\build\intermediates\exploded-aar\com.android.support\support-v4\21.0.3\classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="2c91c949a45a21cdecf26e03951e46c7beec9ad8">
+        <dex dex="E:\Projects\HQ\Shifty\app\build\intermediates\pre-dexed\release\classes-a4cfb7fe859682c8a93a4e358e14e59c513df205.jar" />
+    </item>
+    <item
+        jar="E:\Projects\HQ\Shifty\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\21.0.3\classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="81d42bf983a8741f4888a6e333e454e4a5e0eeb7">
+        <dex dex="E:\Projects\HQ\Shifty\app\build\intermediates\pre-dexed\release\classes-e3aa2344f34d053fa139c91c738c6079e62fd7dd.jar" />
+    </item>
+    <item
+        jar="E:\Projects\HQ\Shifty\app\build\intermediates\exploded-aar\com.google.android.gms\play-services\6.5.87\classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="dd9247ea0fabe8ee479638c4b4a23e93752be256">
+        <dex dex="E:\Projects\HQ\Shifty\app\build\intermediates\pre-dexed\release\classes-de465f11dd2428bdeee56a27df500cb9935a9a33.jar" />
+    </item>
+    <item
+        jar="H:\SDK\extras\android\m2repository\com\android\support\support-annotations\21.0.3\support-annotations-21.0.3.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="4b74cefe1f0c1b819e7260c8627a14674e37fd35">
+        <dex dex="E:\Projects\HQ\Shifty\app\build\intermediates\pre-dexed\release\support-annotations-21.0.3-9ead95bf94a3cc04d31265110a3447c57517ec3f.jar" />
+    </item>
+    <item
+        jar="E:\Projects\HQ\Shifty\app\build\intermediates\exploded-aar\com.android.support\support-v4\21.0.3\libs\internal_impl-21.0.3.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="01ec05bfbafcc07646ba813000bf2ef11742dd03">
+        <dex dex="E:\Projects\HQ\Shifty\app\build\intermediates\pre-dexed\release\internal_impl-21.0.3-da3837144d95d5f322a1248d91a5dedc14e0297b.jar" />
+    </item>
+
+</items>
