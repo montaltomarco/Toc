@@ -48,7 +48,9 @@ def getCoordByAddressNames(request):
 
     response_data = getCoordByNames(firstAddress=firstAddress, secondAddress=secondAddress)
 
-    return HttpResponse(json.dumps(response_data), content_type='application/json')
+    #print response_data["firstAddress"]
+
+    return HttpResponse(response_data, content_type='application/json; charset=utf-8')
 
 @require_http_methods(["GET"])
 def setSelectedRoute(request):

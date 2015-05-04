@@ -15,7 +15,7 @@ def getCoordByNames(firstAddress, secondAddress):
     temp2 = []
     response_data = []
 
-    resp1 = json.loads((requests.get(u"http://nominatim.openstreetmap.org/search/?q=%s&format=json" %firstAddress)).text.encode('utf-8'))
+    resp1 = requests.get(u"http://nominatim.openstreetmap.org/search/?q=%s&format=json" %firstAddress).json()
 
     for o in resp1:
         dict2={}
@@ -25,7 +25,7 @@ def getCoordByNames(firstAddress, secondAddress):
         temp.append(dict2)
     dict[u'firstAddress'] = temp
 
-    r2 = json.loads((requests.get(u"http://nominatim.openstreetmap.org/search/?q=%s&format=json" %secondAddress)).text.encode('utf-8', errors='ignore'))
+    r2 = requests.get(u"http://nominatim.openstreetmap.org/search/?q=%s&format=json" %secondAddress).json()
     for o in r2:
         dict4={}
         dict4[u'lon']= o['lon']
@@ -37,4 +37,4 @@ def getCoordByNames(firstAddress, secondAddress):
     response_data.append(dict)
     response_data.append(dict3)
 
-    return response_data
+    return json.dumps(response_data)
