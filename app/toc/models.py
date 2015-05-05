@@ -139,8 +139,8 @@ class Personne(models.Model):
     prenom = models.CharField(max_length=200)
     email = models.CharField(max_length=200)
     mot_de_pass = models.CharField(max_length=200)
-    vitesse_pied = models.FloatField(default=1.0)
-    vitesse_velo = models.FloatField(default=5.0)
+    #vitesse_pied = models.FloatField(default=1.0)
+    #vitesse_velo = models.FloatField(default=5.0)
     def __str__(self):
         return self.nom + ' ' + self.prenom
 
