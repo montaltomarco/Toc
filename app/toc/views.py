@@ -7,24 +7,38 @@ from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 from models import *
 import requests
-import sys
-import os
 import json
-
-sys.path.append('/app/')
-os.environ["DJANGO_SETTINGS_MODULE"] = "app.settings"
-from toc.models import *
-import django
-django.setup()
 
 #Utils
 from utils import getCoordByNames
 from models import *
+from inscription import InscriptionForm, CreatePerson
 
 # Create your views here.
 
 def index(request):
     return HttpResponse("Index Page")
+
+@require_http_methods(["GET", "POST"])
+@csrf_exempt
+def inscription(request):
+    if request.method == 'POST':
+        return HttpResponse(" Error : Inscription Page Requires POST DATA <br>  ")
+    elif request.method == 'GET':
+
+        inscriptionForm = InscriptionForm()
+        inscriptionForm.email = request.GET.get('email', '')
+        inscriptionForm.password = request.POST.get('password', '')
+        inscriptionForm.confirmezMdp = request.POST.get('confirmezMdp', '')
+        inscriptionForm.nom = request.POST.get('nom', '')
+        inscriptionForm.prenom = request.POST.get('prenom', '')
+        inscriptionForm.civilite = request.POST.get('civilite', '')
+        inscriptionForm.adresse = request.POST.get('adresse', '')
+        inscriptionForm.age = request.POST.get('age', '')
+
+        CreatePerson(InscriptionForm=inscriptionForm)
+
+        return HttpResponse(inscriptionForm.email)
 
 @require_http_methods(["GET", "POST"])
 @csrf_exempt
