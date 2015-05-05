@@ -6,9 +6,9 @@ import json
 import threading
 import datetime
 import psycopg2
-sys.path.append('/app/toc/')
+sys.path.append('/app/')
 os.environ["DJANGO_SETTINGS_MODULE"] = "app.settings"
-from toc.models import Arret_TCL
+from toc.models import *
 import django
 django.setup()
 
