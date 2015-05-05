@@ -21,6 +21,7 @@ def refresh_database():
     with connexion:
         cur = connexion.cursor()
 
+        #Récupération des Ids des lieux à supprimer
         cur.execute("SELECT * FROM toc_arret_tcl")
         list = []
 
@@ -29,6 +30,7 @@ def refresh_database():
 
         cur.execute("DELETE FROM toc_arret_tcl")
 
+        #Suppression des lieux associés aux stations de métros qu'on doit supprimer
         for e in list:
             cur.execute("DELETE FROM toc_lieu WHERE id = %s" %e)
 
