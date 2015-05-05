@@ -4,24 +4,6 @@ from collections import *
 
 # Create your models here.
 
-def getTransportInstances(transport):
-    if transport=="VLV":
-        return False
-
-    elif transport=="TCL":
-        return False
-
-    elif transport=="BLU":
-        return False
-
-    elif transport=="FOT":
-        return False
-
-    elif transport=="VLO":
-        return False
-    else:
-        return False
-
 def calculerDistance(depart,arrivee):
     deltaT = coordY_to_metres(abs(arrivee.lat - depart.lat))
     deltaL = coordX_to_metres(abs(arrivee.lon - depart.lon))
@@ -50,6 +32,7 @@ class Reseau(models.Model):
     def getStation(self,zoneRecherche,station_depart):
         querySet = Station_velov.objects.filter(lat__range = (zoneRecherche.begY,zoneRecherche.endY)
         ).filter(lon__range = (zoneRecherche.begX,zoneRecherche.endX))
+        print querySet
         if station_depart:
             querySet.filter(nb_velos__gt = 2)
         else:
@@ -99,7 +82,7 @@ class Parcours_inter_station(Parcours_temporel):
     def get_temps_approx(self,user):
         user_speed = user.vitesse_velo
         dist = calculerDistance(self.approx_dep,self.approx_arr)
-        temps_approx = dist/user_speed
+        temps_approx = dist/user_speed+user.temps_start+user.temps_stop
         self.temps = temps_approx
         return temps_approx
 
@@ -129,24 +112,28 @@ class Parcours_pied(Parcours_temporel):
 
 
 class Section(models.Model):
-    moyen_transport = models.ForeignKey("MoyenTransport")
+    moyen_transport = models.CharField(max_length=30)
     en_cours = models.BooleanField('en_cours')
-    distance = models.IntegerField()
+    temps = models.IntegerField()
     taux_pollution = models.FloatField('Pollution')
+    trajet = models.ForeignKey("Trajet")
 
 class Personne(models.Model):
     nom = models.CharField(max_length=200)
     prenom = models.CharField(max_length=200)
     email = models.CharField(max_length=200)
     mot_de_pass = models.CharField(max_length=200)
-    #vitesse_pied = models.FloatField(default=1.0)
-    #vitesse_velo = models.FloatField(default=5.0)
+    vitesse_pied = models.FloatField(default=1.0)
+    vitesse_velo = models.FloatField(default=5.0)
+    temps_start = models.IntegerField(default=100)
+    temps_stop = models.IntegerField(default=100)
     def __str__(self):
         return self.nom + ' ' + self.prenom
 
 class Itineraire(models.Model):
     start_pos = models.ForeignKey(Lieu,related_name="start_pos")
     end_pos = models.ForeignKey(Lieu,related_name="end_pos")
+    duree = models.FloatField()
     sections = models.ManyToManyField(Section)
     personnes = models.ManyToManyField(Personne)
 
@@ -262,163 +249,155 @@ class Vecteur(models.Model):
         self.distance = sqrt(deltaT**2+deltaL**2)
         return self.distance
 
-class MoyenTransport(models.Model):
-    nom = models.CharField(max_length=30)
-    code = models.CharField(max_length=20)
-    #parent = models.ForeignKey('self')
-    #enfant = models.ManyToOneField(MoyenTransport)
+rayon_recherche_beg = [0,500,1000,1500]
+rayon_recherche_end = [300,1000,1500,3000]
 
-    def calculerItineraire(self,itineraire):
-        return False
-
-class Moyen_velo(MoyenTransport):
-    def calulerItineraire(self,itineraire,user):
-        return False
-
-class Moyen_velov(MoyenTransport):
-    rayon_recherche_beg = [0,500,1000,1500]
-    rayon_recherche_end = [300,1000,1500,3000]
-
-    #@param[itineraire] est de type trajet
-    def calculerItineraire(self,itineraire,user):
-        stations_dep = self.getStationsZone(itineraire,user,True)
-        stations_arr = self.getStationsZone(itineraire,user,False)
-        if len(stations_dep)==0 or len(stations_arr)==0 :
-            print "Sortie"
-            return False
-        print "Entree"
-        temps_stat_dep = {}
-        for station in stations_dep:
-            #Creation trajets pied entre dep et stat dep
-            new_trajet = Parcours_pied()
-            new_trajet.approx_dep = itineraire.start_pos
-            new_trajet.approx_arr = station
-            temps_pied = new_trajet.get_temps_approx(user)
+#@param[itineraire] est de type trajet
+def selectionner_stations_velov(itineraire,user):
+    stations_dep = getStationsZone(itineraire,user,True)
+    stations_arr = getStationsZone(itineraire,user,False)
+    if len(stations_dep)==0 or len(stations_arr)==0 :
+        print "Sortie"
+        raise Exception("Pas de station dans la zone")
+    print "Entree"
+    temps_stat_dep = {}
+    for station in stations_dep:
+        #Creation trajets pied entre dep et stat dep
+        new_trajet = Parcours_pied()
+        new_trajet.approx_dep = itineraire.start_pos
+        new_trajet.approx_arr = station
+        temps_pied = new_trajet.get_temps_approx(user)
 
 
-            #Creation trajets velo entre stat dep et arr
-            new_trajet2 = Parcours_inter_station()
-            new_trajet2.approx_dep = station
-            new_trajet2.approx_arr = itineraire.end_pos
-            new_trajet2.get_temps_approx(user)
+        #Creation trajets velo entre stat dep et arr
+        new_trajet2 = Parcours_inter_station()
+        new_trajet2.approx_dep = station
+        new_trajet2.approx_arr = itineraire.end_pos
+        new_trajet2.get_temps_approx(user)
 
-            temps_velo = new_trajet2.get_temps_approx(user)
+        temps_velo = new_trajet2.get_temps_approx(user)
 
-            temps_stat_dep[temps_pied+temps_velo] = (station,new_trajet,new_trajet2)
+        temps_stat_dep[temps_pied+temps_velo] = (station,new_trajet,new_trajet2)
 
-        ordered_temps_stat_dep = sorted(temps_stat_dep.iterkeys())
+    ordered_temps_stat_dep = sorted(temps_stat_dep.iterkeys())
 
-        #On recupere la meilleure station
-        best_start_station = temps_stat_dep[ordered_temps_stat_dep[0]][0]
-        trajet_pied_best_start_stat = temps_stat_dep[ordered_temps_stat_dep[0]][1]
-        print best_start_station
-        print trajet_pied_best_start_stat
+    #On recupere la meilleure station
+    best_start_station = temps_stat_dep[ordered_temps_stat_dep[0]][0]
+    trajet_pied_best_start_stat = temps_stat_dep[ordered_temps_stat_dep[0]][1]
+    print best_start_station
+    print trajet_pied_best_start_stat
 
-        temps_stat_arr = {}
-        for station in stations_arr:
-            #Creation trajets pied entre dep et stat dep
-            new_trajet = Parcours_pied()
-            new_trajet.approx_dep = station
-            new_trajet.approx_arr = itineraire.end_pos
-            temps_pied = new_trajet.get_temps_approx(user)
+    temps_stat_arr = {}
+    for station in stations_arr:
+        #Creation trajets pied entre dep et stat dep
+        new_trajet = Parcours_pied()
+        new_trajet.approx_dep = station
+        new_trajet.approx_arr = itineraire.end_pos
+        temps_pied = new_trajet.get_temps_approx(user)
 
-            new_trajet2 = Parcours_inter_station()
-            new_trajet2.exact_dep = best_start_station
-            new_trajet2.exact_arr = station
-            temps_velo = new_trajet2.get_temps_exact(user)
+        new_trajet2 = Parcours_inter_station()
+        new_trajet2.exact_dep = best_start_station
+        new_trajet2.exact_arr = station
+        temps_velo = new_trajet2.get_temps_exact(user)
 
-            temps_pied_dep = trajet_pied_best_start_stat.get_temps_approx(user)
+        temps_pied_dep = trajet_pied_best_start_stat.get_temps_approx(user)
 
-            temps_total = temps_pied + temps_velo + temps_pied_dep
+        temps_total = temps_pied + temps_velo + temps_pied_dep
 
-            temps_stat_arr[temps_total] = (station,new_trajet,new_trajet2)
+        temps_stat_arr[temps_total] = (station,new_trajet,new_trajet2)
 
-        ordered_temps_stat_arr = sorted(temps_stat_arr.iterkeys())
-        print ordered_temps_stat_arr
+    ordered_temps_stat_arr = sorted(temps_stat_arr.iterkeys())
+    print ordered_temps_stat_arr
 
-        tempsStatPiedDep = []
-        tempsStatPiedArr = []
+    tempsStatPiedDep = []
+    tempsStatPiedArr = []
 
-        nb_recherche_stat_dep = 3
-        nb_recherche_stat_arr = 3
-        if len(stations_dep)<3:
-            nb_recherche_stat_dep = len(stations_dep)
-        if len(stations_arr)<3:
-            nb_recherche_stat_arr = len(stations_arr)
+    nb_recherche_stat_dep = 3
+    nb_recherche_stat_arr = 3
+    if len(stations_dep)<3:
+        nb_recherche_stat_dep = len(stations_dep)
+    if len(stations_arr)<3:
+        nb_recherche_stat_arr = len(stations_arr)
 
-        #pour les 3 premieres stations de DEPART
-        for i in range(0,nb_recherche_stat_dep):
-            tempsStatPiedDep.append(temps_stat_dep[ordered_temps_stat_dep[i]][1].get_temps_exact(user))
-        #3 premieres stations d'ARRIVEE
+    #pour les 3 premieres stations de DEPART
+    for i in range(0,nb_recherche_stat_dep):
+        tempsStatPiedDep.append(temps_stat_dep[ordered_temps_stat_dep[i]][1].get_temps_exact(user))
+    #3 premieres stations d'ARRIVEE
+    for j in range(0,nb_recherche_stat_arr):
+        tempsStatPiedArr.append(temps_stat_arr[ordered_temps_stat_arr[j]][1].get_temps_exact(user))
+
+    temps_totaux = {}
+    for i in range(0,nb_recherche_stat_dep):
         for j in range(0,nb_recherche_stat_arr):
-            tempsStatPiedArr.append(temps_stat_arr[ordered_temps_stat_arr[j]][1].get_temps_exact(user))
+            new_trajet = Parcours_inter_station()
+            new_trajet.exact_dep = temps_stat_dep[ordered_temps_stat_dep[i]][0]
+            print new_trajet.exact_dep
+            new_trajet.exact_arr = temps_stat_arr[ordered_temps_stat_arr[j]][0]
+            print new_trajet.exact_arr
+            temps_total = new_trajet.get_temps_exact(user)+tempsStatPiedDep[i]+tempsStatPiedArr[j]
+            temps_totaux[temps_total] = (new_trajet.exact_dep,new_trajet.exact_arr)
 
-        temps_totaux = {}
-        for i in range(0,nb_recherche_stat_dep):
-            for j in range(0,nb_recherche_stat_arr):
-                new_trajet = Parcours_inter_station()
-                new_trajet.exact_dep = temps_stat_dep[ordered_temps_stat_dep[i]][0]
-                print new_trajet.exact_dep
-                new_trajet.exact_arr = temps_stat_arr[ordered_temps_stat_arr[j]][0]
-                print new_trajet.exact_arr
-                temps_total = new_trajet.get_temps_exact(user)+tempsStatPiedDep[i]+tempsStatPiedArr[j]
-                temps_totaux[temps_total] = (new_trajet.exact_dep,new_trajet.exact_arr)
+    ordered_total_times = sorted(temps_totaux.iterkeys())
+    stat_dep = temps_totaux[ordered_total_times[0]][0]
+    stat_arr = temps_totaux[ordered_total_times[0]][1]
+    print stat_dep
+    print stat_arr
 
-        ordered_total_times = sorted(temps_totaux.iterkeys())
-        stat_dep = temps_totaux[ordered_total_times[0]][0]
-        stat_arr = temps_totaux[ordered_total_times[0]][1]
-        print stat_dep
-        print stat_arr
+    return (stat_dep,stat_arr,ordered_total_times[0])
 
-        return (ordered_total_times[0])
+def getStationsZone(itineraire,user,depart):
+    stations_libres_trouvees = False
+    step = 0
+    zone_rech = Carre_recherche()
+    if depart:
+        zone_rech.origine = itineraire.start_pos
+    else:
+        zone_rech.origine = itineraire.end_pos
 
-    def getStationsZone(self,itineraire,user,depart):
-        stations_libres_trouvees = False
-        step = 0
-        zone_rech = Carre_recherche()
-        if depart:
-            zone_rech.origine = itineraire.start_pos
-        else:
-            zone_rech.origine = itineraire.end_pos
+    dX = (itineraire.end_pos.lon - itineraire.start_pos.lon)
+    dY = (itineraire.end_pos.lat - itineraire.start_pos.lat)
+    if not(depart):
+        dX = -dX
+        dY = -dY
 
-        dX = (itineraire.end_pos.lon - itineraire.start_pos.lon)
-        dY = (itineraire.end_pos.lat - itineraire.start_pos.lat)
-        if not(depart):
-            dX = -dX
-            dY = -dY
+    dX_norme = dX / sqrt(dX**2+dY**2)
+    dY_norme = dY / sqrt(dX**2+dY**2)
 
-        dX_norme = dX / sqrt(dX**2+dY**2)
-        dY_norme = dY / sqrt(dX**2+dY**2)
+    #TODO
+    vPied = 1
+    vVelo = 5
+    while not(stations_libres_trouvees) and step<len(rayon_recherche_end):
+        print "BOUCLE "+str(step)
+        zone_rech.rayon = rayon_recherche_end[step]
+        zone_rech.offsetX = dX_norme*itineraire.distance_directe*(vVelo-vPied)/(vVelo+vPied)
+        zone_rech.offsetY = dY_norme*itineraire.distance_directe*(vVelo-vPied)/(vVelo+vPied)
+        step = step + 1
 
-        #TODO
-        vPied = 1
-        vVelo = 5
-        while not(stations_libres_trouvees) and step<len(self.rayon_recherche_end):
-            print "BOUCLE "+str(step)
-            zone_rech.rayon = self.rayon_recherche_end[step]
-            zone_rech.offsetX = dX_norme*itineraire.distance_directe*(vVelo-vPied)/(vVelo+vPied)
-            zone_rech.offsetY = dY_norme*itineraire.distance_directe*(vVelo-vPied)/(vVelo+vPied)
-            step = step + 1
+        zone_rech.calculerCarre()
+        print zone_rech.begX
+        print zone_rech.endX
+        print zone_rech.begY
+        print zone_rech.endY
+        stations_proches = reseau_velov.getStation(zone_rech,True)
+        if len(stations_proches)>0:
+            stations_libres_trouvees = True
 
-            zone_rech.calculerCarre()
-            print zone_rech.begX
-            print zone_rech.endX
-            print zone_rech.begY
-            print zone_rech.endY
-            stations_proches = reseau_velov.getStation(zone_rech,True)
-            if len(stations_proches)>0:
-                stations_libres_trouvees = True
+    return stations_proches
 
-        return stations_proches
+def calculerItineraire_TCL_optimise(trajet,itineraire_TCL,itineraire_velov,user):
+    sections_contigues = False
+    sections_retenues = []
+    trajets_velov = []
+    # trajet_velov_courant = section_velov.trajet.start_pos
+    # trajet_velov.start_pos = section_velov
+    # for section in itineraire_TCL.troncon:
+    #     trajet_equivalent = Trajet()
+    #     trajet_equivalent.start_pos = section.trajet.start_pos
+    #     trajet_equivalent.end_pos = section.trajet.end_pos
+    #     (stat_dep,stat_arr,duree) = Moyen_velov.calculerItineraire(trajet_equivalent,user)
+    #     if section.duree > itineraire.duree:
+    #         sections_retenues.append()
 
-
-class Moyen_pied(MoyenTransport):
-    def calculerItineraire(self,itineraire):
-        return True
-
-class Moyen_TCL(MoyenTransport):
-    def calculerItineraire(self,itineraire):
-        return True
 
 class DistanceInterStation(models.Model):
     stationDepart = models.ForeignKey(Station_velov,related_name="stationDepart")
@@ -427,48 +406,33 @@ class DistanceInterStation(models.Model):
 
 #Exprime la vitesse de l'utilisateur dans un moyen de transport donne
 #les vitesses sont exprimees en metres par seconde
-class VitesseUtilisateur(models.Model):
-    moyen_transport = models.ForeignKey(MoyenTransport)
-    personne = models.ForeignKey(Personne)
-    temps_demarrage = models.IntegerField()
-    temps_arret = models.IntegerField()
-    vitesse = models.IntegerField()
-    vitesseMin = models.IntegerField(default=1)
-    vitesseMax = models.IntegerField(default=2)
-
-    #Retourne la duree en seconde en focntion de la distance en metres
-    def calcul_duree(self,distance):
-        duree = distance/self.vitesse + self.temps_demarrage + self.temps_arret
-        return duree
-
-    def calcul_dureeMin(self,distance):
-        duree = distance/self.vitesseMax + self.temps_demarrage*0.9 + self.temps_arret*0.9
-
-    def set_vitesse(self,vitesseKMH,vitesseMaxKMH=1,vitesseMinKMH=2):
-        self.vitesse = vitesseKMH/3.6
-        self.vitesseMax = vitesseMaxKMH/3.6
-        self.vitesseMin = vitesseMinKMH/3.6
-        return self.vitesse
-
-class TrajetSection(models.Model):
-    consomation_co2 = models.FloatField('CO2')
-    moyen = models.ForeignKey(MoyenTransport)
-    distance = models.IntegerField()
-
-
-class PropositionItineraire(models.Model):
-    #parent = models.ForeignKey(DemandeItineraire)
-    moyen = models.ManyToManyField(MoyenTransport)
-    itineraire = models.ForeignKey(Itineraire)
-
-    def update_moyen(self):
-        for section in self.itineraire.sections:
-            self.add(section.moyen_transport)
+# class VitesseUtilisateur(models.Model):
+#     moyen_transport = models.ForeignKey(MoyenTransport)
+#     personne = models.ForeignKey(Personne)
+#     temps_demarrage = models.IntegerField()
+#     temps_arret = models.IntegerField()
+#     vitesse = models.IntegerField()
+#     vitesseMin = models.IntegerField(default=1)
+#     vitesseMax = models.IntegerField(default=2)
+#
+#     #Retourne la duree en seconde en focntion de la distance en metres
+#     def calcul_duree(self,distance):
+#         duree = distance/self.vitesse + self.temps_demarrage + self.temps_arret
+#         return duree
+#
+#     def calcul_dureeMin(self,distance):
+#         duree = distance/self.vitesseMax + self.temps_demarrage*0.9 + self.temps_arret*0.9
+#
+#     def set_vitesse(self,vitesseKMH,vitesseMaxKMH=1,vitesseMinKMH=2):
+#         self.vitesse = vitesseKMH/3.6
+#         self.vitesseMax = vitesseMaxKMH/3.6
+#         self.vitesseMin = vitesseMinKMH/3.6
+#         return self.vitesse
 
 class Trajet(models.Model):
     start_pos = models.ForeignKey(Lieu,related_name="start_trajet_pos")
     end_pos = models.ForeignKey(Lieu,related_name="end_trajet_pos")
-    moyens_transports_demande = models.ManyToManyField(MoyenTransport)
+    #moyens_transports_demande =[]# models.ManyToManyField(MoyenTransport)
     distance_directe = models.IntegerField(default=0)
 
     def est_non_nul(self):
@@ -484,15 +448,32 @@ class Trajet(models.Model):
 #Classe utilisee pour le calcul d'un itineraire
 #la classe doit etre remplie avec les donnees de la
 #requete itineraire client
-class DemandeItineraire(models.Model):
-    trajet = models.ForeignKey(Trajet)
-    listeProposition = models.ManyToManyField(PropositionItineraire)
-    personne = models.ForeignKey(Personne)
+def obtenir_propositions(trajet,transports_demandes,personne):
+    #Le trajet est nul
+    if not(trajet.est_non_nul()):
+        return False
+    for moyen_transport in transports_demandes:
+        try:
+            (stat_dep,stat_arr,duree) = selectionner_stations_velov(trajet,personne)
+        except Exception as error:
+            pass
+    return True
 
-    def obtenir_propositions(self):
-        #Le trajet est nul
-        if not(self.trajet.est_non_nul()):
-            return False
-        for moyen_transport in self.trajet.moyens_transports_demande:
-            proposition = moyen_transport.calculer_itineraire(self.trajet,self.personne)
-        return True
+
+# def getTransportInstances(transport):
+#     if transport=="VLV":
+#         return Moyen_velov()
+#
+#     elif transport=="TCL":
+#         return Moyen_TCL()
+#
+#     elif transport=="BLU":
+#         return False
+#
+#     elif transport=="FOT":
+#         return Moyen_pied()
+#
+#     elif transport=="VLO":
+#         return Moyen_velo()
+#     else:
+#         return False

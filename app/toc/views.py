@@ -56,31 +56,68 @@ def login(request):
 
 @require_http_methods(["GET"])
 def getRoute(request):
-    fromCoordX = request.GET.get('fromX', '')
-    fromCoordY = request.GET.get('fromY', '')
-    toCoordX = request.GET.get('toX', '')
-    toCoordY = request.GET.get('toY', '')
-    transports = request.GET.get('transports', '')
-    transports = getTransportInstance("TOTO")
     lieu_dep = Lieu()
-    lieu_dep.lat = fromCoordY
-    lieu_dep.lon = fromCoordX
     lieu_arr = Lieu()
-    lieu_dep.lat = toCoordX
-    lieu_dep.lon = toCoordY
+
+    lieu_dep.lon = float(request.GET.get('fromX', ''))
+    lieu_dep.lat = float(request.GET.get('fromY', ''))
+    lieu_arr.lon = float(request.GET.get('toX', ''))
+    lieu_arr.lat = float(request.GET.get('toY', ''))
+    #TODO:Recuperer une liste (cette ligne est suffisante?)
+    transports = request.GET.get('transports', '')
+    print transports
+    lieu_dep.save()
+    lieu_arr.save()
+    transports = ["VLV"]
     trajet = Trajet()
     trajet.start_pos = lieu_dep
     trajet.end_pos = lieu_arr
-    for transport in transports :
-        trajet.moyens_transports_demande.add()
-    demande_courante = DemandeItineraire()
+
+    #TODO:Remplacer le faux user par celui de la session
+    user = Personne()
+
+    obtenir_propositions(trajet,transports,user)
 
 
-    r = (requests.get('http://open.mapquestapi.com/directions/v2/route?key=Fmjtd%7Cluur290anu%2Crl%3Do5-908a0y&from=45.7695736,4.8534248&to=49.46223865,3.82243905078971&routeType=bicycle&manMaps=false&shapeFormat=raw&generalize=0&unit=k').text)
-
+    #r = (requests.get('http://open.mapquestapi.com/directions/v2/route?key=Fmjtd%7Cluur290anu%2Crl%3Do5-908a0y&from=45.7695736,4.8534248&to=49.46223865,3.82243905078971&routeType=bicycle&manMaps=false&shapeFormat=raw&generalize=0&unit=k').text)
+    def get_directions(fromCoordX,fromCoordY,toCoordX,toCoordY,route_type = "bicycle"):
+        #route_type = "bicycle" ou "pedestrian"
+        key = "Fmjtd%7Cluur290anu%2Crl%3Do5-908a0y"
+        r = requests.get('http://open.mapquestapi.com/directions/v2/route?key=%s&outFormat=json&routeType=%s&timeType=1&enhancedNarrative=true&locale=fr_FR&unit=k&from=%s,%s&to=%s,%s&drivingStyle=2&highwayEfficiency=21.0' %(key,route_type,fromCoordX,fromCoordY,toCoordX,toCoordY)).text
+        json_obj = json.loads(r)
+        liste_sections = []
+        for man in json_obj['route']['legs'][0]['maneuvers']:
+            s = Section()
+            s.index = man['index']
+            s.direction = man['direction']
+            s.streets = man['streets']
+            #s.maneuverNotes = man['maneuverNotes
+            print man['maneuverNotes']
+            s.distance = man['distance']
+            s.transportMode = man['transportMode']
+            s.signs = man['signs']
+            s.iconUrl = man['iconUrl']
+            s.directionName = man['directionName']
+            s.time = man['time']
+            s.narrative = man['narrative']
+            l = Lieu()
+            l.lat = man['startPoint']['lat']
+            l.lon = man['startPoint']['lng']
+            l.adresse = man['streets']
+            l.save()
+            s.startPoint = l
+            s.turnType = man['turnType']
+            s.encours = False
+            s.save()
+            liste_sections.append(s)
+        return liste_sections
+    
     response_data = {}
 
-    return JsonResponse(r)
+    #response_data = {}
+
+    #return JsonResponse(r)
+    return HttpResponse("FE")
 
 @require_http_methods(["GET"])
 def getCoordByAddressNames(request):
@@ -108,3 +145,24 @@ def getInfosRoute(request):
 @require_http_methods(["GET"])
 def getProfile(request):
     return HttpResponse("Show personal infos page<br> NO params")
+
+
+def tests_dams(request):
+    lieu1 = Lieu()
+    lieu2 = Lieu()
+    lieu1.lon = 4.842812
+    lieu1.lat = 45.752029
+    lieu2.lon = 4.8550066229888000
+    lieu2.lat = 45.7629790120815000
+    lieu1.save()
+    lieu2.save()
+    trajet = Trajet()
+
+    moyen_transports_demande = "VLV"
+    trajet.start_pos = lieu1
+    trajet.end_pos = lieu2
+    user = Personne()
+
+    selectionner_stations_velov(trajet,user)
+
+    return HttpResponse("E")
