@@ -20,8 +20,17 @@ def refresh_database():
 
     with connexion:
         cur = connexion.cursor()
-        cur.execute("DELETE FROM toc_lieu")
+
+        cur.execute("SELECT * FROM toc_arret_tcl")
+        list = []
+
+        for row in cur:
+            list.append(int(row[0]))
+
         cur.execute("DELETE FROM toc_arret_tcl")
+
+        for e in list:
+            cur.execute("DELETE FROM toc_lieu WHERE id = %s" %e)
 
         json_metro = json.loads(ur.urlopen('https://download.data.grandlyon.com/wfs/rdata?SERVICE=WFS&VERSION=2.0.0&outputformat=GEOJSON&maxfeatures=30&request=GetFeature&typename=tcl_sytral.tclstation&SRSNAME=urn:ogc:def:crs:EPSG::4326').read())
         for kAllStations,vAllStations in json_metro.iteritems():
@@ -44,5 +53,4 @@ def refresh_database():
                     arret.pmr = True
                     arret.escalator = True
                     arret.save()
-
 refresh_database()
