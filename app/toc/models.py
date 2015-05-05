@@ -27,7 +27,7 @@ def metres_to_coordY(distance):
 
 #Definit un reseau de stations et de lignes
 # comme le reseau d'arret TCL ou le reseau de velov
-def getStationVelov(self,zoneRecherche,station_depart):
+def getStationVelov(zoneRecherche,station_depart):
     querySet = Station_velov.objects.filter(lat__range = (zoneRecherche.begY,zoneRecherche.endY)
     ).filter(lon__range = (zoneRecherche.begX,zoneRecherche.endX))
     print querySet
@@ -454,8 +454,8 @@ def get_directions(fromCoordX,fromCoordY,toCoordX,toCoordY,route_type = "bicycle
         s.streets = man['streets']
         #s.maneuverNotes = man['maneuverNotes
         print man['maneuverNotes']
-        s.distance = man['distance']
-        s.transportMode = man['transportMode']
+        s.temps = man['distance']
+        s.moyen_transport = man['transportMode']
         s.signs = man['signs']
         s.iconUrl = man['iconUrl']
         s.directionName = man['directionName']
@@ -466,9 +466,15 @@ def get_directions(fromCoordX,fromCoordY,toCoordX,toCoordY,route_type = "bicycle
         l.lon = man['startPoint']['lng']
         l.adresse = man['streets']
         l.save()
-        s.startPoint = l
+        t = Trajet()
+        t.start_pos = l
+        #TODO:Debug this
+        t.end_pos = l
+        t.save()
+        s.trajet = t
         s.turnType = man['turnType']
-        s.encours = False
+        s.en_cours = False
+        s.taux_pollution = 0
         s.save()
         liste_sections.append(s)
     return liste_sections
@@ -486,11 +492,22 @@ def obtenir_propositions(trajet,transports_demandes,personne):
         if moyen_transport == "VLV":
             try:
                 (stat_dep,stat_arr,duree) = selectionner_stations_velov(trajet,personne)
-                sectionPiedD = get_directions(trajet.start_pos.lon,trajet.start_pos.lat,stat_dep.lon,stat_dep.lat,"pedestrian")
-                sectionVelov = get_directions(stat_dep.lon,stat_dep.lat,stat_arr.lon,stat_arr.lat)
-                sectionPiedF = get_directions(stat_arr.lon,stat_arr.lat,trajet.end_pos.lon,trajet.end_pos.lat,"pedestrian")
             except Exception as error:
+                print "ERROR"
                 pass
+            print "--------"
+            print "Station dep "+str(stat_dep.lon)+" "+str(stat_dep.lat)
+            print "Station arr "+str(stat_arr.lon)+" "+str(stat_arr.lat)
+            sectionPiedD = get_directions(trajet.start_pos.lon,trajet.start_pos.lat,stat_dep.lon,stat_dep.lat,"pedestrian")
+            sectionVelov = get_directions(stat_dep.lon,stat_dep.lat,stat_arr.lon,stat_arr.lat)
+            sectionPiedF = get_directions(stat_arr.lon,stat_arr.lat,trajet.end_pos.lon,trajet.end_pos.lat,"pedestrian")
+            print sectionVelov
+            for section in sectionVelov:
+                print "VLV"+section.narrative+" "+str(section.temps)
+            for section in sectionPiedD:
+                print "PDD"+section.narrative+" "+str(section.temps)
+            for section in sectionPiedF:
+                print "PDF"+section.narrative+" "+str(section.temps)
 
         if moyen_transport == "FOT":
             toto = False
