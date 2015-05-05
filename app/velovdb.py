@@ -20,8 +20,19 @@ def refresh_database():
     with connexion:
         cur = connexion.cursor()
 
-        #cur.execute("DELETE FROM toc_lieu")
+        #Récupération des Ids des lieux à supprimer
+        cur.execute("SELECT * FROM toc_data_velo")
+        list = []
+
+        for row in cur:
+            list.append(int(row[0]))
+
         cur.execute("DELETE FROM toc_data_velo")
+
+        #Suppression des lieux associés aux stations de Velov qu'on doit supprimer
+        for e in list:
+            cur.execute("DELETE FROM toc_lieu WHERE id = %s" %e)
+
         i = 0
         #cur.execute("CREATE TABLE toc_data_velo(id INTEGER PRIMARY KEY,number INT,contract_name TEXT,name TEXT,banking bonus|status|bike_stands|available_bike_stands|available_bikes|last_update|adresse|lat|lon
         json_objs = json.loads(ur.urlopen('https://api.jcdecaux.com/vls/v1/stations?contract=Lyon&apiKey=fce6b56320ad1cd5e2fb0dcc38e793bded329a53').read())
@@ -44,6 +55,5 @@ def refresh_database():
 
             #cur.execute("INSERT INTO toc_station_velov(lat,lon,adresse,number_station,nb_velos, nb_places) VALUES(%s,%s,%s,%s,%s,%s)", (float(obj['position']['lat']),float(obj['position']['lng']),a,int(obj["number"]),int(obj["available_bike_stands"]), int(obj["available_bikes"])))
             cur.execute('INSERT INTO toc_data_velo(number,contract_name,name,banking,bonus,status,bike_stands,available_bike_stands,available_bikes,last_update,lat,lon,adresse) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)', (int(obj["number"]), (obj["contract_name"]), (obj["name"]), obj["banking"], obj["bonus"], obj["status"], obj["bike_stands"], obj["available_bike_stands"], obj["available_bikes"], int(obj["last_update"]/1000),float(obj['position']['lat']),float(obj['position']['lng']),a))
-        connexion.commit()
 
 refresh_database()
