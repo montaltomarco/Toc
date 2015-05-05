@@ -36,4 +36,9 @@ public class SignInActivity extends ActionBarActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    public void ButtonOnClickSign()
+    {
+        // TODO : Connexion logic
+    }
 }

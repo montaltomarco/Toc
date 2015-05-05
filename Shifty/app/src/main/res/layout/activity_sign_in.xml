@@ -5,7 +5,8 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="fr.insa_lyon.shifty.LoginActivity">
+    tools:context="fr.insa_lyon.shifty.MainActivity"
+    android:id="@+id/global">
 
     <ScrollView android:id="@+id/login_form" android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -93,15 +94,22 @@
                 android:id="@+id/passwordConfirm"
                 android:layout_gravity="center_horizontal"
                 android:hint="@string/prompt_password_confirm"
-                android:layout_marginBottom="35dp" />
+                android:layout_marginBottom="15dp" />
 
-            <Button
-                android:layout_width="184dp"
-                android:layout_height="wrap_content"
-                android:text="S&apos;inscrire"
-                android:id="@+id/sign_in_button"
+            <ImageButton
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:id="@+id/imageButton"
                 android:layout_gravity="center_horizontal"
-                android:onClick="signInPage" />
+                android:background="@drawable/mindmap" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="Inscription"
+                android:id="@+id/textView6"
+                android:layout_gravity="center_horizontal" />
 
         </LinearLayout>
     </ScrollView>

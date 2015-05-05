@@ -6,20 +6,38 @@ from django.http import HttpResponse
 from django.views.decorators.http import require_http_methods
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
-<<<<<<< HEAD
+from models import *
 from stations_metrodb import refresh_database
-=======
 import requests
->>>>>>> e623507e970b9c90b5eb7ea428244d48db20f666
 import json
 
 #Utils
 from utils import getCoordByNames
+from models import *
 
 # Create your views here.
 
 def index(request):
-    return HttpResponse("Index Page. Welcome to Shifty")
+    lieu1 = Lieu()
+    lieu2 = Lieu()
+    lieu1.lon = 4.874211
+    lieu1.lat = 45.7765506
+    lieu2.lon = 4.848370
+    lieu2.lat = 45.743943
+    lieu1.save()
+    lieu2.save()
+    itineraire = Itineraire()
+    itineraire.start_pos = lieu1
+    itineraire.end_pos = lieu2
+    user = Personne()
+    moyen_velov = Moyen_velov()
+    moyen_velov.nom = "Velov"
+    moyen_velov.code = "VLV"
+    moyen_velov.save()
+    moyen_velov.calculerItineraire(itineraire,user)
+
+
+    return HttpResponse("e")
 
 @require_http_methods(["GET", "POST"])
 @csrf_exempt
@@ -52,7 +70,9 @@ def getCoordByAddressNames(request):
 
     response_data = getCoordByNames(firstAddress=firstAddress, secondAddress=secondAddress)
 
-    return HttpResponse(json.dumps(response_data), content_type='application/json')
+    #print response_data["firstAddress"]
+
+    return HttpResponse(response_data, content_type='application/json; charset=utf-8')
 
 @require_http_methods(["GET"])
 def setSelectedRoute(request):

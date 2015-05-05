@@ -5,10 +5,6 @@ __author__ = 'marcomontalto'
 
 import requests
 import json
-import codecs
-import sys
-streamWriter = codecs.lookup('utf-8')[-1]
-sys.stdout = streamWriter(sys.stdout)
 
 def getCoordByNames(firstAddress, secondAddress):
     dict = {}
@@ -19,19 +15,17 @@ def getCoordByNames(firstAddress, secondAddress):
     temp2 = []
     response_data = []
 
-    resp1 = json.loads((requests.get(u"http://nominatim.openstreetmap.org/search/?q=%s&format=json" %firstAddress)).text.encode('utf-8'))
-    print resp1
+    resp1 = requests.get(u"http://nominatim.openstreetmap.org/search/?q=%s&format=json" %firstAddress).json()
+
     for o in resp1:
         dict2={}
         dict2[u'lon']= o['lon']
         dict2[u'lat']= o['lat']
         dict2[u'name']= o['display_name']
-        print o['display_name']
         temp.append(dict2)
     dict[u'firstAddress'] = temp
 
-    r2 = json.loads((requests.get(u"http://nominatim.openstreetmap.org/search/?q=%s&format=json" %secondAddress)).text.decode('latin1').encode('utf-8', errors='ignore'))
-    print("Resp 2 = ", r2)
+    r2 = requests.get(u"http://nominatim.openstreetmap.org/search/?q=%s&format=json" %secondAddress).json()
     for o in r2:
         dict4={}
         dict4[u'lon']= o['lon']
@@ -43,6 +37,4 @@ def getCoordByNames(firstAddress, secondAddress):
     response_data.append(dict)
     response_data.append(dict3)
 
-    return response_data
-
-getCoordByNames("Lyon", "Paris")
+    return json.dumps(response_data)
