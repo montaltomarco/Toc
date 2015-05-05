@@ -46,11 +46,11 @@ public class LogInActivity extends ActionBarActivity {
         switch (v.getId()) {
             case R.id.connexionButton:
                 //On envoie les données
-                String email = ((EditText)findViewById(R.id.email)).getText().toString();
+                String email = ((EditText)findViewById(R.id.email_login_form)).getText().toString();
                 String password = ((EditText)findViewById(R.id.password)).getText().toString();
                 String uri = "http://10.0.2.2:8080/shifty/login/";
                 HttpPostRequest postRequest = new HttpPostRequest();
-                postRequest.setValeursPOST("nickname",email);
+                postRequest.setValeursPOST("email",email);
                 postRequest.setValeursPOST("password", password);
                 postRequest.execute(uri);
                 //on passe à la vue suivante

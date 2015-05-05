@@ -6,6 +6,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.RadioGroup;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -49,10 +50,22 @@ public class SignInActivity extends ActionBarActivity {
             case R.id.sign_in_button:
                 String nom = ((EditText)findViewById(R.id.nom)).getText().toString();
                 String prenom = ((EditText)findViewById(R.id.prenom)).getText().toString();
+                String age = ((EditText)findViewById(R.id.age)).getText().toString();
+                String adresse = ((EditText)findViewById(R.id.adresse)).getText().toString();
+                String email = ((EditText)findViewById(R.id.email)).getText().toString();
+                String confirmezMdp = ((EditText)findViewById(R.id.passwordConfirm)).getText().toString();
+                String mdp = ((EditText)findViewById(R.id.password)).getText().toString();
+                String civilite = (findViewById(R.id.radioCivilite)).toString();
                 String uri = "http://10.0.2.2:8080/shifty/login/";//a changer par l uri d'inscription
                 HttpPostRequest postRequest = new HttpPostRequest();
-                postRequest.setValeursPOST("nickname",nom);
-                postRequest.setValeursPOST("password", prenom);
+                postRequest.setValeursPOST("email",email);
+                postRequest.setValeursPOST("password", mdp);
+                postRequest.setValeursPOST("",nom);
+                postRequest.setValeursPOST("",prenom );
+                postRequest.setValeursPOST("",civilite);
+                postRequest.setValeursPOST("",adresse );
+                postRequest.setValeursPOST("",age);
+                postRequest.setValeursPOST("",confirmezMdp );
                 postRequest.execute(uri);
                 //Exemple d'appel de getRequest
                /* HttpGetRequest getRequest = new HttpGetRequest();

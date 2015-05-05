@@ -45,9 +45,9 @@ def login(request):
     if request.method == 'GET':
         return HttpResponse(" Error : Login Page Requires POST DATA <br>  ")
     elif request.method == 'POST':
-        nickname = request.POST.get('nickname', '')
+        email = request.POST.get('email', '')
         password = request.POST.get('password', '')
-        return HttpResponse("Login page <br> Nickname is : "+ nickname + ", Password is : " + password)
+        return HttpResponse("Login page <br> Nickname is : "+ email + ", Password is : " + password)
 
 @require_http_methods(["GET"])
 def getRoute(request):
