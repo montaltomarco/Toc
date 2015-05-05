@@ -1,7 +1,8 @@
 from django.db import models
 from math import *
 from collections import *
-
+import requests
+import json
 # Create your models here.
 
 def calculerDistance(depart,arrivee):
@@ -26,22 +27,17 @@ def metres_to_coordY(distance):
 
 #Definit un reseau de stations et de lignes
 # comme le reseau d'arret TCL ou le reseau de velov
-class Reseau(models.Model):
-    nombreDeStation = models.IntegerField()
+def getStationVelov(self,zoneRecherche,station_depart):
+    querySet = Station_velov.objects.filter(lat__range = (zoneRecherche.begY,zoneRecherche.endY)
+    ).filter(lon__range = (zoneRecherche.begX,zoneRecherche.endX))
+    print querySet
+    if station_depart:
+        querySet.filter(nb_velos__gt = 2)
+    else:
+        querySet.filter(nb_places__gt = 2)
+    print querySet
+    return querySet
 
-    def getStation(self,zoneRecherche,station_depart):
-        querySet = Station_velov.objects.filter(lat__range = (zoneRecherche.begY,zoneRecherche.endY)
-        ).filter(lon__range = (zoneRecherche.begX,zoneRecherche.endX))
-        print querySet
-        if station_depart:
-            querySet.filter(nb_velos__gt = 2)
-        else:
-            querySet.filter(nb_places__gt = 2)
-        print querySet
-        return querySet
-
-reseau_velov = Reseau()
-reseau_TCL = Reseau()
 
 class Lieu(models.Model):
     lat = models.FloatField('Latitude')
@@ -378,7 +374,7 @@ def getStationsZone(itineraire,user,depart):
         print zone_rech.endX
         print zone_rech.begY
         print zone_rech.endY
-        stations_proches = reseau_velov.getStation(zone_rech,True)
+        stations_proches = getStationVelov(zone_rech,True)
         if len(stations_proches)>0:
             stations_libres_trouvees = True
 
@@ -445,6 +441,39 @@ class Trajet(models.Model):
         self.distance_directe = sqrt(coordX_to_metres(self.trajet.start_pos.lon-self.trajet.end_pos.lon)**2+coordY_to_metres(self.trajet.start_pos.lat-self.trajet.end_pos.lat)**2)
         return self.distance_directe
 
+def get_directions(fromCoordX,fromCoordY,toCoordX,toCoordY,route_type = "bicycle"):
+    #route_type = "bicycle" ou "pedestrian"
+    key = "Fmjtd%7Cluur290anu%2Crl%3Do5-908a0y"
+    r = requests.get('http://open.mapquestapi.com/directions/v2/route?key=%s&outFormat=json&routeType=%s&timeType=1&enhancedNarrative=true&locale=fr_FR&unit=k&from=%s,%s&to=%s,%s&drivingStyle=2&highwayEfficiency=21.0' %(key,route_type,fromCoordX,fromCoordY,toCoordX,toCoordY)).text
+    json_obj = json.loads(r)
+    liste_sections = []
+    for man in json_obj['route']['legs'][0]['maneuvers']:
+        s = Section()
+        s.index = man['index']
+        s.direction = man['direction']
+        s.streets = man['streets']
+        #s.maneuverNotes = man['maneuverNotes
+        print man['maneuverNotes']
+        s.distance = man['distance']
+        s.transportMode = man['transportMode']
+        s.signs = man['signs']
+        s.iconUrl = man['iconUrl']
+        s.directionName = man['directionName']
+        s.time = man['time']
+        s.narrative = man['narrative']
+        l = Lieu()
+        l.lat = man['startPoint']['lat']
+        l.lon = man['startPoint']['lng']
+        l.adresse = man['streets']
+        l.save()
+        s.startPoint = l
+        s.turnType = man['turnType']
+        s.encours = False
+        s.save()
+        liste_sections.append(s)
+    return liste_sections
+
+
 #Classe utilisee pour le calcul d'un itineraire
 #la classe doit etre remplie avec les donnees de la
 #requete itineraire client
@@ -453,10 +482,18 @@ def obtenir_propositions(trajet,transports_demandes,personne):
     if not(trajet.est_non_nul()):
         return False
     for moyen_transport in transports_demandes:
-        try:
-            (stat_dep,stat_arr,duree) = selectionner_stations_velov(trajet,personne)
-        except Exception as error:
-            pass
+        #TODO:Uniformiser
+        if moyen_transport == "VLV":
+            try:
+                (stat_dep,stat_arr,duree) = selectionner_stations_velov(trajet,personne)
+                sectionPiedD = get_directions(trajet.start_pos.lon,trajet.start_pos.lat,stat_dep.lon,stat_dep.lat,"pedestrian")
+                sectionVelov = get_directions(stat_dep.lon,stat_dep.lat,stat_arr.lon,stat_arr.lat)
+                sectionPiedF = get_directions(stat_arr.lon,stat_arr.lat,trajet.end_pos.lon,trajet.end_pos.lat,"pedestrian")
+            except Exception as error:
+                pass
+
+        if moyen_transport == "FOT":
+            toto = False
     return True
 
 
