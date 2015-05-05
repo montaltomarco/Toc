@@ -4,6 +4,12 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.EditText;
+
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class SignInActivity extends ActionBarActivity {
@@ -37,8 +43,28 @@ public class SignInActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void ButtonOnClickSign()
+    public void ButtonOnClickSign(View v)
     {
-        // TODO : Connexion logic
+        switch (v.getId()) {
+            case R.id.sign_in_button:
+                String nom = ((EditText)findViewById(R.id.nom)).getText().toString();
+                String prenom = ((EditText)findViewById(R.id.prenom)).getText().toString();
+                String uri = "http://10.0.2.2:8080/shifty/login/";//a changer par l uri d'inscription
+                HttpPostRequest postRequest = new HttpPostRequest();
+                postRequest.setValeursPOST("nickname",nom);
+                postRequest.setValeursPOST("password", prenom);
+                postRequest.execute(uri);
+                //Exemple d'appel de getRequest
+               /* HttpGetRequest getRequest = new HttpGetRequest();
+                String url = "http://10.0.2.2:8080/shifty/coordonnes/";
+                String address1 = ((EditText)findViewById(R.id.adresse1)).getText().toString();
+                String address2 = ((EditText)findViewById(R.id.adresse2)).getText().toString();
+                getRequest.setNameValuePairs("firstAddress", adress1);
+                getRequest.setNameValuePairs("firstAddress", adress2);
+                getRequest.execute(url);*/
+                break;
+        }
     }
+
+
 }
