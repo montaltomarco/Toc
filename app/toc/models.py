@@ -4,6 +4,23 @@ from collections import *
 
 # Create your models here.
 
+def getTransportInstances(transport):
+    if transport=="VLV":
+        return False
+
+    elif transport=="TCL":
+        return False
+
+    elif transport=="BLU":
+        return False
+
+    elif transport=="FOT":
+        return False
+
+    elif transport=="VLO":
+        return False
+    else:
+        return False
 
 def calculerDistance(depart,arrivee):
     deltaT = coordY_to_metres(abs(arrivee.lat - depart.lat))
@@ -190,6 +207,7 @@ class Arret_TCL(Lieu):
     #lignes = models.ManyToManyField(Ligne_TCL)
     pmr = models.BooleanField()
     escalator = models.BooleanField()
+    stations_velov_proches = models.ManyToManyField(Station_velov)
 
     def __str__(self):
         return self.nom+" "+super(Arret_TCL,self).__str__()
@@ -255,7 +273,7 @@ class MoyenTransport(models.Model):
 
 class Moyen_velo(MoyenTransport):
     def calulerItineraire(self,itineraire,user):
-
+        return False
 
 class Moyen_velov(MoyenTransport):
     rayon_recherche_beg = [0,500,1000,1500]
@@ -448,8 +466,8 @@ class PropositionItineraire(models.Model):
             self.add(section.moyen_transport)
 
 class Trajet(models.Model):
-    start_pos = models.ManyToManyField(Lieu,related_name="departTraj")
-    end_pos = models.ManyToManyField(Lieu,related_name="arriveeTraj")
+    start_pos = models.ForeignKey(Lieu,related_name="start_trajet_pos")
+    end_pos = models.ForeignKey(Lieu,related_name="end_trajet_pos")
     moyens_transports_demande = models.ManyToManyField(MoyenTransport)
     distance_directe = models.IntegerField(default=0)
 

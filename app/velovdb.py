@@ -54,6 +54,25 @@ def refresh_database():
             new_station.save()
 
             #cur.execute("INSERT INTO toc_station_velov(lat,lon,adresse,number_station,nb_velos, nb_places) VALUES(%s,%s,%s,%s,%s,%s)", (float(obj['position']['lat']),float(obj['position']['lng']),a,int(obj["number"]),int(obj["available_bike_stands"]), int(obj["available_bikes"])))
-            cur.execute('INSERT INTO toc_data_velo(number,contract_name,name,banking,bonus,status,bike_stands,available_bike_stands,available_bikes,last_update,lat,lon,adresse) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)', (int(obj["number"]), (obj["contract_name"]), (obj["name"]), obj["banking"], obj["bonus"], obj["status"], obj["bike_stands"], obj["available_bike_stands"], obj["available_bikes"], int(obj["last_update"]/1000),float(obj['position']['lat']),float(obj['position']['lng']),a))
+            #cur.execute('INSERT INTO toc_data_velo(number,contract_name,name,banking,bonus,status,bike_stands,available_bike_stands,available_bikes,last_update,lat,lon,adresse) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)', (int(obj["number"]), (obj["contract_name"]), (obj["name"]), obj["banking"], obj["bonus"], obj["status"], obj["bike_stands"], obj["available_bike_stands"], obj["available_bikes"], int(obj["last_update"]/1000),float(obj['position']['lat']),float(obj['position']['lng']),a))
+
+
+def set_prox_velov_tcl():
+    query_tcl = Arret_TCL.objects.all()
+    for arret in query_station:
+        arret = Arret_TCL()
+        carre = Carre_recherche()
+        carre.origine = arret
+        carre.rayon = 200
+        carre.calculerCarre()
+
+        query_station = Station_velov.objects.filter(lat__range = (carre.begY,carre.endY)
+        ).filter(lon__range = (carre.begX,carre.endX))
+
+        for station in query_station:
+            arret.station_velov_proches.add(station)
+
+    return False
+
 
 refresh_database()
