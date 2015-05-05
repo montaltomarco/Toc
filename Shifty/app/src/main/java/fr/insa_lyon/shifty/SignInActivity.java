@@ -1,5 +1,6 @@
 package fr.insa_lyon.shifty;
 
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -46,6 +47,7 @@ public class SignInActivity extends ActionBarActivity {
 
     public void ButtonOnClickSign(View v)
     {
+        Intent nextView;
         switch (v.getId()) {
             case R.id.sign_in_button:
                 String nom = ((EditText)findViewById(R.id.nom)).getText().toString();
@@ -67,14 +69,9 @@ public class SignInActivity extends ActionBarActivity {
                 postRequest.setValeursPOST("",age);
                 postRequest.setValeursPOST("",confirmezMdp );
                 postRequest.execute(uri);
-                //Exemple d'appel de getRequest
-               /* HttpGetRequest getRequest = new HttpGetRequest();
-                String url = "http://10.0.2.2:8080/shifty/coordonnes/";
-                String address1 = ((EditText)findViewById(R.id.adresse1)).getText().toString();
-                String address2 = ((EditText)findViewById(R.id.adresse2)).getText().toString();
-                getRequest.setNameValuePairs("firstAddress", adress1);
-                getRequest.setNameValuePairs("firstAddress", adress2);
-                getRequest.execute(url);*/
+
+                nextView = new Intent(getApplicationContext(),LogInActivity.class);
+                startActivity(nextView);
                 break;
         }
     }

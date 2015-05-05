@@ -92,7 +92,8 @@ def login(request):
     elif request.method == 'POST':
         email = request.POST.get('email', '')
         password = request.POST.get('password', '')
-        return HttpResponse("Login page <br> Nickname is : "+ email + ", Password is : " + password)
+
+        return HttpResponse("Login page <br> Email is : "+ email + ", Password is : " + password)
 
 @require_http_methods(["GET"])
 def getRoute(request):
@@ -128,8 +129,6 @@ def getCoordByAddressNames(request):
     secondAddress = request.GET.get('secondAddress', '')
 
     response_data = getCoordByNames(firstAddress=firstAddress, secondAddress=secondAddress)
-
-    #print response_data["firstAddress"]
 
     return HttpResponse(response_data, content_type='application/json; charset=utf-8')
 

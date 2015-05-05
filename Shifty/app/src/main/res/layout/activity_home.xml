@@ -84,7 +84,8 @@
         android:background="@drawable/but_search"
         android:layout_alignParentBottom="true"
         android:layout_alignEnd="@+id/textView8"
-        android:layout_marginBottom="37dp" />
+        android:layout_marginBottom="37dp"
+        android:onClick="ButtonOnClickSearch" />
 
     <ImageButton
         android:layout_width="100dp"

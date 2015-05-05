@@ -37,31 +37,31 @@ public class HttpGetRequest extends AsyncTask<String, String, String> {
     @Override
     protected String doInBackground(String... params) {
         StringBuilder response = new StringBuilder();
+        System.out.println("-----------JE suis dans execute: ------------");
+        try {
 
-    try {
+            String paramsString = URLEncodedUtils.format(nameValuePairs, "UTF-8");
+            HttpGet get = new HttpGet(params[0] + "?" + paramsString);
 
-        String paramsString = URLEncodedUtils.format(nameValuePairs, "UTF-8");
-        HttpGet get = new HttpGet(params[0] + "?" + paramsString);
-
-        DefaultHttpClient httpClient = new DefaultHttpClient();
-        HttpResponse httpResponse = httpClient.execute(get);
-        if (httpResponse.getStatusLine().getStatusCode() == 200) {
-            Log.d("[GET REQUEST]", "HTTP Get succeeded");
-            HttpEntity messageEntity = httpResponse.getEntity();
-            InputStream is = messageEntity.getContent();
-            BufferedReader br = new BufferedReader(new InputStreamReader(is));
-            String line;
-            while ((line = br.readLine()) != null) {
-                response.append(line);
+            DefaultHttpClient httpClient = new DefaultHttpClient();
+            HttpResponse httpResponse = httpClient.execute(get);
+            if (httpResponse.getStatusLine().getStatusCode() == 200) {
+                Log.d("[GET REQUEST]", "HTTP Get succeeded");
+                HttpEntity messageEntity = httpResponse.getEntity();
+                InputStream is = messageEntity.getContent();
+                BufferedReader br = new BufferedReader(new InputStreamReader(is));
+                String line;
+                while ((line = br.readLine()) != null) {
+                    response.append(line);
+                }
+                System.out.println("-----------La reponse GET est : "+response.toString()+"------------");
             }
-            System.out.println("-----------La reponse GET est : "+response.toString()+"------------");
+        } catch (Exception e) {
+            Log.e("[GET REQUEST]", e.getMessage());
         }
-    } catch (Exception e) {
-        Log.e("[GET REQUEST]", e.getMessage());
-    }
-    Log.d("[GET REQUEST]", "Done with HTTP getting");
+        Log.d("[GET REQUEST]", "Done with HTTP getting");
 
-    return null;
+        return response.toString();
     }
 
     public void setNameValuePairs(String id, String value){
