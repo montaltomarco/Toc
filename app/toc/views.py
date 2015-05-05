@@ -1,24 +1,44 @@
 # -*- coding: utf-8 -*-
 # coding: utf-8
 
-from django.shortcuts import render
 from django.http import HttpResponse
 from django.views.decorators.http import require_http_methods
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 from models import *
-#from stations_metrodb import refresh_database
 import requests
 import json
 
 #Utils
 from utils import getCoordByNames
 from models import *
+from inscription import InscriptionForm, CreatePerson
 
 # Create your views here.
 
 def index(request):
-    return HttpResponse()
+    return HttpResponse("Index Page")
+
+@require_http_methods(["GET", "POST"])
+@csrf_exempt
+def inscription(request):
+    if request.method == 'POST':
+        return HttpResponse(" Error : Inscription Page Requires POST DATA <br>  ")
+    elif request.method == 'GET':
+
+        inscriptionForm = InscriptionForm()
+        inscriptionForm.email = request.GET.get('email', '')
+        inscriptionForm.password = request.POST.get('password', '')
+        inscriptionForm.confirmezMdp = request.POST.get('confirmezMdp', '')
+        inscriptionForm.nom = request.POST.get('nom', '')
+        inscriptionForm.prenom = request.POST.get('prenom', '')
+        inscriptionForm.civilite = request.POST.get('civilite', '')
+        inscriptionForm.adresse = request.POST.get('adresse', '')
+        inscriptionForm.age = request.POST.get('age', '')
+
+        CreatePerson(InscriptionForm=inscriptionForm)
+
+        return HttpResponse(inscriptionForm.email)
 
 @require_http_methods(["GET", "POST"])
 @csrf_exempt
@@ -26,9 +46,13 @@ def login(request):
     if request.method == 'GET':
         return HttpResponse(" Error : Login Page Requires POST DATA <br>  ")
     elif request.method == 'POST':
-        nickname = request.POST.get('nickname', '')
+        mail = request.POST.get('mail', '')
         password = request.POST.get('password', '')
-        return HttpResponse("Login page <br> Nickname is : "+ nickname + ", Password is : " + password)
+        p = Personne.objects.get(email=mail)
+        if p.mot_de_pass == password :
+            return HttpResponse("Login page <br> email is : "+ mail + ", Password is : " + password)
+        else:
+            return HttpResponse("email invalid ou mot de passe erroné")
 
 @require_http_methods(["GET"])
 def getRoute(request):
@@ -56,6 +80,39 @@ def getRoute(request):
 
 
     #r = (requests.get('http://open.mapquestapi.com/directions/v2/route?key=Fmjtd%7Cluur290anu%2Crl%3Do5-908a0y&from=45.7695736,4.8534248&to=49.46223865,3.82243905078971&routeType=bicycle&manMaps=false&shapeFormat=raw&generalize=0&unit=k').text)
+    def get_directions(fromCoordX,fromCoordY,toCoordX,toCoordY,route_type = "bicycle"):
+        #route_type = "bicycle" ou "pedestrian"
+        key = "Fmjtd%7Cluur290anu%2Crl%3Do5-908a0y"
+        r = requests.get('http://open.mapquestapi.com/directions/v2/route?key=%s&outFormat=json&routeType=%s&timeType=1&enhancedNarrative=true&locale=fr_FR&unit=k&from=%s,%s&to=%s,%s&drivingStyle=2&highwayEfficiency=21.0' %(key,route_type,fromCoordX,fromCoordY,toCoordX,toCoordY)).text
+        json_obj = json.loads(r)
+        liste_sections = []
+        for man in json_obj['route']['legs'][0]['maneuvers']:
+            s = Section()
+            s.index = man['index']
+            s.direction = man['direction']
+            s.streets = man['streets']
+            #s.maneuverNotes = man['maneuverNotes
+            print man['maneuverNotes']
+            s.distance = man['distance']
+            s.transportMode = man['transportMode']
+            s.signs = man['signs']
+            s.iconUrl = man['iconUrl']
+            s.directionName = man['directionName']
+            s.time = man['time']
+            s.narrative = man['narrative']
+            l = Lieu()
+            l.lat = man['startPoint']['lat']
+            l.lon = man['startPoint']['lng']
+            l.adresse = man['streets']
+            l.save()
+            s.startPoint = l
+            s.turnType = man['turnType']
+            s.encours = False
+            s.save()
+            liste_sections.append(s)
+        return liste_sections
+    
+    response_data = {}
 
     #response_data = {}
 
@@ -68,8 +125,6 @@ def getCoordByAddressNames(request):
     secondAddress = request.GET.get('secondAddress', '')
 
     response_data = getCoordByNames(firstAddress=firstAddress, secondAddress=secondAddress)
-
-    #print response_data["firstAddress"]
 
     return HttpResponse(response_data, content_type='application/json; charset=utf-8')
 
