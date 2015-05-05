@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 
 
 public class LogInActivity extends ActionBarActivity {
@@ -44,7 +45,15 @@ public class LogInActivity extends ActionBarActivity {
         Intent nextView;
         switch (v.getId()) {
             case R.id.connexionButton:
-                // TODO : Connexion Logic
+                //On envoie les données
+                String email = ((EditText)findViewById(R.id.email)).getText().toString();
+                String password = ((EditText)findViewById(R.id.password)).getText().toString();
+                String uri = "http://10.0.2.2:8080/shifty/login/";
+                HttpPostRequest postRequest = new HttpPostRequest();
+                postRequest.setValeursPOST("email",email);
+                postRequest.setValeursPOST("password", password);
+                postRequest.execute(uri);
+                //on passe à la vue suivante
                 nextView = new Intent(getApplicationContext(),HomeActivity.class);
                 startActivity(nextView);
                 break;
