@@ -8,11 +8,11 @@ import json
 import threading
 import datetime
 import psycopg2
-sys.path.append('/app/toc/')
+sys.path.append('/app/')
 os.environ["DJANGO_SETTINGS_MODULE"] = "app.settings"
+from toc.models import *
 import django
 django.setup()
-from toc.models import *
 
 def refresh_database():
     #threading.Timer(600.0, refresh_database).start()
