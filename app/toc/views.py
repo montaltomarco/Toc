@@ -7,9 +7,15 @@ from django.views.decorators.http import require_http_methods
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 from models import *
-from stations_metrodb import refresh_database
 import requests
+import sys
+import os
 import json
+sys.path.append('/app/')
+os.environ["DJANGO_SETTINGS_MODULE"] = "app.settings"
+from toc.models import *
+import django
+django.setup()
 
 #Utils
 from utils import getCoordByNames
@@ -45,10 +51,13 @@ def login(request):
     if request.method == 'GET':
         return HttpResponse(" Error : Login Page Requires POST DATA <br>  ")
     elif request.method == 'POST':
-        nickname = request.POST.get('nickname', '')
+        mail = request.POST.get('mail', '')
         password = request.POST.get('password', '')
-        return HttpResponse("Login page <br> Nickname is : "+ nickname + ", Password is : " + password)
-
+        p = Personne.objects.get(email=mail)
+        if p.mot_de_pass == password :
+            return HttpResponse("Login page <br> email is : "+ mail + ", Password is : " + password)
+        else:
+            return HttpResponse("email invalid ou mot de passe erroné")
 @require_http_methods(["GET"])
 def getRoute(request):
     fromCoordX = request.GET.get('fromX', '')
