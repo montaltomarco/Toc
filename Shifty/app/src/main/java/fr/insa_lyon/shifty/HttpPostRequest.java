@@ -2,6 +2,7 @@ package fr.insa_lyon.shifty;
 
 import android.os.AsyncTask;
 import android.os.StrictMode;
+import android.util.Log;
 import android.widget.EditText;
 import android.widget.RadioGroup;
 
@@ -39,7 +40,9 @@ public class HttpPostRequest extends AsyncTask<String, String, String> {
             HttpClient httpclient = new DefaultHttpClient();
             httpclient.execute(httppost);
 
-        } catch (Exception e) { }
+        } catch (Exception e) {
+            Log.e("[POST REQUEST]", e.getMessage());
+        }
 
         return null;
     }
