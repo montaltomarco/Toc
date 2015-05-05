@@ -46,4 +46,21 @@ def refresh_database():
                 station.nb_places = int(obj["available_bikes"])
                 station.save()
 
+def set_prox_velov_tcl():
+    query_tcl = Arret_TCL.objects.all()
+    for arret in query_station:
+        arret = Arret_TCL()
+        carre = Carre_recherche()
+        carre.origine = arret
+        carre.rayon = 200
+        carre.calculerCarre()
+
+        query_station = Station_velov.objects.filter(lat__range = (carre.begY,carre.endY)
+        ).filter(lon__range = (carre.begX,carre.endX))
+
+        for station in query_station:
+            arret.station_velov_proches.add(station)
+
+    return False
+
 refresh_database()
