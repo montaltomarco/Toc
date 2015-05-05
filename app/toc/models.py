@@ -80,8 +80,7 @@ def Parcours_compare(v1, v2):
 
 class Parcours_inter_station(Parcours_temporel):
     def get_temps_approx(self,user):
-        #TODO: integration user
-        user_speed = 5
+        user_speed = user.vitesse_velo
         dist = calculerDistance(self.approx_dep,self.approx_arr)
         temps_approx = dist/user_speed
         self.temps = temps_approx
@@ -91,13 +90,11 @@ class Parcours_inter_station(Parcours_temporel):
         self.approx_dep = self.exact_dep
         self.approx_arr = self.exact_arr
         #TODO: integeration user
-        user_speed = 5
         return self.get_temps_approx(user)
 
 class Parcours_pied(Parcours_temporel):
     def get_temps_approx(self,user):
-        #TODO: integration user
-        user_speed = 1
+        user_speed = user.vitesse_pied
         dist = calculerDistance(self.approx_dep,self.approx_arr)
         temps_approx = dist/user_speed
         self.temps = temps_approx
@@ -115,59 +112,56 @@ class Parcours_pied(Parcours_temporel):
 
 
 class Section(models.Model):
-	moyen_transport = models.ForeignKey("MoyenTransport")
-	en_cours = models.BooleanField('en_cours')
-	distance = models.IntegerField()
-	taux_pollution = models.FloatField('Pollution')
+    moyen_transport = models.ForeignKey("MoyenTransport")
+    en_cours = models.BooleanField('en_cours')
+    distance = models.IntegerField()
+    taux_pollution = models.FloatField('Pollution')
 
 class Personne(models.Model):
-	nom = models.CharField(max_length=200)
-	prenom = models.CharField(max_length=200)
-	email = models.CharField(max_length=200)
-	mot_de_pass = models.CharField(max_length=200)
-	def __str__(self):
-		return self.nom + ' ' + self.prenom
+    nom = models.CharField(max_length=200)
+    prenom = models.CharField(max_length=200)
+    email = models.CharField(max_length=200)
+    mot_de_pass = models.CharField(max_length=200)
+    vitesse_pied = models.FloatField(default=1.0)
+    vitesse_velo = models.FloatField(default=5.0)
+    def __str__(self):
+        return self.nom + ' ' + self.prenom
 
 class Itineraire(models.Model):
     start_pos = models.ForeignKey(Lieu,related_name="start_pos")
     end_pos = models.ForeignKey(Lieu,related_name="end_pos")
     sections = models.ManyToManyField(Section)
     personnes = models.ManyToManyField(Personne)
-    distance_directe = models.IntegerField(default=0)
-
-    def calculer_distance_directe(self):
-        #self.personne.getVitesse(Moyen_pied())
-        return sqrt(coordX_to_metres(self.trajet.depart_traj.lon-self.trajet.arrivee_traj.lon)**2+coordY_to_metres(self.trajet.depart_traj.lat-self.trajet.arrivee_traj.lat)**2)
 
     def __str__(self):
-		return self.start_pos.name
+        return self.start_pos.name
 
 class Profil(models.Model):
-	type_personne = models.CharField(max_length=200)
+    type_personne = models.CharField(max_length=200)
 
 class Data_velo(models.Model):
-	number = models.IntegerField()
-  	contract_name = models.CharField(max_length=200)
-  	name = models.CharField(max_length=200)
-  	lat = models.FloatField()
-  	lon = models.FloatField()
-  	adresse = models.CharField(max_length=200)
-  	banking = models.BooleanField('banking')
-  	bonus = models.BooleanField('bonus')
-  	status = models.CharField(max_length=200)
-  	bike_stands = models.IntegerField()
-  	available_bike_stands = models.IntegerField()
-  	available_bikes = models.IntegerField()
-  	last_update = models.IntegerField()
-  	def __str__(self):
-		return self.name.encode('utf-8', errors='replace')
+    number = models.IntegerField()
+    contract_name = models.CharField(max_length=200)
+    name = models.CharField(max_length=200)
+    lat = models.FloatField()
+    lon = models.FloatField()
+    adresse = models.CharField(max_length=200)
+    banking = models.BooleanField('banking')
+    bonus = models.BooleanField('bonus')
+    status = models.CharField(max_length=200)
+    bike_stands = models.IntegerField()
+    available_bike_stands = models.IntegerField()
+    available_bikes = models.IntegerField()
+    last_update = models.IntegerField()
+    def __str__(self):
+        return self.name.encode('utf-8', errors='replace')
 
 class Data_meteo(models.Model):
-	timestamps = models.IntegerField()
-  	pluie = models.FloatField()
-  	pluie_convective = models.FloatField()
-  	def __str__(self):
-		return 'Timestamps = ' + str(self.timestamps) + ' Pluie = ' + str(self.pluie) + ' Pluie Convective= ' + str(self.pluie_convective)
+    timestamps = models.IntegerField()
+    pluie = models.FloatField()
+    pluie_convective = models.FloatField()
+    def __str__(self):
+        return 'Timestamps = ' + str(self.timestamps) + ' Pluie = ' + str(self.pluie) + ' Pluie Convective= ' + str(self.pluie_convective)
 
 class Station_velov(Lieu):
     number_station = models.IntegerField()
@@ -259,9 +253,15 @@ class MoyenTransport(models.Model):
     def calculerItineraire(self,itineraire):
         return False
 
+class Moyen_velo(MoyenTransport):
+    def calulerItineraire(self,itineraire,user):
+
+
 class Moyen_velov(MoyenTransport):
     rayon_recherche_beg = [0,500,1000,1500]
     rayon_recherche_end = [300,1000,1500,3000]
+
+    #@param[itineraire] est de type trajet
     def calculerItineraire(self,itineraire,user):
         stations_dep = self.getStationsZone(itineraire,user,True)
         stations_arr = self.getStationsZone(itineraire,user,False)
@@ -346,9 +346,11 @@ class Moyen_velov(MoyenTransport):
                 temps_total = new_trajet.get_temps_exact(user)+tempsStatPiedDep[i]+tempsStatPiedArr[j]
                 temps_totaux[temps_total] = (new_trajet.exact_dep,new_trajet.exact_arr)
 
-        ordered_total_times = sorted(temps_totaux.iteritems())
-        # stat_dep = temps_stat_dep[ordered_total_times[0][0][0]]
-        # stat_arr = ordered_temps_stat_arr[ordered_total_times[0][0][1]]
+        ordered_total_times = sorted(temps_totaux.iterkeys())
+        stat_dep = temps_totaux[ordered_total_times[0]][0]
+        stat_arr = temps_totaux[ordered_total_times[0]][1]
+        print stat_dep
+        print stat_arr
 
         return (ordered_total_times[0])
 
@@ -446,14 +448,20 @@ class PropositionItineraire(models.Model):
             self.add(section.moyen_transport)
 
 class Trajet(models.Model):
-    depart_traj = models.ManyToManyField(Lieu,related_name="departTraj")
-    arrivee_traj = models.ManyToManyField(Lieu,related_name="arriveeTraj")
+    start_pos = models.ManyToManyField(Lieu,related_name="departTraj")
+    end_pos = models.ManyToManyField(Lieu,related_name="arriveeTraj")
     moyens_transports_demande = models.ManyToManyField(MoyenTransport)
+    distance_directe = models.IntegerField(default=0)
 
     def est_non_nul(self):
-        if abs(self.depart_traj.lon-self.arrivee_traj.lon)<0.000001 and abs(self.depart_traj.lat-self.arrivee_traj.lat)<0.000001:
+        if abs(self.start_pos.lon-self.end_pos.lon)<0.000001 and abs(self.start_pos.lat-self.end_pos.lat)<0.000001:
             return False
         return True
+
+    def calculer_distance_directe(self):
+        #self.personne.getVitesse(Moyen_pied())
+        self.distance_directe = sqrt(coordX_to_metres(self.trajet.start_pos.lon-self.trajet.end_pos.lon)**2+coordY_to_metres(self.trajet.start_pos.lat-self.trajet.end_pos.lat)**2)
+        return self.distance_directe
 
 #Classe utilisee pour le calcul d'un itineraire
 #la classe doit etre remplie avec les donnees de la
@@ -467,4 +475,6 @@ class DemandeItineraire(models.Model):
         #Le trajet est nul
         if not(self.trajet.est_non_nul()):
             return False
+        for moyen_transport in self.trajet.moyens_transports_demande:
+            proposition = moyen_transport.calculer_itineraire(self.trajet,self.personne)
         return True

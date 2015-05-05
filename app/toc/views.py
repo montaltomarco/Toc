@@ -26,7 +26,7 @@ def index(request):
     lieu2.lat = 45.743943
     lieu1.save()
     lieu2.save()
-    itineraire = Itineraire()
+    itineraire = Trajet()
     itineraire.start_pos = lieu1
     itineraire.end_pos = lieu2
     user = Personne()
