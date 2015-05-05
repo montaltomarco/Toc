@@ -127,6 +127,7 @@ class Personne(models.Model):
     vitesse_velo = models.FloatField(default=5.0)
     temps_start = models.IntegerField(default=100)
     temps_stop = models.IntegerField(default=100)
+
     def __str__(self):
         return self.nom + ' ' + self.prenom
 
