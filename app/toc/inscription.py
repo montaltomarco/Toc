@@ -13,14 +13,13 @@ class InscriptionForm(forms.Form):
     adresse = forms.CharField(required=False)
     age = forms.IntegerField(required=False)
 
-class CreatePerson(InscriptionForm):
-    connexion = psycopg2.connect(dbname = 'db_data', user = 'postgres', password = 'postgres')
-
-    cur = connexion.cursor()
+def CreatePerson(form):
     new_personne = Personne()
-    new_personne.email = InscriptionForm.email
-    new_personne.mot_de_pass = InscriptionForm.password
-    new_personne.nom = InscriptionForm.nom
-    new_personne.prenom = InscriptionForm.prenom
+    new_personne.email = form.email
+    new_personne.mot_de_pass = form.password
+    new_personne.nom = form.nom
+    new_personne.prenom = form.prenom
+    new_personne.vitesse_pied = 0
+    new_personne.vitesse_velo = 0
 
     new_personne.save()

@@ -36,7 +36,7 @@ def inscription(request):
         inscriptionForm.adresse = request.POST.get('adresse', '')
         inscriptionForm.age = request.POST.get('age', '')
 
-        CreatePerson(InscriptionForm=inscriptionForm)
+        CreatePerson(form=inscriptionForm)
 
         return HttpResponse(inscriptionForm.email)
 
