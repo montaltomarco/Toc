@@ -8,6 +8,7 @@ from django.http import JsonResponse
 from models import *
 import requests
 import json
+import re
 
 #Utils
 from utils import getCoordByNames
@@ -22,23 +23,48 @@ def index(request):
 @require_http_methods(["GET", "POST"])
 @csrf_exempt
 def inscription(request):
-    if request.method == 'POST':
-        return HttpResponse(" Error : Inscription Page Requires POST DATA <br>  ")
-    elif request.method == 'GET':
 
+    response={}
+
+    if request.method == 'POST':
+        response[u'status'] = u'error'
+        response[u'message'] = u'Error - Inscription Requires POST DATA'
+        return JsonResponse(response)
+
+    elif request.method == 'GET':
         inscriptionForm = InscriptionForm()
         inscriptionForm.email = request.GET.get('email', '')
-        inscriptionForm.password = request.POST.get('password', '')
-        inscriptionForm.confirmezMdp = request.POST.get('confirmezMdp', '')
+        inscriptionForm.password = request.GET.get('password', '')
+        inscriptionForm.confirmezMdp = request.GET.get('confirmezMdp', '')
         inscriptionForm.nom = request.POST.get('nom', '')
         inscriptionForm.prenom = request.POST.get('prenom', '')
-        inscriptionForm.civilite = request.POST.get('civilite', '')
+        inscriptionForm.civilite = request.GET.get('civilite', '')
         inscriptionForm.adresse = request.POST.get('adresse', '')
         inscriptionForm.age = request.POST.get('age', '')
 
+        if not re.match(r"^[A-Za-z0-9\.\+_-]+@[A-Za-z0-9\._-]+\.[a-zA-Z]*$", inscriptionForm.email) or inscriptionForm.email=='' :
+            response[u'status'] = u'error'
+            response[u'message'] = u'Error - email - ' + inscriptionForm.email + u" doesn't respect the required format"
+            return JsonResponse(response)
+
+        if inscriptionForm.password!=inscriptionForm.confirmezMdp or inscriptionForm.password=='':
+            print inscriptionForm.password
+            print inscriptionForm.confirmezMdp
+            response[u'status'] = u'error'
+            response[u'message'] = u'Error - les deux mot de passe ne correspondent pas.'
+            return JsonResponse(response)
+
+        if inscriptionForm.civilite:
+            if inscriptionForm.civilite!='homme' and inscriptionForm.civilite!='femme':
+                response[u'status'] = u'error'
+                response[u'message'] = u'Error - vous pouvez seulement etre un homme ou une femme.'
+                return JsonResponse(response)
+
         CreatePerson(form=inscriptionForm)
 
-        return HttpResponse(inscriptionForm.email)
+        response[u'status'] = u'ok'
+        response[u'message'] = inscriptionForm.email
+        return JsonResponse(response)
 
 @require_http_methods(["GET", "POST"])
 @csrf_exempt
