@@ -31,8 +31,7 @@ def getCoordByNames(firstAddress, secondAddress):
         dict4[u'lat']= o['lat']
         dict4[u'name']= o['display_name']
         temp2.append(dict4)
-    dict3[u'secondAddress'] = temp2
-    response_data['depart']=dict
-    response_data['arrivee'] = dict3
+    response_data['firstAddress'] = temp
+    response_data['secondAddress'] = temp2
 
     return json.dumps(response_data)
