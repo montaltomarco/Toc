@@ -1,8 +1,10 @@
+# -*- coding: utf-8 -*-
 from django.db import models
 from math import *
 from collections import *
 import requests
 import json
+import time
 # Create your models here.
 
 def calculerDistance(depart,arrivee):
@@ -612,6 +614,43 @@ def obtenir_propositions(trajet,transports_demandes,personne):
             print "Station arr "+str(stat_arr.lon)+" "+str(stat_arr.lat)
             sectionPiedD = get_directions(trajet.start_pos.lat,trajet.start_pos.lon,stat_dep.lat,stat_dep.lon,"pedestrian")
             sectionVelov = get_directions(stat_dep.lat,stat_dep.lon,stat_arr.lat,stat_arr.lon)
+
+            #Cas de la Pluie pendant le trajet avec des prcipitations suprieures  2mm
+            tempsServeur = int(time.time()) + (5*60) #on ajoute 5 minutes car on concidère qu'on part 5 minutes aprs avoir lancé l'application
+            tempsMarchePied = sectionPiedD[0]
+            tempsVelov = sectionVelov[0]
+
+            timestampVelovDepart = (tempsServeur + tempsMarchePied) - ((tempsServeur + tempsMarchePied)%600) #on veut tomber sur un bon timestamp en BD
+
+            i = 0
+            velovPluie = False
+            idFinVelov = 0
+
+            while(i < tempsVelov):
+                temps = timestampVelovDepart + i
+                meteo = Data_meteo().objects.get(timestamps = temps)
+
+                if meteo.pluie >= 2.0:
+                    velovPluie = True
+                    break
+
+                i += 600
+                idFinVelov += 1
+
+            #Mise à jour des Temps de Trajet pour le Velov et on supprime le reste
+           # if velovPluie == True:
+                #i = 0
+                #while i < idFinVelov:
+                    #sectionVelov[i].time -=  sectionVelov[idFinVelov]
+                    #i += 1
+                #On ne garde que la sous liste qui nous intéresse
+                #sectionVelov = sectionVelov[0:idFinVelov]
+
+                #Calcul de la station de velov la plus proche car il pleut
+                #stat_arr.lat = sectionVelov[idFinVelov]
+                #stat_arr.lon = sectionVelov[idFinVelov]
+                #sectionVelov = get_directions(stat_dep.lat,stat_dep.lon,stat_arr.lat,stat_arr.lon)
+
             sectionPiedF = get_directions(stat_arr.lat,stat_arr.lon,trajet.end_pos.lat,trajet.end_pos.lon,"pedestrian")
             print sectionVelov
             for section in sectionVelov:
