@@ -93,7 +93,8 @@
         android:id="@+id/SaveButton"
         android:background="@drawable/but"
         android:layout_alignTop="@+id/SearchButton"
-        android:layout_alignEnd="@+id/textView10" />
+        android:layout_alignEnd="@+id/textView10"
+        android:onClick="ButtonOnClickSearch" />
 
     <TextView
         android:layout_width="wrap_content"

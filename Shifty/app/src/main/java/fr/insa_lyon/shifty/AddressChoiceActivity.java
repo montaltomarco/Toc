@@ -70,7 +70,11 @@ public class AddressChoiceActivity extends ActionBarActivity {
 
         return super.onOptionsItemSelected(item);
     }
-
+    public void Dummybutton()
+    {
+        Intent inte = new Intent(getApplicationContext(),ResultActivity.class);
+        startActivity(inte);
+    }
     public void ButtonOnClickValidate(View v) {
         Intent nextView;
         switch (v.getId()) {

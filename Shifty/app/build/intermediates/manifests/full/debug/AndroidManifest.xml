@@ -60,6 +60,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="fr.insa_lyon.shifty.HomeActivity" />
         </activity>
+        <activity
+            android:name="fr.insa_lyon.shifty.ResultActivity"
+            android:label="@string/title_activity_result"
+            android:parentActivityName="fr.insa_lyon.shifty.AddressChoiceActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="fr.insa_lyon.shifty.AddressChoiceActivity" />
+        </activity>
 
         <meta-data
             android:name="com.google.android.gms.version"

@@ -111,6 +111,7 @@
         android:id="@+id/SearchButton"
         android:layout_alignTop="@+id/textView10"
         android:layout_alignStart="@+id/SaveButton"
-        android:background="@drawable/but_search" />
+        android:background="@drawable/but_search"
+        android:onClick="Dummybutton" />
 
 </RelativeLayout>

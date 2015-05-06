@@ -1715,12 +1715,10 @@ containing a value of this type.
         public static final int vehicle=0x7f020069;
     }
     public static final class id {
-        public static final int ButtonLog=0x7f0a0091;
-        public static final int ButtonSignIn=0x7f0a008c;
-        public static final int Description=0x7f0a0086;
+        public static final int ButtonLog=0x7f0a008f;
+        public static final int ButtonSignIn=0x7f0a008a;
         public static final int SaveButton=0x7f0a006a;
         public static final int SearchButton=0x7f0a0069;
-        public static final int Title=0x7f0a0085;
         public static final int action_bar=0x7f0a0045;
         public static final int action_bar_activity_content=0x7f0a0000;
         public static final int action_bar_container=0x7f0a0044;
@@ -1734,12 +1732,12 @@ containing a value of this type.
         public static final int action_mode_bar=0x7f0a0042;
         public static final int action_mode_bar_stub=0x7f0a0041;
         public static final int action_mode_close_button=0x7f0a0034;
-        public static final int action_settings=0x7f0a0095;
+        public static final int action_settings=0x7f0a0093;
         public static final int activity_chooser_view_content=0x7f0a0035;
         public static final int adjust_height=0x7f0a0016;
         public static final int adjust_width=0x7f0a0017;
-        public static final int adresse=0x7f0a0080;
-        public static final int age=0x7f0a007f;
+        public static final int adresse=0x7f0a0081;
+        public static final int age=0x7f0a0080;
         public static final int always=0x7f0a001b;
         public static final int arrivee=0x7f0a0066;
         public static final int autoCompleteTextView2=0x7f0a006d;
@@ -1768,11 +1766,11 @@ containing a value of this type.
         public static final int end=0x7f0a0014;
         public static final int expand_activities_button=0x7f0a0036;
         public static final int expanded_menu=0x7f0a003c;
-        public static final int frameLayoutHome=0x7f0a008a;
-        public static final int frameLayoutHome2=0x7f0a008e;
+        public static final int frameLayoutHome=0x7f0a0088;
+        public static final int frameLayoutHome2=0x7f0a008c;
         public static final int global=0x7f0a0053;
         public static final int grayscale=0x7f0a0030;
-        public static final int gridLayout=0x7f0a0088;
+        public static final int gridLayout=0x7f0a0086;
         public static final int holo_dark=0x7f0a0023;
         public static final int holo_light=0x7f0a0024;
         public static final int home=0x7f0a0004;
@@ -1781,11 +1779,10 @@ containing a value of this type.
         public static final int icon=0x7f0a003a;
         public static final int ifRoom=0x7f0a001d;
         public static final int image=0x7f0a0037;
-        public static final int imageButton=0x7f0a0082;
-        public static final int imageView=0x7f0a0092;
-        public static final int imageView2=0x7f0a0089;
+        public static final int imageButton=0x7f0a0083;
+        public static final int imageView=0x7f0a0090;
+        public static final int imageView2=0x7f0a0087;
         public static final int imageView3=0x7f0a0068;
-        public static final int imageView4=0x7f0a0087;
         public static final int inscriptionButton=0x7f0a0075;
         public static final int listMode=0x7f0a0009;
         public static final int list_item=0x7f0a0039;
@@ -1795,12 +1792,12 @@ containing a value of this type.
         public static final int middle=0x7f0a0015;
         public static final int monochrome=0x7f0a0031;
         public static final int never=0x7f0a001e;
-        public static final int nom=0x7f0a007d;
+        public static final int nom=0x7f0a007e;
         public static final int none=0x7f0a000e;
         public static final int normal=0x7f0a000a;
         public static final int password=0x7f0a0073;
-        public static final int passwordConfirm=0x7f0a0081;
-        public static final int prenom=0x7f0a007e;
+        public static final int passwordConfirm=0x7f0a0082;
+        public static final int prenom=0x7f0a007f;
         public static final int production=0x7f0a0025;
         public static final int progress_circular=0x7f0a0005;
         public static final int progress_horizontal=0x7f0a0006;
@@ -1813,11 +1810,12 @@ containing a value of this type.
         public static final int radioButton_secondAddress1=0x7f0a005c;
         public static final int radioButton_secondAddress2=0x7f0a005d;
         public static final int radioButton_secondAddress3=0x7f0a005e;
-        public static final int radioCivilite=0x7f0a007a;
+        public static final int radioCivilite=0x7f0a007b;
         public static final int radioGroup_arrivee=0x7f0a005b;
         public static final int radioGroup_depart=0x7f0a0055;
-        public static final int radioMadame=0x7f0a007c;
-        public static final int radioMonsieur=0x7f0a007b;
+        public static final int radioMadame=0x7f0a007d;
+        public static final int radioMonsieur=0x7f0a007c;
+        public static final int resultList=0x7f0a007a;
         public static final int sandbox=0x7f0a0026;
         public static final int satellite=0x7f0a0019;
         public static final int search_badge=0x7f0a0049;
@@ -1835,30 +1833,30 @@ containing a value of this type.
         public static final int showCustom=0x7f0a000f;
         public static final int showHome=0x7f0a0010;
         public static final int showTitle=0x7f0a0011;
-        public static final int sign_in_button=0x7f0a0083;
+        public static final int sign_in_button=0x7f0a0084;
         public static final int split_action_bar=0x7f0a0007;
         public static final int strict_sandbox=0x7f0a0027;
         public static final int submit_area=0x7f0a0050;
         public static final int tabMode=0x7f0a000b;
         public static final int terrain=0x7f0a001a;
-        public static final int textConnexion=0x7f0a0090;
-        public static final int textInscription=0x7f0a008b;
+        public static final int textConnexion=0x7f0a008e;
+        public static final int textInscription=0x7f0a0089;
         public static final int textView10=0x7f0a0067;
         public static final int textView11=0x7f0a006b;
         public static final int textView12=0x7f0a006c;
         public static final int textView13=0x7f0a006e;
-        public static final int textView14=0x7f0a008f;
-        public static final int textView2=0x7f0a008d;
+        public static final int textView14=0x7f0a008d;
+        public static final int textView2=0x7f0a008b;
         public static final int textView4=0x7f0a0078;
         public static final int textView5=0x7f0a0077;
-        public static final int textView6=0x7f0a0084;
+        public static final int textView6=0x7f0a0085;
         public static final int textView7=0x7f0a0062;
         public static final int textView8=0x7f0a0063;
         public static final int textView9=0x7f0a0064;
         public static final int textViewPointArrive=0x7f0a005a;
         public static final int textViewPointDepart=0x7f0a0054;
-        public static final int textViewWelcome=0x7f0a0093;
-        public static final int textViewWelcomeAl=0x7f0a0094;
+        public static final int textViewWelcome=0x7f0a0091;
+        public static final int textViewWelcomeAl=0x7f0a0092;
         public static final int textViewiti=0x7f0a006f;
         public static final int title=0x7f0a003b;
         public static final int up=0x7f0a0008;
@@ -1898,13 +1896,10 @@ containing a value of this type.
         public static final int activity_home=0x7f040018;
         public static final int activity_log_in=0x7f040019;
         public static final int activity_main=0x7f04001a;
-        public static final int activity_sign_in=0x7f04001b;
-        public static final int fragment_bus=0x7f04001c;
-        public static final int fragment_cycle=0x7f04001d;
-        public static final int fragment_main=0x7f04001e;
-        public static final int fragment_metro=0x7f04001f;
-        public static final int fragment_route=0x7f040020;
-        public static final int support_simple_spinner_dropdown_item=0x7f040021;
+        public static final int activity_result=0x7f04001b;
+        public static final int activity_sign_in=0x7f04001c;
+        public static final int fragment_main=0x7f04001d;
+        public static final int support_simple_spinner_dropdown_item=0x7f04001e;
     }
     public static final class menu {
         public static final int global=0x7f0e0000;
@@ -1912,7 +1907,8 @@ containing a value of this type.
         public static final int menu_home=0x7f0e0002;
         public static final int menu_log_in=0x7f0e0003;
         public static final int menu_main=0x7f0e0004;
-        public static final int menu_sign_in=0x7f0e0005;
+        public static final int menu_result=0x7f0e0005;
+        public static final int menu_sign_in=0x7f0e0006;
     }
     public static final class mipmap {
         public static final int ic_launcher=0x7f030000;
@@ -1997,13 +1993,14 @@ containing a value of this type.
         public static final int title_activity_home=0x7f0c0049;
         public static final int title_activity_log_in=0x7f0c004a;
         public static final int title_activity_login=0x7f0c004b;
-        public static final int title_activity_sign_in=0x7f0c004c;
-        public static final int title_activity_sign_up=0x7f0c004d;
-        public static final int title_choisis_points=0x7f0c004e;
-        public static final int title_section1=0x7f0c004f;
-        public static final int title_section2=0x7f0c0050;
-        public static final int title_section3=0x7f0c0051;
-        public static final int wallet_buy_button_place_holder=0x7f0c0052;
+        public static final int title_activity_result=0x7f0c004c;
+        public static final int title_activity_sign_in=0x7f0c004d;
+        public static final int title_activity_sign_up=0x7f0c004e;
+        public static final int title_choisis_points=0x7f0c004f;
+        public static final int title_section1=0x7f0c0050;
+        public static final int title_section2=0x7f0c0051;
+        public static final int title_section3=0x7f0c0052;
+        public static final int wallet_buy_button_place_holder=0x7f0c0053;
     }
     public static final class style {
         /**  Customize your theme here. 
