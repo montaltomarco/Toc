@@ -9,6 +9,7 @@ from models import *
 import requests
 import json
 import re
+from django.shortcuts import render_to_response
 
 #Utils
 from utils import getCoordByNames
@@ -18,7 +19,7 @@ from inscription import InscriptionForm, CreatePerson
 # Create your views here.
 
 def index(request):
-    return HttpResponse("Index Page")
+    return render_to_response('Shifty.html')
 
 @require_http_methods(["GET", "POST"])
 @csrf_exempt
