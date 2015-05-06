@@ -39,7 +39,7 @@ public class HttpGetRequest extends AsyncTask<String, String, String> {
     protected void onPostExecute(String result) {
         // TODO Auto-generated method stub
         super.onPostExecute(result);
-        System.out.println("Resultat de onPostExecute : -------------------"+result);
+
         home.setJson(result);
 
     }

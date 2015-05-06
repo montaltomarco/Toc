@@ -10,11 +10,14 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import android.widget.EditText;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
 
 /**
  * Created by marcomontalto on 06/05/15.
  */
 public class AddressChoiceActivity extends ActionBarActivity {
+
+    private JSONObject response;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,14 +27,22 @@ public class AddressChoiceActivity extends ActionBarActivity {
 
         if(b!=null)
         {
-            String[] value = b.getStringArray("result");
+            String value = b.getString("result");
 
             try {
-                JSONObject firstAddresses = new JSONObject(value[0]);
-                JSONObject secondAddresses = new JSONObject(value[1]);
-                System.out.println("Lenght is : " + firstAddresses.getJSONArray("firstAddress").length());
-                ((RadioButton)findViewById(R.id.radioButton_firstAddress1)).setText((firstAddresses.getJSONArray("firstAddress")).getJSONObject(0).getString("lat"));
-                System.out.println("Result is : " +  value);
+                response = new JSONObject(value);
+
+                RadioGroup rbtnGrp1 = (RadioGroup)findViewById(R.id.radioGroup_depart);
+                for (int i = 0; i < response.getJSONArray("firstAddress").length(); i++) {
+                    ((RadioButton) rbtnGrp1.getChildAt(i)).setText(response.getJSONArray("firstAddress").getJSONObject(i).getString("name"));
+                    ((RadioButton) rbtnGrp1.getChildAt(i)).setVisibility(View.VISIBLE);
+                }
+
+                RadioGroup rbtnGrp2 = (RadioGroup)findViewById(R.id.radioGroup_arrivee);
+                for (int i = 0; i < response.getJSONArray("secondAddress").length(); i++) {
+                    ((RadioButton) rbtnGrp2.getChildAt(i)).setText(response.getJSONArray("secondAddress").getJSONObject(i).getString("name"));
+                    ((RadioButton) rbtnGrp2.getChildAt(i)).setVisibility(View.VISIBLE);
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -69,10 +80,39 @@ public class AddressChoiceActivity extends ActionBarActivity {
                 nextView = new Intent(getApplicationContext(),HomeActivity.class); //A changer par une vue avec la liste des addresses proposees
                 startActivity(nextView);
                 break;
-            case R.id.button_Valider: //Pourquoi il aurait il un bouton inscription dans homeActivity?
+            case R.id.button_Valider:
+                String url = "http://10.0.2.2:8080/shifty/route/";
+                HttpGetRequest getRequest = new HttpGetRequest();
+
+                try {
+                    RadioGroup rbtnGrp1 = (RadioGroup) findViewById(R.id.radioGroup_depart);
+                    int radioButtonID = rbtnGrp1.getCheckedRadioButtonId();
+                    View radioButton = rbtnGrp1.findViewById(radioButtonID);
+                    int idx = rbtnGrp1.indexOfChild(radioButton);
+                    JSONObject obj = response.getJSONArray("firstAddress").getJSONObject(idx);
+                    getRequest.setNameValuePairs("fromX", obj.getString("lat"));
+                    getRequest.setNameValuePairs("fromY", obj.getString("lon"));
+                    System.out.println("lat :" + obj.getString("lat"));
+                    System.out.println("long :" + obj.getString("lon"));
+
+                    RadioGroup rbtnGrp2 = (RadioGroup) findViewById(R.id.radioGroup_arrivee);
+                    int radioButtonID2 = rbtnGrp2.getCheckedRadioButtonId();
+                    View radioButton2 = rbtnGrp2.findViewById(radioButtonID2);
+                    int idx2 = rbtnGrp2.indexOfChild(radioButton2);
+                    JSONObject obj2 = response.getJSONArray("secondAddress").getJSONObject(idx2);
+                    getRequest.setNameValuePairs("toX", obj.getString("lat"));
+                    getRequest.setNameValuePairs("toY", obj.getString("lon"));
+                    System.out.println("lat2 :" + obj2.getString("lat"));
+                    System.out.println("long2 :" + obj2.getString("lon"));
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
                 System.out.println("************  button valider   ******************");
-                nextView = new Intent(getApplicationContext(),AddressChoiceActivity.class); //A changer par une vue avec la liste des addresses proposees
-                startActivity(nextView);
+                //nextView = new Intent(getApplicationContext(),AddressChoiceActivity.class); //A changer par une vue avec la liste des addresses proposees
+                //startActivity(nextView);
+                getRequest.execute(url);
                 break;
         }
     }
