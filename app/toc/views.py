@@ -1,88 +1,70 @@
 # -*- coding: utf-8 -*-
 # coding: utf-8
 
-from django.shortcuts import render
 from django.http import HttpResponse
 from django.views.decorators.http import require_http_methods
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 from models import *
-#from stations_metrodb import refresh_database
 import requests
 import json
+import re
 
 #Utils
 from utils import getCoordByNames
 from models import *
+from inscription import InscriptionForm, CreatePerson
 
 # Create your views here.
 
 def index(request):
-    lieu1 = Lieu()
-    lieu2 = Lieu()
-    lieu1.lon = 4.874211
-    lieu1.lat = 45.7765506
-    lieu2.lon = 4.848370
-    lieu2.lat = 45.743943
-    lieu1.save()
-    lieu2.save()
-    itineraire = Trajet()
+    return HttpResponse("Index Page")
 
-    station1 = Arret_TCL()
-    station1.lat = lieu1.lat
-    station1.lon = lieu1.lon
-    station1.escalator = True
-    station1.id_station = 1
-    station1.pmr = True
-    station2 = Arret_TCL()
-    station2.lat = lieu1.lat
-    station2.lon = lieu1.lon
-    station2.pmr = True
-    station2.id_station = 1
-    station2.escalator = True
-    station1.save()
-    station2.save()
+@require_http_methods(["GET", "POST"])
+@csrf_exempt
+def inscription(request):
 
-    arret1 = Station_velov()
-    arret1.lat = lieu1.lat
-    arret1.lon = lieu1.lon
-    arret1.number_station = 1
-    arret1.nb_velos = 0
-    arret1.nb_places = 0
-    arret2 = Station_velov()
-    arret2.lat = lieu2.lat
-    arret2.lon = lieu2.lon
-    arret2.number_station = 1
-    arret2.nb_velos = 0
-    arret2.nb_places = 0
-    arret1.save()
-    arret2.save()
+    response={}
 
-    station1.stations_velov_proches.add(arret1)
-    station1.stations_velov_proches.add(arret2)
-    station1.save()
+    if request.method == 'POST':
+        response[u'status'] = u'error'
+        response[u'message'] = u'Error - Inscription Requires POST DATA'
+        return JsonResponse(response)
 
-    print "-------------------------------"
-    toto = station1.stations_velov_proches.all()
-    print toto.count()
-    for stat in toto:
-        print stat.lat
-    print "wwwwwwwwwwwwwwwwwwwwwwwwwwwwwww"
+    elif request.method == 'GET':
+        inscriptionForm = InscriptionForm()
+        inscriptionForm.email = request.GET.get('email', '')
+        inscriptionForm.password = request.GET.get('password', '')
+        inscriptionForm.confirmezMdp = request.GET.get('confirmezMdp', '')
+        inscriptionForm.nom = request.POST.get('nom', '')
+        inscriptionForm.prenom = request.POST.get('prenom', '')
+        inscriptionForm.civilite = request.GET.get('civilite', '')
+        inscriptionForm.adresse = request.POST.get('adresse', '')
+        inscriptionForm.age = request.POST.get('age', '')
 
-    moyen_velov = Moyen_velov()
-    moyen_velov.nom = "Velov"
-    moyen_velov.code = "VLV"
-    moyen_velov.save()
+        if not re.match(r"^[A-Za-z0-9\.\+_-]+@[A-Za-z0-9\._-]+\.[a-zA-Z]*$", inscriptionForm.email) or inscriptionForm.email=='' :
+            response[u'status'] = u'error'
+            response[u'message'] = u'Error - email - ' + inscriptionForm.email + u" doesn't respect the required format"
+            return JsonResponse(response)
 
-    itineraire.moyen_transports_demande = moyen_velov
-    itineraire.start_pos = lieu1
-    itineraire.end_pos = lieu2
-    user = Personne()
+        if inscriptionForm.password!=inscriptionForm.confirmezMdp or inscriptionForm.password=='':
+            print inscriptionForm.password
+            print inscriptionForm.confirmezMdp
+            response[u'status'] = u'error'
+            response[u'message'] = u'Error - les deux mot de passe ne correspondent pas.'
+            return JsonResponse(response)
 
-    moyen_velov.calculerItineraire(itineraire,user)
+        if inscriptionForm.civilite:
+            if inscriptionForm.civilite!='homme' and inscriptionForm.civilite!='femme':
+                response[u'status'] = u'error'
+                response[u'message'] = u'Error - vous pouvez seulement etre un homme ou une femme.'
+                return JsonResponse(response)
 
+        CreatePerson(form=inscriptionForm)
 
-    return HttpResponse("e")
+        response[u'status'] = u'ok'
+        response[u'message'] = inscriptionForm.email
+        return JsonResponse(response)
 
 @require_http_methods(["GET", "POST"])
 @csrf_exempt
@@ -90,38 +72,46 @@ def login(request):
     if request.method == 'GET':
         return HttpResponse(" Error : Login Page Requires POST DATA <br>  ")
     elif request.method == 'POST':
-        email = request.POST.get('email', '')
+        mail = request.POST.get('mail', '')
         password = request.POST.get('password', '')
-
-        return HttpResponse("Login page <br> Email is : "+ email + ", Password is : " + password)
+        p = Personne.objects.get(email=mail)
+        if p.mot_de_pass == password :
+            return HttpResponse("Login page <br> email is : "+ mail + ", Password is : " + password)
+        else:
+            return HttpResponse("email invalid ou mot de passe erroné")
 
 @require_http_methods(["GET"])
 def getRoute(request):
-    fromCoordX = request.GET.get('fromX', '')
-    fromCoordY = request.GET.get('fromY', '')
-    toCoordX = request.GET.get('toX', '')
-    toCoordY = request.GET.get('toY', '')
-    transports = request.GET.get('transports', '')
-    transports = getTransportInstance("TOTO")
     lieu_dep = Lieu()
-    lieu_dep.lat = fromCoordY
-    lieu_dep.lon = fromCoordX
     lieu_arr = Lieu()
-    lieu_dep.lat = toCoordX
-    lieu_dep.lon = toCoordY
+
+    lieu_dep.lon = float(request.GET.get('fromX', ''))
+    lieu_dep.lat = float(request.GET.get('fromY', ''))
+    lieu_arr.lon = float(request.GET.get('toX', ''))
+    lieu_arr.lat = float(request.GET.get('toY', ''))
+    #TODO:Recuperer une liste (cette ligne est suffisante?)
+    transports = request.GET.get('transports', '')
+    print transports
+    lieu_dep.save()
+    lieu_arr.save()
+    transports = ["VLV"]
     trajet = Trajet()
     trajet.start_pos = lieu_dep
     trajet.end_pos = lieu_arr
-    for transport in transports :
-        trajet.moyens_transports_demande.add()
-    demande_courante = DemandeItineraire()
+
+    #TODO:Remplacer le faux user par celui de la session
+    user = Personne()
+
+    obtenir_propositions(trajet,transports,user)
 
 
-    r = (requests.get('http://open.mapquestapi.com/directions/v2/route?key=Fmjtd%7Cluur290anu%2Crl%3Do5-908a0y&from=45.7695736,4.8534248&to=49.46223865,3.82243905078971&routeType=bicycle&manMaps=false&shapeFormat=raw&generalize=0&unit=k').text)
-
+    #r = (requests.get('http://open.mapquestapi.com/directions/v2/route?key=Fmjtd%7Cluur290anu%2Crl%3Do5-908a0y&from=45.7695736,4.8534248&to=49.46223865,3.82243905078971&routeType=bicycle&manMaps=false&shapeFormat=raw&generalize=0&unit=k').text)
     response_data = {}
 
-    return JsonResponse(r)
+    #response_data = {}
+
+    #return JsonResponse(r)
+    return HttpResponse("FE")
 
 @require_http_methods(["GET"])
 def getCoordByAddressNames(request):
@@ -149,3 +139,24 @@ def getInfosRoute(request):
 @require_http_methods(["GET"])
 def getProfile(request):
     return HttpResponse("Show personal infos page<br> NO params")
+
+
+def tests_dams(request):
+    lieu1 = Lieu()
+    lieu2 = Lieu()
+    lieu1.lon = 4.842812
+    lieu1.lat = 45.752029
+    lieu2.lon = 4.8550066229888000
+    lieu2.lat = 45.7629790120815000
+    lieu1.save()
+    lieu2.save()
+    trajet = Trajet()
+
+    moyen_transports_demande = "VLV"
+    trajet.start_pos = lieu1
+    trajet.end_pos = lieu2
+    user = Personne()
+
+    selectionner_stations_velov(trajet,user)
+
+    return HttpResponse("E")
