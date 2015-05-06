@@ -169,6 +169,12 @@ class Station_velov(Lieu):
     nb_velos = models.IntegerField()
     nb_places = models.IntegerField()
 
+class Station_autopartage(Lieu):
+    nom = models.CharField(max_length=200)
+    identifiantstation = models.CharField(max_length=200)
+    commune = models.CharField(max_length=200)
+    typeautopartage = models.CharField(max_length=200)
+
 class Ligne_TCL(models.Model):
     #reseau = models.ForeignKey(Reseau)
     codeTitan = models.CharField(max_length = 20)
