@@ -23,7 +23,7 @@ def getCoordByNames(firstAddress, secondAddress):
             dict2={}
             dict2[u'lon']= o['lon']
             dict2[u'lat']= o['lat']
-            dict2[u'name']= o['display_name'].split(",")[:3]
+            dict2[u'name']= ','.join(o['display_name'].split(",")[:3])
             temp.append(dict2)
         else:
             pass
@@ -36,7 +36,7 @@ def getCoordByNames(firstAddress, secondAddress):
             dict4={}
             dict4[u'lon']= o['lon']
             dict4[u'lat']= o['lat']
-            dict4[u'name']= o['display_name'].split(",")[:3]
+            dict4[u'name']= ','.join(o['display_name'].split(",")[:3])
             temp2.append(dict4)
         else:
             pass
