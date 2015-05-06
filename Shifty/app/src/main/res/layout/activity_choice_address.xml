@@ -5,93 +5,126 @@
     android:id="@+id/global"
     android:weightSum="1"
     android:paddingTop="15dp"
-    android:paddingLeft="12dp">
+    android:paddingLeft="0dp">
 
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="42dp"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Choisi le départ :"
+        android:text="Départ :"
         android:id="@+id/textViewPointDepart"
         android:lines="2"
         android:minHeight="0dp"
-        android:translationZ="0dp" />
+        android:translationZ="0dp"
+        android:textStyle="bold"
+        android:paddingLeft="12dp" />
 
     <RadioGroup
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:clickable="false">
+        android:clickable="false"
+        android:id="@+id/radioGroup_depart"
+        android:paddingLeft="12dp">
 
         <RadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/radioButton_firstAddress1"
-            android:checked="false" />
+            android:checked="false"
+            android:visibility="invisible" />
 
         <RadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/radioButton_firstAddress2"
             android:layout_gravity="right"
-            android:checked="false" />
+            android:checked="false"
+            android:visibility="invisible" />
 
         <RadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/radioButton_firstAddress3"
-            android:checked="false" />
+            android:checked="false"
+            android:visibility="invisible" />
 
         <RadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/radioButton_firstAddress4"
-            android:checked="false" />
+            android:checked="false"
+            android:visibility="invisible" />
 
     </RadioGroup>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="392dp"
+        android:layout_height="5dp"
+        android:layout_gravity="center_horizontal"
+        android:background="#ff000000"
+        android:layout_marginLeft="0dp"
+        android:layout_marginBottom="0dp"
+        android:layout_marginTop="20dp"></LinearLayout>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Choisi la destination :"
+        android:text="Arrivé :"
         android:id="@+id/textViewPointArrive"
         android:lines="2"
         android:minHeight="0dp"
         android:translationZ="0dp"
-        android:paddingTop="20dp" />
+        android:paddingTop="20dp"
+        android:textStyle="bold"
+        android:paddingLeft="12dp" />
 
     <RadioGroup
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:clickable="false" >
+        android:clickable="false"
+        android:paddingLeft="12dp"
+        android:id="@+id/radioGroup_arrivee">
 
         <RadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/radioButton_secondAddress1"
-            android:checked="false" />
+            android:checked="false"
+            android:visibility="invisible" />
 
         <RadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/radioButton_secondAddress2"
-            android:layout_gravity="right"
-            android:checked="false" />
+            android:checked="false"
+            android:visibility="invisible" />
 
         <RadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/radioButton_secondAddress3"
-            android:checked="false" />
+            android:checked="false"
+            android:visibility="invisible" />
 
         <RadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/radioButton_radioButton_secondAddress4"
-            android:checked="false" />
+            android:checked="false"
+            android:visibility="invisible" />
     </RadioGroup>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="5dp"
+        android:layout_gravity="center_horizontal"
+        android:background="#ff000000"
+        android:layout_marginLeft="0dp"
+        android:layout_marginBottom="0dp"
+        android:layout_marginTop="20dp" />
 
     <RelativeLayout
         android:layout_width="match_parent"
