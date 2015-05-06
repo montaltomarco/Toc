@@ -107,6 +107,9 @@ public class AddressChoiceActivity extends ActionBarActivity {
                     getRequest.setNameValuePairs("toY", obj.getString("lon"));
                     System.out.println("lat2 :" + obj2.getString("lat"));
                     System.out.println("long2 :" + obj2.getString("lon"));
+                    getRequest.setChoiceActivity(this);
+                    getRequest.execute();
+
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -120,6 +123,10 @@ public class AddressChoiceActivity extends ActionBarActivity {
 
     public void setRoute(String result)
     {
-
+        Intent nextView = new Intent(getApplicationContext(),ItineraireActivity.class);
+        Bundle params = new Bundle();
+        params.putString("result", result); //Your id
+        nextView.putExtras(params); //Put your id to your next Intent
+        startActivity(nextView);
     }
 }
