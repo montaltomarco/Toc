@@ -30,14 +30,25 @@ def metres_to_coordY(distance):
 def getStationVelov(zoneRecherche,station_depart):
     querySet = Station_velov.objects.filter(lat__range = (zoneRecherche.begY,zoneRecherche.endY)
     ).filter(lon__range = (zoneRecherche.begX,zoneRecherche.endX))
-    print querySet
     if station_depart:
         querySet.filter(nb_velos__gt = 2)
     else:
         querySet.filter(nb_places__gt = 2)
-    print querySet
     return querySet
 
+def getStationBluely(zoneRecherche,station_depart):
+    querySet = Station_autopartage.objects.filter(lat__range = (zoneRecherche.begY,zoneRecherche.endY)
+    ).filter(lon__range = (zoneRecherche.begX,zoneRecherche.endX))
+    return querySet
+
+def getBorneVelo(zoneRecherche,station_depart):
+    querySet = Borne_velo.objects.filter(lat__range = (zoneRecherche.begY,zoneRecherche.endY)
+    ).filter(lon__range = (zoneRecherche.begX,zoneRecherche.endX))
+    if station_depart:
+        querySet.filter(nb_velos__gt = 2)
+    else:
+        querySet.filter(nb_places__gt = 2)
+    return querySet
 
 class Lieu(models.Model):
     lat = models.FloatField('Latitude')
@@ -168,6 +179,9 @@ class Station_velov(Lieu):
     nb_velos = models.IntegerField()
     nb_places = models.IntegerField()
 
+class Borne_velo(Lieu):
+    nbarceaux = models.IntegerField()
+
 class Ligne_TCL(models.Model):
     #reseau = models.ForeignKey(Reseau)
     codeTitan = models.CharField(max_length = 20)
@@ -245,17 +259,12 @@ class Vecteur(models.Model):
         self.distance = sqrt(deltaT**2+deltaL**2)
         return self.distance
 
-rayon_recherche_beg = [0,500,1000,1500]
-rayon_recherche_end = [300,1000,1500,3000]
-
 #@param[itineraire] est de type trajet
 def selectionner_stations_velov(itineraire,user):
-    stations_dep = getStationsZone(itineraire,user,True)
-    stations_arr = getStationsZone(itineraire,user,False)
+    stations_dep = getStationsZone(itineraire,user,True,"velov")
+    stations_arr = getStationsZone(itineraire,user,False,"velov")
     if len(stations_dep)==0 or len(stations_arr)==0 :
-        print "Sortie"
         raise Exception("Pas de station dans la zone")
-    print "Entree"
     temps_stat_dep = {}
     for station in stations_dep:
         #Creation trajets pied entre dep et stat dep
@@ -280,8 +289,6 @@ def selectionner_stations_velov(itineraire,user):
     #On recupere la meilleure station
     best_start_station = temps_stat_dep[ordered_temps_stat_dep[0]][0]
     trajet_pied_best_start_stat = temps_stat_dep[ordered_temps_stat_dep[0]][1]
-    print best_start_station
-    print trajet_pied_best_start_stat
 
     temps_stat_arr = {}
     for station in stations_arr:
@@ -303,7 +310,6 @@ def selectionner_stations_velov(itineraire,user):
         temps_stat_arr[temps_total] = (station,new_trajet,new_trajet2)
 
     ordered_temps_stat_arr = sorted(temps_stat_arr.iterkeys())
-    print ordered_temps_stat_arr
 
     tempsStatPiedDep = []
     tempsStatPiedArr = []
@@ -327,21 +333,17 @@ def selectionner_stations_velov(itineraire,user):
         for j in range(0,nb_recherche_stat_arr):
             new_trajet = Parcours_inter_station()
             new_trajet.exact_dep = temps_stat_dep[ordered_temps_stat_dep[i]][0]
-            print new_trajet.exact_dep
             new_trajet.exact_arr = temps_stat_arr[ordered_temps_stat_arr[j]][0]
-            print new_trajet.exact_arr
             temps_total = new_trajet.get_temps_exact(user)+tempsStatPiedDep[i]+tempsStatPiedArr[j]
             temps_totaux[temps_total] = (new_trajet.exact_dep,new_trajet.exact_arr)
 
     ordered_total_times = sorted(temps_totaux.iterkeys())
     stat_dep = temps_totaux[ordered_total_times[0]][0]
     stat_arr = temps_totaux[ordered_total_times[0]][1]
-    print stat_dep
-    print stat_arr
 
     return (stat_dep,stat_arr,ordered_total_times[0])
 
-def getStationsZone(itineraire,user,depart):
+def getStationsZone(itineraire,user,depart,type,recherche_large=True):
     stations_libres_trouvees = False
     step = 0
     zone_rech = Carre_recherche()
@@ -349,6 +351,20 @@ def getStationsZone(itineraire,user,depart):
         zone_rech.origine = itineraire.start_pos
     else:
         zone_rech.origine = itineraire.end_pos
+
+    vPied = user.vitesse_pied
+    vVelo = user.vitesse_velo
+
+    if type=="velov" and recherche_large:
+        rayon_recherche_beg = [0,500,1000,1500]
+        rayon_recherche_end = [300,1000,1500,3000]
+    elif type=="velov" and not(recherche_large):
+        rayon_recherche_end = [200]
+    elif type=="blue":
+        rayon_recherche_end = [1000,1500,3000,4000]
+        vVelo = 12
+    elif type=="velo":
+        rayon_recherche_end = [300,1000,1500,3000]
 
     dX = (itineraire.end_pos.lon - itineraire.start_pos.lon)
     dY = (itineraire.end_pos.lat - itineraire.start_pos.lat)
@@ -360,25 +376,27 @@ def getStationsZone(itineraire,user,depart):
     dY_norme = dY / sqrt(dX**2+dY**2)
 
     #TODO
-    vPied = 1
-    vVelo = 5
+
     while not(stations_libres_trouvees) and step<len(rayon_recherche_end):
-        print "BOUCLE "+str(step)
         zone_rech.rayon = rayon_recherche_end[step]
         zone_rech.offsetX = dX_norme*itineraire.distance_directe*(vVelo-vPied)/(vVelo+vPied)
         zone_rech.offsetY = dY_norme*itineraire.distance_directe*(vVelo-vPied)/(vVelo+vPied)
         step = step + 1
 
         zone_rech.calculerCarre()
-        print zone_rech.begX
-        print zone_rech.endX
-        print zone_rech.begY
-        print zone_rech.endY
-        stations_proches = getStationVelov(zone_rech,True)
+        if type=="velov":
+            stations_proches = getStationVelov(zone_rech,True)
+        elif type=="blue":
+            stations_proches = getStationBluely(zone_rech,True)
+        elif type=="velo":
+            stations_proches = getBorneVelo(zone_rech,True)
+
         if len(stations_proches)>0:
             stations_libres_trouvees = True
 
     return stations_proches
+
+
 
 def calculerItineraire_TCL_optimise(trajet,itineraire_TCL,itineraire_velov,user):
     sections_contigues = False
@@ -441,6 +459,39 @@ class Trajet(models.Model):
         self.distance_directe = sqrt(coordX_to_metres(self.trajet.start_pos.lon-self.trajet.end_pos.lon)**2+coordY_to_metres(self.trajet.start_pos.lat-self.trajet.end_pos.lat)**2)
         return self.distance_directe
 
+def calculer_velov_bluely(trajet,user):
+    stations_blue_dep = getStationsZone(trajet,user,True,"blue")
+    stations_blue_arr = getStationsZone(trajet,user,False,"blue")
+
+    dico_trajet_debut_bluely = {}
+    dico_trajets = {}
+    for station_dep in stations_blue_dep:
+        current_trajet = Trajet()
+        current_trajet.start_pos = trajet.start_pos
+        current_trajet.end_pos = station_dep
+        try:
+            dico_trajet_debut_bluely[station_dep] = selectionner_stations_velov(trajet,user)
+        except:
+            pass
+
+    for station_arr in stations_blue_arr:
+        current_trajet = Trajet()
+        current_trajet.start_pos = trajet.start_pos
+        current_trajet.end_pos = station_dep
+        (velov_fin_stat_dep,velov_fin_stat_arr,velov_fin_duree) = selectionner_stations_velov(trajet,user)
+        trajet_fin = (velov_fin_stat_dep,velov_fin_stat_arr,velov_fin_duree)
+        for station_dep in stations_blue_dep:
+            trajet_en_blue = Trajet()
+            trajet_en_blue.start_pos = stat_dep
+            trajet_en_blue.end_pos = stat_arr
+            dico_trajets[trajet_en_blue.calculer_distance_directe()/12+velov_fin_duree+dico_trajet_debut_bluely[station_dep][2]] = (dico_trajet_debut_bluely[station_dep],(trajet_en_blue.start_pos,trajet_en_blue.end_pos,trajet_en_blue.distance_directe/12),trajet_fin)
+
+    ordered_total_times = sorted(dico_trajets.iterkeys())
+
+    return ordered_total_times
+
+
+
 def get_directions(fromCoordX,fromCoordY,toCoordX,toCoordY,route_type = "bicycle"):
     #route_type = "bicycle" ou "pedestrian"
     key = "Fmjtd%7Cluur290anu%2Crl%3Do5-908a0y"
@@ -498,12 +549,12 @@ def obtenir_propositions(trajet,transports_demandes,personne):
             print "--------"
             print "Station dep "+str(stat_dep.lon)+" "+str(stat_dep.lat)
             print "Station arr "+str(stat_arr.lon)+" "+str(stat_arr.lat)
-            sectionPiedD = get_directions(trajet.start_pos.lon,trajet.start_pos.lat,stat_dep.lon,stat_dep.lat,"pedestrian")
-            sectionVelov = get_directions(stat_dep.lon,stat_dep.lat,stat_arr.lon,stat_arr.lat)
-            sectionPiedF = get_directions(stat_arr.lon,stat_arr.lat,trajet.end_pos.lon,trajet.end_pos.lat,"pedestrian")
+            sectionPiedD = get_directions(trajet.start_pos.lat,trajet.start_pos.lon,stat_dep.lat,stat_dep.lon,"pedestrian")
+            sectionVelov = get_directions(stat_dep.lat,stat_dep.lon,stat_arr.lat,stat_arr.lon)
+            sectionPiedF = get_directions(stat_arr.lat,stat_arr.lon,trajet.end_pos.lat,trajet.end_pos.lon,"pedestrian")
             print sectionVelov
             for section in sectionVelov:
-                print "VLV"+section.narrative+" "+str(section.temps)
+                print "VLV X"+str(section.trajet.start_pos.lon)+" Y"+str(section.trajet.start_pos.lat)
             for section in sectionPiedD:
                 print "PDD"+section.narrative+" "+str(section.temps)
             for section in sectionPiedF:
