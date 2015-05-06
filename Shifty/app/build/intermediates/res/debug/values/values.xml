@@ -299,6 +299,7 @@
     <string name="title_activity_login">Log In</string>
     <!-- From: file:/E:/Projects/App/Toc/Shifty/app/src/main/res/values/strings.xml -->
     <eat-comment/>
+    <string name="title_activity_result">Result</string>
     <string name="title_activity_sign_in">Shifty - Inscription</string>
     <string name="title_activity_sign_up">Shifty - Connexion</string>
     <string name="title_choisis_points">Choisis tes Adresses !</string>

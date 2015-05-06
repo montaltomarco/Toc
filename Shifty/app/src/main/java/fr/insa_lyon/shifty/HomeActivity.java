@@ -54,11 +54,16 @@ public class HomeActivity extends ActionBarActivity {
                 getRequest.setActivityHome(this);
                 getRequest.execute(url);
                 break;
-            case R.id.inscriptionButton: //Pourquoi il aurait il un bouton inscription dans homeActivity?
-                nextView = new Intent(getApplicationContext(), SignInActivity.class);
-                startActivity(nextView);
+            case R.id.SaveButton:
+                // Sauvegarder l'itinéraire dasn les favoris
                 break;
         }
+    }
+
+    public void Dummybutton()
+    {
+        Intent inte = new Intent(getApplicationContext(),ResultActivity.class);
+        startActivity(inte);
     }
 
     public void setJson(String result){
