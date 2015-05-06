@@ -52,9 +52,6 @@ public class HttpGetRequest extends AsyncTask<String, String, String> {
                 choiceActivity.setRoute(result);
                 break;
             }
-            case 3 :{
-                break;
-            }
 
         }
     }
