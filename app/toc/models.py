@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from django.db import models
 from math import *
 from collections import *
@@ -614,8 +615,8 @@ def obtenir_propositions(trajet,transports_demandes,personne):
             sectionPiedD = get_directions(trajet.start_pos.lat,trajet.start_pos.lon,stat_dep.lat,stat_dep.lon,"pedestrian")
             sectionVelov = get_directions(stat_dep.lat,stat_dep.lon,stat_arr.lat,stat_arr.lon)
 
-            #Cas de la Pluie pendant le trajet avec des précipitations supérieures à 2mm
-            tempsServeur = int(time.time()) + (5*60) #on ajoute 5 minutes car on concidère qu'on part 5 minutes après avoir lancé l'application
+            #Cas de la Pluie pendant le trajet avec des prcipitations suprieures  2mm
+            tempsServeur = int(time.time()) + (5*60) #on ajoute 5 minutes car on concidère qu'on part 5 minutes aprs avoir lancé l'application
             tempsMarchePied = sectionPiedD[0]
             tempsVelov = sectionVelov[0]
 

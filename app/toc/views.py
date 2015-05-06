@@ -117,9 +117,10 @@ def getRoute(request):
 def getCoordByAddressNames(request):
     firstAddress = request.GET.get('firstAddress', '')
     secondAddress = request.GET.get('secondAddress', '')
-
+    print firstAddress
+    print secondAddress
     response_data = getCoordByNames(firstAddress=firstAddress, secondAddress=secondAddress)
-
+    print response_data
     return HttpResponse(response_data, content_type='application/json; charset=utf-8')
 
 @require_http_methods(["GET"])
