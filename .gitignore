@@ -4,6 +4,7 @@
 env/flask.log
 
 app/toc/*.pyc
+app/app/*.pyc
 
 env/.vagrant
 Shifty/build
