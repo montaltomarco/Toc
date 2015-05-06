@@ -566,12 +566,12 @@ def get_directions(fromCoordX,fromCoordY,toCoordX,toCoordY,route_type = "bicycle
         s.streets = man['streets']
         #s.maneuverNotes = man['maneuverNotes
         print man['maneuverNotes']
-        s.temps = man['distance']
+        s.distance = man['distance']
         s.moyen_transport = man['transportMode']
         s.signs = man['signs']
         s.iconUrl = man['iconUrl']
         s.directionName = man['directionName']
-        s.time = man['time']
+        s.temps = man['time']
         s.narrative = man['narrative']
         l = Lieu()
         l.lat = man['startPoint']['lat']
