@@ -7,82 +7,133 @@
     tools:context=".MainActivity$PlaceholderFragment"
     android:background="@android:color/transparent">
 
-    <RelativeLayout
-        android:layout_width="fill_parent"
+    <GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:layout_width="127dp"
+            android:layout_height="26dp"
+            android:id="@+id/imageView2"
+            android:layout_gravity="right|top"
+            android:background="@drawable/grand_lyon"
+            android:layout_row="1"
+            android:layout_column="11" />
+
+        <FrameLayout
+            android:layout_width="fill_parent"
+            android:layout_height="417dp"
+            android:layout_row="2"
+            android:layout_column="11"
+            android:id="@+id/frameLayoutHome">
+
+            <FrameLayout
+                android:layout_width="251dp"
+                android:layout_height="130dp"
+                android:layout_gravity="center_horizontal|top"
+                android:outlineProvider="bounds">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="Inscription"
+                    android:id="@+id/textInscription"
+                    android:layout_gravity="right|center_vertical"
+                    android:textStyle="bold"
+                    android:textIsSelectable="true"
+                    android:onClick="ButtonOnClick" />
+
+                <ImageButton
+                    android:layout_width="90dp"
+                    android:layout_height="90dp"
+                    android:id="@+id/ButtonSignIn"
+                    android:background="@drawable/inscription"
+                    android:nestedScrollingEnabled="false"
+                    android:onClick="ButtonOnClick"
+                    android:layout_toStartOf="@+id/textView2"
+                    android:layout_alignEnd="@+id/textInscription"
+                    android:layout_gravity="left|center_vertical"
+                    android:layout_row="0"
+                    android:layout_column="1" />
+
+            </FrameLayout>
+
+            <FrameLayout
+                android:layout_width="280dp"
+                android:layout_height="165dp"
+                android:layout_gravity="center_horizontal|bottom"
+                android:id="@+id/frameLayoutHome2">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="Contactez Nous : admin@shifty.fr"
+                    android:id="@+id/textView2"
+                    android:layout_gravity="center"
+                    android:textStyle="bold|italic" />
+
+            </FrameLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="H4112 - All right reserved"
+                android:id="@+id/textView14"
+                android:layout_gravity="right|bottom" />
+
+            <FrameLayout
+                android:layout_width="251dp"
+                android:layout_height="154dp"
+                android:layout_gravity="center">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="Connexion"
+                    android:id="@+id/textConnexion"
+                    android:layout_gravity="right|center_vertical"
+                    android:textStyle="bold"
+                    android:textIsSelectable="true"
+                    android:onClick="ButtonOnClick" />
+
+                <ImageButton
+                    android:layout_width="117dp"
+                    android:layout_height="117dp"
+                    android:id="@+id/ButtonLog"
+                    android:background="@drawable/icon_login"
+                    android:nestedScrollingEnabled="false"
+                    android:onClick="ButtonOnClick"
+                    android:layout_below="@+id/ButtonSignIn"
+                    android:layout_centerHorizontal="true"
+                    android:baselineAlignBottom="false"
+                    android:layout_row="4"
+                    android:layout_column="1"
+                    android:layout_gravity="left|center_vertical" />
+            </FrameLayout>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/imageView"
+                android:layout_gravity="left|bottom"
+                android:background="@drawable/ic_launcher" />
+
+        </FrameLayout>
+    </GridLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Welcome to Shifty !"
+        android:id="@+id/textViewWelcome"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="39dp"
-        android:id="@+id/relativeLayout">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Welcome to Shifty !"
-            android:id="@+id/textViewWelcome"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true" />
-    </RelativeLayout>
-
-    <ImageButton
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:id="@+id/ButtonSignIn"
-        android:background="@drawable/mindmap"
-        android:nestedScrollingEnabled="false"
-        android:layout_alignTop="@+id/ButtonLog"
-        android:layout_alignParentStart="true"
-        android:onClick="ButtonOnClick" />
-
-    <ImageButton
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:id="@+id/ButtonLog"
-        android:background="@drawable/checklist"
-        android:nestedScrollingEnabled="false"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"
-        android:onClick="ButtonOnClick" />
-
-    <ImageButton
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:id="@+id/ButtonCont"
-        android:background="@drawable/database"
-        android:nestedScrollingEnabled="false"
-        android:layout_alignTop="@+id/ButtonLog"
-        android:layout_alignParentEnd="true"
-        android:onClick="ButtonOnClick" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="Inscription"
-        android:id="@+id/textView"
-        android:layout_below="@+id/ButtonSignIn"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="41dp" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="Connexion"
-        android:id="@+id/textView2"
-        android:layout_below="@+id/ButtonLog"
-        android:layout_centerHorizontal="true" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="Contactez-nous !"
-        android:id="@+id/textView3"
-        android:layout_below="@+id/ButtonCont"
-        android:layout_alignParentEnd="true"
-        android:layout_marginRight="25dp" />
+        android:layout_alignEnd="@+id/textViewWelcomeAl"
+        android:textStyle="bold|italic" />
 
 </RelativeLayout>
-<!-- From: file:/F:/Toc/Shifty/app/src/main/res/layout/fragment_main.xml -->
+<!-- From: file:/Users/marcomontalto/Desktop/PERSONALE/Insa/4IF/2%20Semestre/Toc/Toc/Shifty/app/src/main/res/layout/fragment_main.xml -->

@@ -6,3 +6,7 @@ env/flask.log
 app/toc/*.pyc
 
 env/.vagrant
+Shifty/build
+Shifty/.idea
+Shifty/.gradle
+Shifty/build.gradle

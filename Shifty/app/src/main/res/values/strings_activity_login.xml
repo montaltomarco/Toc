@@ -13,7 +13,7 @@
     <string name="error_field_required">Champ obligatoire</string>
 
     <!-- Strings related to signin-->
-    <string name="prompt_password_confirm">Confirmez votre mot de passe</string>
+    <string name="prompt_password_confirm">Confirmez mot de passe</string>
     <string name="name">Nom</string>
     <string name="first_name">Prénom</string>
     <string name="adress">Adresse</string>
