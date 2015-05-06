@@ -75,7 +75,6 @@ public class AddressChoiceActivity extends ActionBarActivity {
         Intent nextView;
         switch (v.getId()) {
             case R.id.button_NouvelleRecherche:
-                System.out.println("************  button nouvelle Recherche   ******************");
                 //on passe à la vue suivante
                 nextView = new Intent(getApplicationContext(),HomeActivity.class); //A changer par une vue avec la liste des addresses proposees
                 startActivity(nextView);
@@ -109,11 +108,14 @@ public class AddressChoiceActivity extends ActionBarActivity {
                     e.printStackTrace();
                 }
 
-                System.out.println("************  button valider   ******************");
-                //nextView = new Intent(getApplicationContext(),AddressChoiceActivity.class); //A changer par une vue avec la liste des addresses proposees
-                //startActivity(nextView);
+                getRequest.setChoiceActivity(this);
                 getRequest.execute(url);
                 break;
         }
+    }
+
+    public void setRoute(String result)
+    {
+
     }
 }

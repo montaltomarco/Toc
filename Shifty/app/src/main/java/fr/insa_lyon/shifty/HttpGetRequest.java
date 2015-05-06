@@ -44,12 +44,12 @@ public class HttpGetRequest extends AsyncTask<String, String, String> {
         System.out.println("Resultat de onPostExecute : -------------------"+result);
         switch (idActivity){
             case 1 :{
-                System.out.println("Je suis dans la case 1 : -----------------");
                 home.setJson(result);
                 System.out.println("Je suis dans la case 1 : ****************");
                 break;
             }
             case 2 :{
+                choiceActivity.setRoute(result);
                 break;
             }
             case 3 :{
@@ -57,9 +57,6 @@ public class HttpGetRequest extends AsyncTask<String, String, String> {
             }
 
         }
-
-
-
     }
 
     @Override
