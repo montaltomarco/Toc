@@ -3,4 +3,4 @@
     <item android:id="@+id/action_settings" android:title="@string/action_settings"
         android:orderInCategory="100" android:showAsAction="never" />
 </menu>
-<!-- From: file:/Users/marcomontalto/Desktop/PERSONALE/Insa/4IF/2%20Semestre/Toc/Toc/Shifty/app/src/main/res/menu/global.xml -->
+<!-- From: file:/E:/Projects/App/Toc/Shifty/app/src/main/res/menu/global.xml -->
