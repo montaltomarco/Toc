@@ -180,6 +180,9 @@ class Station_velov(Lieu):
     nb_velos = models.IntegerField()
     nb_places = models.IntegerField()
 
+    def __str__(self):
+        return self.adresse.encode('utf-8', errors='replace')+" "+str(self.number_station)
+
 class Borne_velo(Lieu):
     nbarceaux = models.IntegerField()
 
@@ -188,6 +191,10 @@ class Station_autopartage(Lieu):
     identifiantstation = models.CharField(max_length=200)
     commune = models.CharField(max_length=200)
     typeautopartage = models.CharField(max_length=200)
+
+    def __str__(self):
+        return self.identifiantstation.encode('utf-8', errors='replace')+" : "+self.nom.encode('utf-8', errors='replace')+" "+str(self.lon)+" "+str(self.lat)
+
 
 
 class Ligne_TCL(models.Model):
@@ -464,38 +471,84 @@ class Trajet(models.Model):
 
     def calculer_distance_directe(self):
         #self.personne.getVitesse(Moyen_pied())
-        self.distance_directe = sqrt(coordX_to_metres(self.trajet.start_pos.lon-self.trajet.end_pos.lon)**2+coordY_to_metres(self.trajet.start_pos.lat-self.trajet.end_pos.lat)**2)
+        self.distance_directe = sqrt(coordX_to_metres(self.start_pos.lon-self.end_pos.lon)**2+coordY_to_metres(self.start_pos.lat-self.end_pos.lat)**2)
         return self.distance_directe
 
-def calculer_velov_bluely(trajet,user):
+def get_stations_velov_bluely_combine(trajet,user):
     stations_blue_dep = getStationsZone(trajet,user,True,"blue")
     stations_blue_arr = getStationsZone(trajet,user,False,"blue")
+    print "Requete"
+    print "--- DEP >>>>"
+    print stations_blue_dep
+    print "--- ARR >>>>"
+    print stations_blue_arr
 
     dico_trajet_debut_bluely = {}
     dico_trajets = {}
     for station_dep in stations_blue_dep:
+        print "---- Calcul velo dep -----"
+        print "TO"
+        print station_dep
         current_trajet = Trajet()
         current_trajet.start_pos = trajet.start_pos
         current_trajet.end_pos = station_dep
-        try:
-            dico_trajet_debut_bluely[station_dep] = selectionner_stations_velov(trajet,user)
-        except:
-            pass
+        temps_pied = float(current_trajet.calculer_distance_directe()/user.vitesse_pied)
+        temps_velov_min = float(current_trajet.calculer_distance_directe()/user.vitesse_velo+user.temps_start+user.temps_stop)
 
+        if temps_velov_min<temps_pied:
+            try:
+                dico_trajet_debut_bluely[station_dep] = selectionner_stations_velov(current_trajet,user)
+            except:
+                print "Erreur calcul trajet velov"
+                pass
+            print "ooooooooooooooooooooooooooo"
+            print "UTILE"
+            print "ooooooooooooooooooooooooooo"
+        else:
+            print "+++++++++++++++++++++++++++"
+            print "INUTILE"
+            (a,b,temps) = selectionner_stations_velov(current_trajet,user)
+            print temps
+            print temps_velov_min
+            dico_trajet_debut_bluely[station_dep] = (None,None,temps_pied)
+            print temps_pied
+            print "++++++++++++++++++++++++++++"
+
+    print dico_trajet_debut_bluely
+    print "XXXXXXXXXXXXXXXXXXXXXXX"
     for station_arr in stations_blue_arr:
+        print "---- Calcul velo arr -----"
+        print "TO"
+        print station_arr
         current_trajet = Trajet()
-        current_trajet.start_pos = trajet.start_pos
-        current_trajet.end_pos = station_dep
-        (velov_fin_stat_dep,velov_fin_stat_arr,velov_fin_duree) = selectionner_stations_velov(trajet,user)
-        trajet_fin = (velov_fin_stat_dep,velov_fin_stat_arr,velov_fin_duree)
+        current_trajet.start_pos = station_arr
+        current_trajet.end_pos = trajet.end_pos
+        temps_pied = 1.2*current_trajet.calculer_distance_directe()/(user.vitesse_pied)
+        temps_velov_min = current_trajet.calculer_distance_directe()/user.vitesse_velo+user.temps_start+user.temps_stop
+        try:
+            if temps_velov_min<temps_pied:
+                (velov_fin_stat_dep,velov_fin_stat_arr,velov_fin_duree) = selectionner_stations_velov(current_trajet,user)
+                trajet_fin = (velov_fin_stat_dep,velov_fin_stat_arr,velov_fin_duree)
+            else :
+                velov_fin_duree = temps_pied
+                trajet_fin = (None,None,temps_pied)
+
+        except Exception as e:
+            print e
+            pass
+            continue
+
         for station_dep in stations_blue_dep:
             trajet_en_blue = Trajet()
-            trajet_en_blue.start_pos = stat_dep
-            trajet_en_blue.end_pos = stat_arr
-            dico_trajets[trajet_en_blue.calculer_distance_directe()/12+velov_fin_duree+dico_trajet_debut_bluely[station_dep][2]] = (dico_trajet_debut_bluely[station_dep],(trajet_en_blue.start_pos,trajet_en_blue.end_pos,trajet_en_blue.distance_directe/12),trajet_fin)
+            trajet_en_blue.start_pos = station_dep
+            trajet_en_blue.end_pos = station_arr
+            temps_blue = trajet_en_blue.calculer_distance_directe()/12
+            dico_trajets[temps_blue+velov_fin_duree+dico_trajet_debut_bluely[station_dep][2]] = (dico_trajet_debut_bluely[station_dep],(trajet_en_blue.start_pos,trajet_en_blue.end_pos,temps_blue),trajet_fin)
 
     ordered_total_times = sorted(dico_trajets.iterkeys())
-
+    for i in range(5):
+        print "porposition1"+str(i)
+        print dico_trajets[ordered_total_times[i]]
     return ordered_total_times
 
 

@@ -11,4 +11,5 @@ urlpatterns = [
     url(r'^routesPerso/', 'toc.views.getRoutesPerso', name='getRoutesPerso'),
     url(r'^infosRoute/', 'toc.views.getInfosRoute', name='getInfosRoute'),
     url(r'^profile/', 'toc.views.getProfile', name='getProfile'),
+    url(r'^tests/', 'toc.views.tests_dams', name='tests_dams')
 ]
