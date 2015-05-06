@@ -120,6 +120,8 @@ def getCoordByAddressNames(request):
 
     response_data = getCoordByNames(firstAddress=firstAddress, secondAddress=secondAddress)
 
+    print response_data
+
     return HttpResponse(response_data, content_type='application/json; charset=utf-8')
 
 @require_http_methods(["GET"])

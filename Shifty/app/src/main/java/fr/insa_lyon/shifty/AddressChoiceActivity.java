@@ -24,12 +24,13 @@ public class AddressChoiceActivity extends ActionBarActivity {
 
         if(b!=null)
         {
-            String value = b.getString("result");
+            String[] value = b.getStringArray("result");
 
             try {
-                JSONObject obj= new JSONObject(value);
-                System.out.println("Lenght is : " + obj.getJSONArray("firstAddress").length());
-                ((RadioButton)findViewById(R.id.radioButton_firstAddress1)).setText((obj.getJSONArray("firstAddress")).getJSONObject(0).getString("lat"));
+                JSONObject firstAddresses = new JSONObject(value[0]);
+                JSONObject secondAddresses = new JSONObject(value[1]);
+                System.out.println("Lenght is : " + firstAddresses.getJSONArray("firstAddress").length());
+                ((RadioButton)findViewById(R.id.radioButton_firstAddress1)).setText((firstAddresses.getJSONArray("firstAddress")).getJSONObject(0).getString("lat"));
                 System.out.println("Result is : " +  value);
             } catch (Exception e) {
                 e.printStackTrace();
