@@ -2,39 +2,39 @@
 <items version="2" >
 
     <item
-        jar="/Users/marcomontalto/Desktop/PERSONALE/Insa/4IF/2 Semestre/Toc/Toc/Shifty/app/build/intermediates/exploded-aar/com.android.support/support-v4/21.0.3/libs/internal_impl-21.0.3.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="01ec05bfbafcc07646ba813000bf2ef11742dd03">
-        <dex dex="/Users/marcomontalto/Desktop/PERSONALE/Insa/4IF/2 Semestre/Toc/Toc/Shifty/app/build/intermediates/pre-dexed/debug/internal_impl-21.0.3-f30bece18fc75b5d15a6e370add0b5e2a563d7fa.jar" />
-    </item>
-    <item
-        jar="/Users/marcomontalto/Library/Android/sdk/extras/android/m2repository/com/android/support/support-annotations/21.0.3/support-annotations-21.0.3.jar"
+        jar="H:\SDK\extras\android\m2repository\com\android\support\support-annotations\21.0.3\support-annotations-21.0.3.jar"
         jumboMode="false"
         revision="21.1.2"
         sha1="4b74cefe1f0c1b819e7260c8627a14674e37fd35">
-        <dex dex="/Users/marcomontalto/Desktop/PERSONALE/Insa/4IF/2 Semestre/Toc/Toc/Shifty/app/build/intermediates/pre-dexed/debug/support-annotations-21.0.3-aa518c0f1e2142fa65325fae17f93021892e8814.jar" />
+        <dex dex="E:\Projects\App\Toc\Shifty\app\build\intermediates\pre-dexed\release\support-annotations-21.0.3-9ead95bf94a3cc04d31265110a3447c57517ec3f.jar" />
     </item>
     <item
-        jar="/Users/marcomontalto/Desktop/PERSONALE/Insa/4IF/2 Semestre/Toc/Toc/Shifty/app/build/intermediates/exploded-aar/com.google.android.gms/play-services/6.5.87/classes.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="dd9247ea0fabe8ee479638c4b4a23e93752be256">
-        <dex dex="/Users/marcomontalto/Desktop/PERSONALE/Insa/4IF/2 Semestre/Toc/Toc/Shifty/app/build/intermediates/pre-dexed/debug/classes-53178d7298da6a42003ae5f9a55b398891f1ef71.jar" />
-    </item>
-    <item
-        jar="/Users/marcomontalto/Desktop/PERSONALE/Insa/4IF/2 Semestre/Toc/Toc/Shifty/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.3/classes.jar"
+        jar="E:\Projects\App\Toc\Shifty\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\21.0.3\classes.jar"
         jumboMode="false"
         revision="21.1.2"
         sha1="81d42bf983a8741f4888a6e333e454e4a5e0eeb7">
-        <dex dex="/Users/marcomontalto/Desktop/PERSONALE/Insa/4IF/2 Semestre/Toc/Toc/Shifty/app/build/intermediates/pre-dexed/debug/classes-d00214bbe6d90a34ea70c37686f756c711642ef6.jar" />
+        <dex dex="E:\Projects\App\Toc\Shifty\app\build\intermediates\pre-dexed\release\classes-b7d1ceef67779daeab0a9da72628cd3586cfaae9.jar" />
     </item>
     <item
-        jar="/Users/marcomontalto/Desktop/PERSONALE/Insa/4IF/2 Semestre/Toc/Toc/Shifty/app/build/intermediates/exploded-aar/com.android.support/support-v4/21.0.3/classes.jar"
+        jar="E:\Projects\App\Toc\Shifty\app\build\intermediates\exploded-aar\com.android.support\support-v4\21.0.3\libs\internal_impl-21.0.3.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="01ec05bfbafcc07646ba813000bf2ef11742dd03">
+        <dex dex="E:\Projects\App\Toc\Shifty\app\build\intermediates\pre-dexed\release\internal_impl-21.0.3-3cd4b59e2f29af193ecc342dd71fe7c4d2bc23d1.jar" />
+    </item>
+    <item
+        jar="E:\Projects\App\Toc\Shifty\app\build\intermediates\exploded-aar\com.android.support\support-v4\21.0.3\classes.jar"
         jumboMode="false"
         revision="21.1.2"
         sha1="2c91c949a45a21cdecf26e03951e46c7beec9ad8">
-        <dex dex="/Users/marcomontalto/Desktop/PERSONALE/Insa/4IF/2 Semestre/Toc/Toc/Shifty/app/build/intermediates/pre-dexed/debug/classes-a83c41459968d4a038b31d041be52b720ef041e9.jar" />
+        <dex dex="E:\Projects\App\Toc\Shifty\app\build\intermediates\pre-dexed\release\classes-648f8f80488076d4dc410391944240c301391bea.jar" />
+    </item>
+    <item
+        jar="E:\Projects\App\Toc\Shifty\app\build\intermediates\exploded-aar\com.google.android.gms\play-services\6.5.87\classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="dd9247ea0fabe8ee479638c4b4a23e93752be256">
+        <dex dex="E:\Projects\App\Toc\Shifty\app\build\intermediates\pre-dexed\release\classes-162142122a982e9a4f199dc61484046fc89e2aa2.jar" />
     </item>
 
 </items>

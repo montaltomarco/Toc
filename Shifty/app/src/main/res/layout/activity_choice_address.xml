@@ -151,7 +151,7 @@
             android:layout_alignTop="@+id/button_NouvelleRecherche"
             android:layout_toEndOf="@+id/button_NouvelleRecherche"
             android:layout_marginStart="66dp"
-            android:onClick="ButtonOnClickValidate" />
+            android:onClick="Dummybutton" />
     </RelativeLayout>
 
 </LinearLayout>

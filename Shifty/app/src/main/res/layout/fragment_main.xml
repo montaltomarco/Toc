@@ -135,7 +135,6 @@
         android:text="Shifty"
         android:id="@+id/textViewWelcome"
         android:layout_alignParentTop="true"
-        android:layout_alignEnd="@+id/textViewWelcomeAl"
         android:textStyle="bold|italic" />
 
 </RelativeLayout>
