@@ -26,19 +26,19 @@ def inscription(request):
 
     response={}
 
-    if request.method == 'POST':
+    if request.method == 'GET':
         response[u'status'] = u'error'
         response[u'message'] = u'Error - Inscription Requires POST DATA'
         return JsonResponse(response)
 
-    elif request.method == 'GET':
+    elif request.method == 'POST':
         inscriptionForm = InscriptionForm()
-        inscriptionForm.email = request.GET.get('email', '')
-        inscriptionForm.password = request.GET.get('password', '')
-        inscriptionForm.confirmezMdp = request.GET.get('confirmezMdp', '')
+        inscriptionForm.email = request.POST.get('email', '')
+        inscriptionForm.password = request.POST.get('password', '')
+        inscriptionForm.confirmezMdp = request.POST.get('confirmezMdp', '')
         inscriptionForm.nom = request.POST.get('nom', '')
         inscriptionForm.prenom = request.POST.get('prenom', '')
-        inscriptionForm.civilite = request.GET.get('civilite', '')
+        inscriptionForm.civilite = request.POST.get('civilite', '')
         inscriptionForm.adresse = request.POST.get('adresse', '')
         inscriptionForm.age = request.POST.get('age', '')
 
@@ -55,9 +55,9 @@ def inscription(request):
             return JsonResponse(response)
 
         if inscriptionForm.civilite:
-            if inscriptionForm.civilite!='homme' and inscriptionForm.civilite!='femme':
+            if inscriptionForm.civilite!='Madame' and inscriptionForm.civilite!='Monsieur':
                 response[u'status'] = u'error'
-                response[u'message'] = u'Error - vous pouvez seulement etre un homme ou une femme.'
+                response[u'message'] = u'Error - vous pouvez seulement etre un monsieur ou une madame.'
                 return JsonResponse(response)
 
         CreatePerson(form=inscriptionForm)
