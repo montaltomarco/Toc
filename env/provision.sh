@@ -1,4 +1,3 @@
-va# update and install essentials
 sudo apt-get update
 sudo apt-get install build-essential python-dev python-pip curl -y
 
