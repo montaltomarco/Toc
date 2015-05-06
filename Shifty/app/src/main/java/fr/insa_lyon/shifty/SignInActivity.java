@@ -58,16 +58,16 @@ public class SignInActivity extends ActionBarActivity {
                 String confirmezMdp = ((EditText)findViewById(R.id.passwordConfirm)).getText().toString();
                 String mdp = ((EditText)findViewById(R.id.password)).getText().toString();
                 String civilite = (findViewById(R.id.radioCivilite)).toString();
-                String uri = "http://10.0.2.2:8080/shifty/login/";//a changer par l uri d'inscription
+                String uri = "http://10.0.2.2:8080/shifty/inscription/";
                 HttpPostRequest postRequest = new HttpPostRequest();
                 postRequest.setValeursPOST("email",email);
                 postRequest.setValeursPOST("password", mdp);
-                postRequest.setValeursPOST("",nom);
-                postRequest.setValeursPOST("",prenom );
-                postRequest.setValeursPOST("",civilite);
-                postRequest.setValeursPOST("",adresse );
-                postRequest.setValeursPOST("",age);
-                postRequest.setValeursPOST("",confirmezMdp );
+                postRequest.setValeursPOST("nom",nom);
+                postRequest.setValeursPOST("prenom",prenom );
+                postRequest.setValeursPOST("civilite",civilite);
+                postRequest.setValeursPOST("adresse",adresse );
+                postRequest.setValeursPOST("age",age);
+                postRequest.setValeursPOST("confirmezMdp",confirmezMdp );
                 postRequest.execute(uri);
 
                 nextView = new Intent(getApplicationContext(),LogInActivity.class);

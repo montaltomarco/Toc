@@ -134,6 +134,7 @@ class Personne(models.Model):
     vitesse_velo = models.FloatField(default=5.0)
     temps_start = models.IntegerField(default=100)
     temps_stop = models.IntegerField(default=100)
+
     def __str__(self):
         return self.nom + ' ' + self.prenom
 
@@ -181,6 +182,13 @@ class Station_velov(Lieu):
 
 class Borne_velo(Lieu):
     nbarceaux = models.IntegerField()
+
+class Station_autopartage(Lieu):
+    nom = models.CharField(max_length=200)
+    identifiantstation = models.CharField(max_length=200)
+    commune = models.CharField(max_length=200)
+    typeautopartage = models.CharField(max_length=200)
+
 
 class Ligne_TCL(models.Model):
     #reseau = models.ForeignKey(Reseau)

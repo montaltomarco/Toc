@@ -8,6 +8,7 @@ from django.http import JsonResponse
 from models import *
 import requests
 import json
+import re
 
 #Utils
 from utils import getCoordByNames
@@ -22,12 +23,17 @@ def index(request):
 @require_http_methods(["GET", "POST"])
 @csrf_exempt
 def inscription(request):
-    if request.method == 'POST':
-        return HttpResponse(" Error : Inscription Page Requires POST DATA <br>  ")
-    elif request.method == 'GET':
 
+    response={}
+
+    if request.method == 'GET':
+        response[u'status'] = u'error'
+        response[u'message'] = u'Error - Inscription Requires POST DATA'
+        return JsonResponse(response)
+
+    elif request.method == 'POST':
         inscriptionForm = InscriptionForm()
-        inscriptionForm.email = request.GET.get('email', '')
+        inscriptionForm.email = request.POST.get('email', '')
         inscriptionForm.password = request.POST.get('password', '')
         inscriptionForm.confirmezMdp = request.POST.get('confirmezMdp', '')
         inscriptionForm.nom = request.POST.get('nom', '')
@@ -36,9 +42,29 @@ def inscription(request):
         inscriptionForm.adresse = request.POST.get('adresse', '')
         inscriptionForm.age = request.POST.get('age', '')
 
+        if not re.match(r"^[A-Za-z0-9\.\+_-]+@[A-Za-z0-9\._-]+\.[a-zA-Z]*$", inscriptionForm.email) or inscriptionForm.email=='' :
+            response[u'status'] = u'error'
+            response[u'message'] = u'Error - email - ' + inscriptionForm.email + u" doesn't respect the required format"
+            return JsonResponse(response)
+
+        if inscriptionForm.password!=inscriptionForm.confirmezMdp or inscriptionForm.password=='':
+            print inscriptionForm.password
+            print inscriptionForm.confirmezMdp
+            response[u'status'] = u'error'
+            response[u'message'] = u'Error - les deux mot de passe ne correspondent pas.'
+            return JsonResponse(response)
+
+        if inscriptionForm.civilite:
+            if inscriptionForm.civilite!='Madame' and inscriptionForm.civilite!='Monsieur':
+                response[u'status'] = u'error'
+                response[u'message'] = u'Error - vous pouvez seulement etre un monsieur ou une madame.'
+                return JsonResponse(response)
+
         CreatePerson(form=inscriptionForm)
 
-        return HttpResponse(inscriptionForm.email)
+        response[u'status'] = u'ok'
+        response[u'message'] = inscriptionForm.email
+        return JsonResponse(response)
 
 @require_http_methods(["GET", "POST"])
 @csrf_exempt

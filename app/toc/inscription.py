@@ -19,7 +19,5 @@ def CreatePerson(form):
     new_personne.mot_de_pass = form.password
     new_personne.nom = form.nom
     new_personne.prenom = form.prenom
-    new_personne.vitesse_pied = 0
-    new_personne.vitesse_velo = 0
 
     new_personne.save()
