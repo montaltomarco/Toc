@@ -6,7 +6,10 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import android.widget.EditText;
+import android.widget.RadioButton;
 
 /**
  * Created by marcomontalto on 06/05/15.
@@ -18,10 +21,19 @@ public class AddressChoiceActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choice_address);
         Bundle b = getIntent().getExtras();
+
         if(b!=null)
         {
-            int value = b.getInt("result");
-            System.out.println("Result is : " +  value);
+            String value = b.getString("result");
+
+            try {
+                JSONObject obj= new JSONObject(value);
+                System.out.println("Lenght is : " + obj.getJSONArray("firstAddress").length());
+                ((RadioButton)findViewById(R.id.radioButton_firstAddress1)).setText((obj.getJSONArray("firstAddress")).getJSONObject(0).getString("lat"));
+                System.out.println("Result is : " +  value);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 

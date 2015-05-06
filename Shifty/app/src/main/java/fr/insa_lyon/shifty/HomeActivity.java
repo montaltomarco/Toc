@@ -53,7 +53,6 @@ public class HomeActivity extends ActionBarActivity {
                 getRequest.setNameValuePairs("secondAddress", arrivee);
                 getRequest.setActivityHome(this);
                 getRequest.execute(url);
-
                 break;
             case R.id.inscriptionButton: //Pourquoi il aurait il un bouton inscription dans homeActivity?
                 nextView = new Intent(getApplicationContext(), SignInActivity.class);
