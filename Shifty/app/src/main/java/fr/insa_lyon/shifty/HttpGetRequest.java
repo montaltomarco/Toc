@@ -27,7 +27,9 @@ import java.util.List;
  */
 public class HttpGetRequest extends AsyncTask<String, String, String> {
     private List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
-    HomeActivity home;
+    HomeActivity home;  //id=1
+    AddressChoiceActivity choiceActivity; //id=2
+    Integer idActivity;
 
     @Override
     protected void onPreExecute() {
@@ -40,7 +42,23 @@ public class HttpGetRequest extends AsyncTask<String, String, String> {
         // TODO Auto-generated method stub
         super.onPostExecute(result);
         System.out.println("Resultat de onPostExecute : -------------------"+result);
-        home.setJson(result);
+        switch (idActivity){
+            case 1 :{
+                System.out.println("Je suis dans la case 1 : -----------------");
+                home.setJson(result);
+                System.out.println("Je suis dans la case 1 : ****************");
+                break;
+            }
+            case 2 :{
+                break;
+            }
+            case 3 :{
+                break;
+            }
+
+        }
+
+
 
     }
 
@@ -67,7 +85,6 @@ public class HttpGetRequest extends AsyncTask<String, String, String> {
         } catch (Exception e) {
             Log.e("[GET REQUEST]", e.getMessage());
         }
-        System.out.println("-----------La reponse GET est : "+response.toString()+"------------");
         return response.toString();
     }
 
@@ -77,6 +94,12 @@ public class HttpGetRequest extends AsyncTask<String, String, String> {
 
     public void setActivityHome(HomeActivity ha){
         home = ha;
+        idActivity=1;
+    }
+
+    public void setChoiceActivity(AddressChoiceActivity aca){
+        choiceActivity = aca;
+        idActivity=2;
     }
 
 }
