@@ -1,6 +1,0 @@
-E:\Projects\HQ\Shifty\app\build\intermediates\classes\release
-E:\Projects\HQ\Shifty\app\build\intermediates\pre-dexed\release\support-annotations-21.0.3-9ead95bf94a3cc04d31265110a3447c57517ec3f.jar
-E:\Projects\HQ\Shifty\app\build\intermediates\pre-dexed\release\internal_impl-21.0.3-da3837144d95d5f322a1248d91a5dedc14e0297b.jar
-E:\Projects\HQ\Shifty\app\build\intermediates\pre-dexed\release\classes-e3aa2344f34d053fa139c91c738c6079e62fd7dd.jar
-E:\Projects\HQ\Shifty\app\build\intermediates\pre-dexed\release\classes-a4cfb7fe859682c8a93a4e358e14e59c513df205.jar
-E:\Projects\HQ\Shifty\app\build\intermediates\pre-dexed\release\classes-de465f11dd2428bdeee56a27df500cb9935a9a33.jar

@@ -84,7 +84,8 @@
         android:background="@drawable/but_search"
         android:layout_alignParentBottom="true"
         android:layout_alignEnd="@+id/textView8"
-        android:layout_marginBottom="37dp" />
+        android:layout_marginBottom="37dp"
+        android:onClick="ButtonOnClickSearch" />
 
     <ImageButton
         android:layout_width="100dp"
@@ -115,4 +116,4 @@
         android:layout_alignEnd="@+id/SearchButton" />
 
 </RelativeLayout>
-<!-- From: file:/E:/Projects/HQ/Shifty/app/src/main/res/layout/activity_home.xml -->
+<!-- From: file:/Users/marcomontalto/Desktop/PERSONALE/Insa/4IF/2%20Semestre/Toc/Toc/Shifty/app/src/main/res/layout/activity_home.xml -->

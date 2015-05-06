@@ -51,16 +51,24 @@ public class HomeActivity extends ActionBarActivity {
                 String arrivee = ((EditText)findViewById(R.id.arrivee)).getText().toString();
                 getRequest.setNameValuePairs("firstAddress", depart);
                 getRequest.setNameValuePairs("secondAddress", arrivee);
-                String reponse = (getRequest.execute(url)).toString();
-                System.out.println("************  Raspunsul execute este : "+reponse+"   ******************");
-                //on passe à la vue suivante
-                nextView = new Intent(getApplicationContext(),HomeActivity.class); //A changer par une vue avec la liste des addresses proposees
-                startActivity(nextView);
+                getRequest.setActivityHome(this);
+                getRequest.execute(url);
+
                 break;
             case R.id.inscriptionButton: //Pourquoi il aurait il un bouton inscription dans homeActivity?
                 nextView = new Intent(getApplicationContext(), SignInActivity.class);
                 startActivity(nextView);
                 break;
         }
+    }
+
+    public void setJson(String result){
+        //on passe à la vue suivante
+        //il faut utiliser result pour avoir les données à passer
+        Intent nextView = new Intent(getApplicationContext(),AddressChoiceActivity.class);
+        Bundle params = new Bundle();
+        params.putString("result", result); //Your id
+        nextView.putExtras(params); //Put your id to your next Intent
+        startActivity(nextView);
     }
 }

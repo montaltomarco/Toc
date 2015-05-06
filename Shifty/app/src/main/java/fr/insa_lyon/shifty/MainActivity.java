@@ -54,12 +54,17 @@ public class MainActivity extends ActionBarActivity {
                 nextView= new Intent(getApplicationContext(),SignInActivity.class);
                 startActivity(nextView);
                 break;
+            case R.id.textInscription:
+                nextView= new Intent(getApplicationContext(),SignInActivity.class);
+                startActivity(nextView);
+                break;
             case R.id.ButtonLog:
                 nextView = new Intent(getApplicationContext(),LogInActivity.class);
                 startActivity(nextView);
                 break;
-            case R.id.ButtonCont:
-
+            case R.id.textConnexion:
+                nextView= new Intent(getApplicationContext(),LogInActivity.class);
+                startActivity(nextView);
                 break;
         }
     }

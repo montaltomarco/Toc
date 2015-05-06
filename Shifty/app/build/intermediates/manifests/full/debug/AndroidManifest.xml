@@ -12,10 +12,11 @@
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
-        android:icon="@drawable/ic_launcher"
+        android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
@@ -50,6 +51,14 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="fr.insa_lyon.shifty.LogInActivity" />
+        </activity>
+        <activity
+            android:name="fr.insa_lyon.shifty.AddressChoiceActivity"
+            android:label="@string/title_choisis_points"
+            android:parentActivityName="fr.insa_lyon.shifty.HomeActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="fr.insa_lyon.shifty.HomeActivity" />
         </activity>
 
         <meta-data

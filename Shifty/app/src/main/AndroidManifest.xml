@@ -10,7 +10,7 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@drawable/ic_launcher"
+        android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
@@ -45,6 +45,14 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="fr.insa_lyon.shifty.LogInActivity" />
+        </activity>
+        <activity
+            android:name=".AddressChoiceActivity"
+            android:label="@string/title_choisis_points"
+            android:parentActivityName=".HomeActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="fr.insa_lyon.shifty.HomeActivity" />
         </activity>
     </application>
 

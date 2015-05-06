@@ -27,6 +27,7 @@ import java.util.List;
  */
 public class HttpGetRequest extends AsyncTask<String, String, String> {
     private List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
+    HomeActivity home;
 
     @Override
     protected void onPreExecute() {
@@ -35,9 +36,17 @@ public class HttpGetRequest extends AsyncTask<String, String, String> {
     }
 
     @Override
+    protected void onPostExecute(String result) {
+        // TODO Auto-generated method stub
+        super.onPostExecute(result);
+        System.out.println("Resultat de onPostExecute : -------------------"+result);
+        home.setJson(result);
+
+    }
+
+    @Override
     protected String doInBackground(String... params) {
         StringBuilder response = new StringBuilder();
-        System.out.println("-----------JE suis dans execute: ------------");
         try {
 
             String paramsString = URLEncodedUtils.format(nameValuePairs, "UTF-8");
@@ -54,18 +63,20 @@ public class HttpGetRequest extends AsyncTask<String, String, String> {
                 while ((line = br.readLine()) != null) {
                     response.append(line);
                 }
-                System.out.println("-----------La reponse GET est : "+response.toString()+"------------");
             }
         } catch (Exception e) {
             Log.e("[GET REQUEST]", e.getMessage());
         }
-        Log.d("[GET REQUEST]", "Done with HTTP getting");
-
+        System.out.println("-----------La reponse GET est : "+response.toString()+"------------");
         return response.toString();
     }
 
     public void setNameValuePairs(String id, String value){
         nameValuePairs.add(new BasicNameValuePair(id, value));
+    }
+
+    public void setActivityHome(HomeActivity ha){
+        home = ha;
     }
 
 }
