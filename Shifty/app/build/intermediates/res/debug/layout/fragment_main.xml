@@ -135,8 +135,7 @@
         android:text="Shifty"
         android:id="@+id/textViewWelcome"
         android:layout_alignParentTop="true"
-        android:layout_alignEnd="@+id/textViewWelcomeAl"
         android:textStyle="bold|italic" />
 
 </RelativeLayout>
-<!-- From: file:/E:/Projects/App/Toc/Shifty/app/src/main/res/layout/fragment_main.xml -->
+<!-- From: file:/Users/starwers13/Documents/4IF/PLD_Reseau/Toc/Shifty/app/src/main/res/layout/fragment_main.xml -->

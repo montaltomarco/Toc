@@ -12,6 +12,8 @@ import android.widget.RadioGroup;
 
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+
 
 public class ItineraireActivity extends ListActivity {
 
@@ -28,8 +30,13 @@ public class ItineraireActivity extends ListActivity {
         if(b!=null)
         {
             String value = b.getString("result");
+            ArrayList<String> listeRes = new ArrayList<String>();
+            listeRes.add(value);
+            listeRes.add("AAAAAAAAAAAAAAAAAAAAAAAAAAa");
+            listeRes.add("BBBBBBBBBBBBBBBBBBBBBBBBBB");
+            mStrings=listeRes.toArray(new String[listeRes.size()]);
 
-            try {
+            /*try {
                 response = new JSONObject(value);
 
                 for (int i = 0; i < response.getJSONArray("indications").length(); i++) {
@@ -38,7 +45,7 @@ public class ItineraireActivity extends ListActivity {
 
             } catch (Exception e) {
                 e.printStackTrace();
-            }
+            }*/
         }
 
 
