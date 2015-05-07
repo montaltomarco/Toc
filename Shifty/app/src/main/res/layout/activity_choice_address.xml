@@ -124,29 +124,19 @@
         android:layout_marginBottom="0dp"
         android:layout_marginTop="20dp" />
 
-    <RelativeLayout
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@android:color/holo_blue_light">
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal">
 
         <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="165dp"
+            android:layout_height="73dp"
             android:text="Valider"
-            android:id="@+id/button_Valider"
-            android:background="#ffd95e55"
-            android:onClick="Dummybutton"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentEnd="true"
-            android:elegantTextHeight="false"
-            android:enabled="false"
-            android:focusable="false"
-            android:focusableInTouchMode="false"
+            android:id="@+id/button_Validate_Trj"
+            android:layout_gravity="center_horizontal"
             android:clickable="true"
-            android:textColor="#ff000000"
-            android:textStyle="bold" />
-    </RelativeLayout>
+            android:onClick="ButtonOnClickValidate" />
+    </FrameLayout>
 
 </LinearLayout>

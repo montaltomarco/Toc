@@ -551,7 +551,7 @@ def get_stations_velov_bluely_combine(trajet,user):
     for i in range(5):
         print "porposition1"+str(i)
         print dico_trajets[ordered_total_times[i]]
-    return ordered_total_times
+    return dico_trajets[ordered_total_times[0]]
 
 
 
@@ -567,7 +567,7 @@ def get_directions(fromCoordX,fromCoordY,toCoordX,toCoordY,route_type = "bicycle
         s.direction = man['direction']
         s.streets = man['streets']
         #s.maneuverNotes = man['maneuverNotes
-        print man['maneuverNotes']
+        #print man['maneuverNotes']
         s.distance = man['distance']
         s.moyen_transport = man['transportMode']
         s.signs = man['signs']
@@ -617,7 +617,7 @@ def obtenir_propositions(trajet,transports_demandes,personne):
 
             #Cas de la Pluie pendant le trajet avec des prcipitations suprieures  2mm
             tempsServeur = int(time.time()) + (5*60) #on ajoute 5 minutes car on concidère qu'on part 5 minutes aprs avoir lancé l'application
-            tempsMarchePied = sectionPiedD[0]
+            tempsMarchePied = sectionPiedD[0].temps
             tempsVelov = sectionVelov[0]
 
             timestampVelovDepart = (tempsServeur + tempsMarchePied) - ((tempsServeur + tempsMarchePied)%600) #on veut tomber sur un bon timestamp en BD
@@ -628,14 +628,16 @@ def obtenir_propositions(trajet,transports_demandes,personne):
 
             while(i < tempsVelov):
                 temps = timestampVelovDepart + i
-                meteo = Data_meteo().objects.get(timestamps = temps)
+                meteo = Data_meteo.objects.filter(timestamps = temps)
+                if len(meteo)>=1:
+                    if meteo[0].pluie >= 2.0:
+                        velovPluie = True
+                        break
 
-                if meteo.pluie >= 2.0:
-                    velovPluie = True
+                    i += 600
+                    idFinVelov += 1
+                else:
                     break
-
-                i += 600
-                idFinVelov += 1
 
             #Mise à jour des Temps de Trajet pour le Velov et on supprime le reste
            # if velovPluie == True:
@@ -652,16 +654,46 @@ def obtenir_propositions(trajet,transports_demandes,personne):
                 #sectionVelov = get_directions(stat_dep.lat,stat_dep.lon,stat_arr.lat,stat_arr.lon)
 
             sectionPiedF = get_directions(stat_arr.lat,stat_arr.lon,trajet.end_pos.lat,trajet.end_pos.lon,"pedestrian")
-            print sectionVelov
-            for section in sectionVelov:
-                print "VLV X"+str(section.trajet.start_pos.lon)+" Y"+str(section.trajet.start_pos.lat)
-            for section in sectionPiedD:
-                print "PDD"+section.narrative+" "+str(section.temps)
-            for section in sectionPiedF:
-                print "PDF"+section.narrative+" "+str(section.temps)
+            #print sectionVelov
+            # for section in sectionVelov:
+            #     print "VLV X"+str(section.trajet.start_pos.lon)+" Y"+str(section.trajet.start_pos.lat)
+            # for section in sectionPiedD:
+            #     print "PDD"+section.narrative+" "+str(section.temps)
+            # for section in sectionPiedF:
+            #     print "PDF"+section.narrative+" "+str(section.temps)
 
         if moyen_transport == "FOT":
             toto = False
+
+        if moyen_transport == "BLU":
+            ((velovDO,velovDD,d1),(blueStatO,blueStatD,d2),(velovFO,velovFD,d3))= get_stations_velov_bluely_combine(trajet,personne)
+            troncons = []
+            if velovDO != None:
+                #Le premier trajet se fait bien en velov
+                print "1A"
+                troncons.append(get_directions(trajet.start_pos.lat,trajet.start_pos.lon,velovDO.lat,velovDO.lon,"pedestrian"))
+                print "1B"
+                troncons.append(get_directions(velovDO.lat,velovDO.lon,velovDD.lat,velovDD.lon,"bicycle"))
+                print "1C"
+                troncons.append(get_directions(velovDD.lat,velovDD.lon,blueStatO.lat,blueStatO.lon,"pedestrian"))
+            else :
+                print "1-"
+                troncons.append(get_directions(trajet.start_pos.lat,trajet.start_pos.lon,blueStatO.lat,blueStatO.lon,"pedestrian"))
+
+            print "2"
+            troncons.append(get_directions(blueStatO.lat,blueStatO.lon,blueStatD.lat,blueStatD.lon,"fastest")) #TODO
+            if velovFO != None:
+                #Le dernier trajet se fait bien en velov
+                print "3A"
+                troncons.append(get_directions(blueStatD.lat,blueStatD.lon,velovFO.lat,velovFO.lon,"pedestrian"))
+                print "3B"
+                troncons.append(get_directions(velovFO.lat,velovFO.lon,velovFD.lat,velovFD.lon,"bicycle"))
+                print "3C"
+                troncons.append(get_directions(velovFD.lat,velovFD.lon,trajet.end_pos.lat,trajet.end_pos.lon,"pedestrian"))
+            else :
+                print "3-"
+                troncons.append(get_directions(blueStatD.lat,blueStatD.lon,trajet.end_pos.lat,trajet.end_pos.lon,"pedestrian"))
+
     return True
 
 

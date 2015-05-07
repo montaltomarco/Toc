@@ -49,6 +49,7 @@ public class HttpGetRequest extends AsyncTask<String, String, String> {
                 break;
             }
             case 2 :{
+                System.out.println("Je suis dans la case 2 : ****************");
                 choiceActivity.setRoute(result);
                 break;
             }

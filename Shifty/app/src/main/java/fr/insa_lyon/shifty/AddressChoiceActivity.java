@@ -77,8 +77,9 @@ public class AddressChoiceActivity extends ActionBarActivity {
     }
     public void ButtonOnClickValidate(View v) {
         Intent nextView;
+        System.out.println("Bouton clicked");
         switch (v.getId()) {
-            case R.id.button_Valider:
+            case R.id.button_Validate_Trj :
                 String url = "http://10.0.2.2:8080/shifty/route/";
                 HttpGetRequest getRequest = new HttpGetRequest();
 
@@ -102,18 +103,18 @@ public class AddressChoiceActivity extends ActionBarActivity {
                     getRequest.setNameValuePairs("toY", obj.getString("lon"));
                     System.out.println("lat2 :" + obj2.getString("lat"));
                     System.out.println("long2 :" + obj2.getString("lon"));
-                    getRequest.setChoiceActivity(this);
-                    getRequest.execute();
-
 
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
 
                 getRequest.setChoiceActivity(this);
+                System.out.println("apres choice act :");
                 getRequest.execute(url);
+                System.out.println("apres get request");
                 break;
         }
+
     }
 
     public void setRoute(String result)

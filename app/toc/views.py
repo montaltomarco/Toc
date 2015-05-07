@@ -95,7 +95,7 @@ def getRoute(request):
     print transports
     lieu_dep.save()
     lieu_arr.save()
-    transports = ["VLV"]
+    transports = ["VLV","BLU"]
     trajet = Trajet()
     trajet.start_pos = lieu_dep
     trajet.end_pos = lieu_arr
@@ -159,6 +159,9 @@ def tests_dams(request):
     trajet.end_pos = lieu2
     user = Personne()
 
-    selectionner_stations_velov(trajet,user)
-
+    ((velovDO,velovDD,d1),(blueStatO,blueStatD,d2),(velovFO,velovFD,d3))= get_stations_velov_bluely_combine(trajet,user)
+    print "VV1"+str(velovDD.lon)
+    print "VV2"+str(velovFD.lat)
+    print "VV3"+str(blueStatD.lon)
+    print "VV4"+str(blueStatO.lat)
     return HttpResponse("E")

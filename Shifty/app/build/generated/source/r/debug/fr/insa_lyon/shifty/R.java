@@ -1748,7 +1748,7 @@ containing a value of this type.
         public static final int bonj_text=0x7f0a0080;
         public static final int book_now=0x7f0a002b;
         public static final int buttonLogIn=0x7f0a0078;
-        public static final int button_Valider=0x7f0a0060;
+        public static final int button_Validate_Trj=0x7f0a0060;
         public static final int button_decon=0x7f0a0085;
         public static final int button_inscr_validate=0x7f0a0090;
         public static final int button_profile=0x7f0a0083;
