@@ -567,7 +567,7 @@ def get_directions(fromCoordX,fromCoordY,toCoordX,toCoordY,route_type = "bicycle
         s.direction = man['direction']
         s.streets = man['streets']
         #s.maneuverNotes = man['maneuverNotes
-        print man['maneuverNotes']
+        #print man['maneuverNotes']
         s.distance = man['distance']
         s.moyen_transport = man['transportMode']
         s.signs = man['signs']
