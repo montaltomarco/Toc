@@ -41,7 +41,8 @@ def refresh_meteodb():
             if len(dateSplit) == 6: #On veut être sûr que ce qu'on récupère est bien une date
                 dt = datetime(year=int(dateSplit[0]), month=int(dateSplit[1]), day=int(dateSplit[2]), hour=int(dateSplit[3]), minute=int(dateSplit[4]), second=int(dateSplit[5]))
                 timestamp = time.mktime(dt.timetuple())
-                dictMeteo[int(timestamp)] = [abs(float(vMeteo["pluie"])), abs(float(vMeteo["pluie_convective"]))]
+                temperature = float(vMeteo["temperature"]["2m"])
+                dictMeteo[int(timestamp)] = [abs(float(vMeteo["pluie"])), abs(float(vMeteo["pluie_convective"])), temperature]
 
         i = 0
         dictMeteoOriginal = dictMeteo.copy()
@@ -54,6 +55,7 @@ def refresh_meteodb():
                 nextMeteo = dictMeteo.get(minimum+(3*3600))
                 deltaPluie = nextMeteo[0]  - currentMeteo[0]
                 deltaPluieConvective = nextMeteo[1]  - currentMeteo[1]
+                deltaTemperature = nextMeteo[2]  - currentMeteo[2]
 
                 j = 0
                 while(j < nbValeurSMeteoParHeure):
@@ -61,6 +63,7 @@ def refresh_meteodb():
                     meteo.timestamps = int(minimum + (j*(3600/nbValeurSMeteoParHeure)))
                     meteo.pluie = float(currentMeteo[0]) + ((float(j)/float(nbValeurSMeteoParHeure))* float(deltaPluie))
                     meteo.pluie_convective =  float(currentMeteo[1]) + ((float(j)/float(nbValeurSMeteoParHeure))* float(deltaPluieConvective))
+                    meteo.temperature =  float(currentMeteo[2]) + ((float(j)/float(nbValeurSMeteoParHeure))* float(deltaTemperature)) -273.15
                     meteo.save()
                     j = j + 1
 
@@ -70,6 +73,7 @@ def refresh_meteodb():
                 meteo.timestamps = int(dictMeteo.keys()[0])
                 meteo.pluie = float(dictMeteo.values()[0][1])
                 meteo.pluie_convective = float(dictMeteo.values()[0][1])
+                meteo.temperature = float(dictMeteo.values()[0][2])-273.15
                 meteo.save()
             i += 1
 refresh_meteodb()

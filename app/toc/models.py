@@ -640,13 +640,10 @@ def get_directions(fromCoordX,fromCoordY,toCoordX,toCoordY,route_type = "bicycle
         s.index = man['index']
         s.direction = man['direction']
         s.streets = man['streets']
-<<<<<<< HEAD
-        #s.maneuverNotes = man['maneuverNotes
-        print man['maneuverNotes']
-=======
+
         #s.maneuverNotes = man['maneuverNotes']
         #print man['maneuverNotes']
->>>>>>> 65fc868a280b05911dd2ce4a24fba41300d46e84
+
         s.distance = man['distance']
         s.moyen_transport = man['transportMode']
         s.signs = man['signs']
@@ -699,13 +696,9 @@ def obtenir_propositions(trajet,transports_demandes,personne):
 
             #Cas de la Pluie pendant le trajet avec des prcipitations suprieures  2mm
             tempsServeur = int(time.time()) + (5*60) #on ajoute 5 minutes car on concidère qu'on part 5 minutes aprs avoir lancé l'application
-<<<<<<< HEAD
-            tempsMarchePied = sectionPiedD[0]
-            tempsVelov = sectionVelov[0]
-=======
+
             tempsMarchePied = resultVelov[0][0].temps
             tempsVelov = resultVelov[1][0]
->>>>>>> 65fc868a280b05911dd2ce4a24fba41300d46e84
 
             timestampVelovDepart = (tempsServeur + tempsMarchePied) - ((tempsServeur + tempsMarchePied)%600) #on veut tomber sur un bon timestamp en BD
 
@@ -738,19 +731,6 @@ def obtenir_propositions(trajet,transports_demandes,personne):
                 #stat_arr.lon = sectionVelov[idFinVelov]
                 #sectionVelov = get_directions(stat_dep.lat,stat_dep.lon,stat_arr.lat,stat_arr.lon)
 
-<<<<<<< HEAD
-            sectionPiedF = get_directions(stat_arr.lat,stat_arr.lon,trajet.end_pos.lat,trajet.end_pos.lon,"pedestrian")
-            print sectionVelov
-            for section in sectionVelov:
-                print "VLV X"+str(section.trajet.start_pos.lon)+" Y"+str(section.trajet.start_pos.lat)
-            for section in sectionPiedD:
-                print "PDD"+section.narrative+" "+str(section.temps)
-            for section in sectionPiedF:
-                print "PDF"+section.narrative+" "+str(section.temps)
-
-        if moyen_transport == "FOT":
-            toto = False
-=======
             resultVelov.append(get_directions(stat_arr.lat,stat_arr.lon,trajet.end_pos.lat,trajet.end_pos.lon,"pedestrian"))
             #print sectionVelov
             # for section in sectionVelov:
@@ -792,7 +772,6 @@ def obtenir_propositions(trajet,transports_demandes,personne):
                     print sect.narrative
                     print " "
                 print " "
->>>>>>> 65fc868a280b05911dd2ce4a24fba41300d46e84
     return True
 
 
