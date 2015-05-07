@@ -24,6 +24,11 @@ def minTimestampKey(dictMeteo):
             minimum = keyMeteo
     return minimum
 
+def getCurrentMeteo():
+    currentTimeStamp = int(time.time())
+    timestampDB = currentTimeStamp - (currentTimeStamp%600)
+    return Data_meteo.objects.get(timestamps=timestampDB)
+
 def refresh_meteodb():
     nbValeurSMeteoParHeure = 6
 
@@ -71,7 +76,7 @@ def refresh_meteodb():
             else: #on incère le timestamp manimum en base de donnée
                 meteo = Data_meteo()
                 meteo.timestamps = int(dictMeteo.keys()[0])
-                meteo.pluie = float(dictMeteo.values()[0][1])
+                meteo.pluie = float(dictMeteo.values()[0][0])
                 meteo.pluie_convective = float(dictMeteo.values()[0][1])
                 meteo.temperature = float(dictMeteo.values()[0][2])-273.15
                 meteo.save()
