@@ -54,7 +54,7 @@ public class HomeActivity extends ActionBarActivity {
         switch (v.getId()) {
             case R.id.SearchButton:
                 //On envoie les données
-                String url = "http://10.0.2.2:8080/shifty/coordonnes/";
+                String url = "http://162.220.53.17:8000/shifty/coordonnes/";
                 HttpGetRequest getRequest = new HttpGetRequest();
                 String depart = ((EditText)findViewById(R.id.depart)).getText().toString();
                 String arrivee = ((EditText)findViewById(R.id.arrivee)).getText().toString();

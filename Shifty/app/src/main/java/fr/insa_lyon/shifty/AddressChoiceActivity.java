@@ -82,7 +82,7 @@ public class AddressChoiceActivity extends ActionBarActivity {
         System.out.println("Bouton clicked");
         switch (v.getId()) {
             case R.id.button_Validate_Trj :
-                String url = "http://10.0.2.2:8080/shifty/route/";
+                String url = "http://162.220.53.17:8000/shifty/route/";
                 HttpGetRequest getRequest = new HttpGetRequest();
 
                 try {

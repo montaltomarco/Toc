@@ -42,7 +42,7 @@ public class ItineraireActivity extends ActionBarActivity {
                 textDepDest.setText("De " + b.getString("depart") + " à " + b.getString("arrive") + "");
 
                 TextView textMeteo = (TextView)findViewById(R.id.textMeteo);
-                textDepDest.setText("Température : " + array.getString(0) + ", " + array.getString(1));
+                textMeteo.setText(array.getString(0) + ", " + array.getString(1));
 
                 for(int i=2; i<array.length()-1; i=i+2)
                 {

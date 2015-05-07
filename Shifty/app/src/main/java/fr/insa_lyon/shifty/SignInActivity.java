@@ -62,7 +62,7 @@ public class SignInActivity extends ActionBarActivity {
                 String confirmezMdp = ((EditText)findViewById(R.id.passwordConfirm)).getText().toString();
                 String mdp = ((EditText)findViewById(R.id.password)).getText().toString();
                 String civilite = (findViewById(R.id.radioCivilite)).toString();
-                String uri = "http://10.0.2.2:8080/shifty/inscription/";
+                String uri = "http://162.220.53.17:8000/shifty/inscription/";
                 HttpPostRequest postRequest = new HttpPostRequest();
                 postRequest.setValeursPOST("email",email);
                 postRequest.setValeursPOST("password", mdp);

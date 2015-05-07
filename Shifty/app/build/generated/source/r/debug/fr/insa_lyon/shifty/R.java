@@ -1797,7 +1797,7 @@ containing a value of this type.
         public static final int imageView3=0x7f0a0068;
         public static final int imageView4=0x7f0a008e;
         public static final int imageView5=0x7f0a0083;
-        public static final int imageView6=0x7f0a0073;
+        public static final int imageView6=0x7f0a0072;
         public static final int indications_id=0x7f0a0075;
         public static final int inscriptionButton=0x7f0a007d;
         public static final int linearLayout=0x7f0a0065;
@@ -1859,10 +1859,10 @@ containing a value of this type.
         public static final int tabMode=0x7f0a000b;
         public static final int terrain=0x7f0a001a;
         public static final int textConnexion=0x7f0a00a0;
-        public static final int textDepDest=0x7f0a0074;
+        public static final int textDepDest=0x7f0a0073;
         public static final int textInscription=0x7f0a009a;
-        public static final int textMeteo=0x7f0a0072;
-        public static final int textView=0x7f0a006a;
+        public static final int textMeteo=0x7f0a0074;
+        public static final int textName=0x7f0a006a;
         public static final int textView10=0x7f0a0067;
         public static final int textView13=0x7f0a006f;
         public static final int textView14=0x7f0a009e;
