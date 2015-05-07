@@ -93,7 +93,8 @@
         android:id="@+id/SaveButton"
         android:background="@drawable/but"
         android:layout_alignTop="@+id/SearchButton"
-        android:layout_alignEnd="@+id/textView10" />
+        android:layout_alignEnd="@+id/textView10"
+        android:onClick="ButtonOnClickSearch" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -116,4 +117,4 @@
         android:layout_alignEnd="@+id/SearchButton" />
 
 </RelativeLayout>
-<!-- From: file:/E:/Projects/App/Toc/Shifty/app/src/main/res/layout/activity_home.xml -->
+<!-- From: file:/Users/starwers13/Documents/4IF/PLD_Reseau/Toc/Shifty/app/src/main/res/layout/activity_home.xml -->
