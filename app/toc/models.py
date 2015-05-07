@@ -179,12 +179,8 @@ class Data_meteo(models.Model):
     pluie_convective = models.FloatField()
     temperature = models.FloatField()
     def __str__(self):
-        return 'Timestamps = ' + str(self.timestamps) + ' Pluie = ' + str(self.pluie) + ' Pluie Convective= ' + str(self.pluie_convective) + ' Température = ' + str(self.temperature)
+        return 'Timestamps = ' + str(self.timestamps) + ' Pluie = ' + str(self.pluie) + ' Pluie Convective= ' + str(self.pluie_convective) + ' TempÃ©rature = ' + str(self.temperature)
 
-def getCurrentMeteo():
-    currentTimeStamp = int(time.time())
-    timestampDB = currentTimeStamp - (currentTimeStamp%600)
-    return Data_meteo.objects.get(timestamps=timestampDB)
 
 class Station_velov(Lieu):
     number_station = models.IntegerField()
@@ -559,8 +555,12 @@ def get_stations_velov_bluely_combine(trajet,user):
     ordered_total_times = sorted(dico_trajets.iterkeys())
     for i in range(5):
         print "porposition1"+str(i)
-        print dico_trajets[ordered_total_times[i]]
-    return ordered_total_times
+        #print dico_trajets[ordered_total_times[i]]
+        try:
+            d = dico_trajets[ordered_total_times[0]]
+        except:
+            d="vide"
+    return d
 
 def parallel_directions(fromCoordX,fromCoordY,toCoordX,toCoordY,dico_sections,no_section,lock_dico,lockdb,route_type = "bicycle"):
     sections = get_directions(fromCoordX,fromCoordY,toCoordX,toCoordY,lockdb,route_type)
@@ -645,10 +645,8 @@ def get_directions(fromCoordX,fromCoordY,toCoordX,toCoordY,route_type = "bicycle
         s.index = man['index']
         s.direction = man['direction']
         s.streets = man['streets']
-
         #s.maneuverNotes = man['maneuverNotes']
         #print man['maneuverNotes']
-
         s.distance = man['distance']
         s.moyen_transport = man['transportMode']
         s.signs = man['signs']
@@ -701,7 +699,6 @@ def obtenir_propositions(trajet,transports_demandes,personne):
 
             #Cas de la Pluie pendant le trajet avec des prcipitations suprieures  2mm
             tempsServeur = int(time.time()) + (5*60) #on ajoute 5 minutes car on concidère qu'on part 5 minutes aprs avoir lancé l'application
-
             tempsMarchePied = resultVelov[0][0].temps
             tempsVelov = resultVelov[1][0]
 
@@ -713,14 +710,16 @@ def obtenir_propositions(trajet,transports_demandes,personne):
 
             while(i < tempsVelov):
                 temps = timestampVelovDepart + i
-                meteo = Data_meteo().objects.get(timestamps = temps)
+                meteo = Data_meteo.objects.filter(timestamps = temps)
+                if len(meteo)>=1:
+                    if meteo[0].pluie >= 2.0:
+                        velovPluie = True
+                        break
 
-                if meteo.pluie >= 2.0:
-                    velovPluie = True
+                    i += 600
+                    idFinVelov += 1
+                else:
                     break
-
-                i += 600
-                idFinVelov += 1
 
             #Mise à jour des Temps de Trajet pour le Velov et on supprime le reste
            # if velovPluie == True:

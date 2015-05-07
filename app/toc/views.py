@@ -15,6 +15,7 @@ from utils import getCoordByNames
 from models import *
 from inscription import InscriptionForm, CreatePerson
 
+
 # Create your views here.
 
 def index(request):
@@ -64,11 +65,16 @@ def inscription(request):
 
         response[u'status'] = u'ok'
         response[u'message'] = inscriptionForm.email
+        response[u'prenom'] = inscriptionForm.prenom
+
         return JsonResponse(response)
 
 @require_http_methods(["GET", "POST"])
 @csrf_exempt
 def login(request):
+
+    response={}
+
     if request.method == 'GET':
         return HttpResponse(" Error : Login Page Requires POST DATA <br>  ")
     elif request.method == 'POST':
@@ -76,12 +82,38 @@ def login(request):
         password = request.POST.get('password', '')
         p = Personne.objects.get(email=mail)
         if p.mot_de_pass == password :
-            return HttpResponse("Login page <br> email is : "+ mail + ", Password is : " + password)
+            response[u'status'] = u'ok'
+            response[u'prenom'] = p.prenom
+
+            return JsonResponse(response)
         else:
-            return HttpResponse("email invalid ou mot de passe erroné")
+            response[u'status'] = u'error'
+            return JsonResponse(response)
 
 @require_http_methods(["GET"])
 def getRoute(request):
+    def __get_transport(obj) :
+        if type(obj) == "toc.Station_velov":
+            return "bicycle"
+        else:
+            return "fastest"
+
+    def getCurrentMeteo():
+        currentTimeStamp = int(time.time())
+        timestampDB = currentTimeStamp - (currentTimeStamp%600)
+        print timestampDB
+        """
+        try:
+            return Data_meteo.objects.get(timestamps=timestampDB)
+        except:
+            return  None"""
+
+    def __get_nom_transport(obj) :
+        if type(obj) == "toc.Station_velov":
+            return "Velo'V"
+        else:
+            return "BlueLY"
+
     lieu_dep = Lieu()
     lieu_arr = Lieu()
 
@@ -103,11 +135,59 @@ def getRoute(request):
 
     #TODO:Remplacer le faux user par celui de la session
     user = Personne()
-    resp = get_stations_velov_bluely_combine(trajet,user)
+    try:
+        resp = get_stations_velov_bluely_combine(trajet,user)
+    except:
+        resp=""
     data = []
+    def __get_pluie():
+        meteo = getCurrentMeteo()
+        if meteo.pluie>2.5:
+            return "Pluie"
+        else:
+            return "Soleil"
+
+    def __get_temperature():
+        return getCurrentMeteo().temperature
+    getCurrentMeteo()
+    data.append("Soleil")
+    data.append("18C")
     print "-----------------------------------------------------------------------------------------------------"
     #obtenir_propositions(trajet,transports,user)
     #data = serializers.serialize("json", resp)
+    try:
+        temp = get_directions(lieu_dep.lat,lieu_dep.lon,resp[0][0].lat,resp[0][0].lon,"pedestrian")
+        for t in temp:
+            data.append("A Pied")
+            data.append(t.narrative)
+    except:pass
+    print data
+    i = 0
+    for r in resp:
+        try:
+            temp = get_directions(r[0].lat,r[0].lon,r[1].lat,r[1].lon,__get_transport(r[0]))
+            i = i+1
+            print r[0].lat,r[0].lon,r[1].lat,r[1].lon
+            for t in temp:
+                data.append(__get_nom_transport(r[0]))
+                data.append(t.narrative)
+        except:
+            print "exception. I:"
+            print i
+            continue
+    try:
+        temp = get_directions(resp[i][1].lat,resp[i][1].lon,lieu_arr.lat,lieu_arr.lon,"pedestrian")
+        for t in temp:
+            data.append("A Pied")
+            data.append(t.narrative)
+    except:pass
+
+    """for r in resp:
+        try:
+            temp = get_directions(lieu_dep.lat,lieu_dep.lon,r[0].lat,r[0].lon,"pedestrian")
+
+           
+
     try:
         temp = get_directions(lieu_dep.lat,lieu_dep.lon,resp[0][0].lat,resp[0][0].lon,"pedestrian")
         for t in temp:
@@ -117,6 +197,8 @@ def getRoute(request):
         pass
     try:
         temp = get_directions(resp[0][0].lat,resp[0][0].lon, resp[1][0].lat,resp[1][0].lon,"bicycle")
+        data.append("BICYCLE")
+        data.append("Vous devez Prendre Le velo ici")
         for t in temp:
             data.append(t.moyen_transport)
             data.append(t.narrative)
@@ -124,6 +206,8 @@ def getRoute(request):
         pass
     try:
         temp = get_directions(resp[1][0].lat,resp[1][0].lon, resp[2][0].lat,resp[2][0].lon,"fastest")
+        data.append("AUTO")
+        data.append("Vous devez Prendre La voiture ici")
         for t in temp:
             data.append(t.moyen_transport)
             data.append(t.narrative)
@@ -140,11 +224,13 @@ def getRoute(request):
             data.append(t.narrative)
     except:
         pass
+         """
     #r = (requests.get('http://open.mapquestapi.com/directions/v2/route?key=Fmjtd%7Cluur290anu%2Crl%3Do5-908a0y&from=45.7695736,4.8534248&to=49.46223865,3.82243905078971&routeType=bicycle&manMaps=false&shapeFormat=raw&generalize=0&unit=k').text)
     response_data = {}
     #response_data = {}
         #print type(r[0])
     #return JsonResponse(resp)
+    print data
     return HttpResponse(json.dumps(data))
 
 @require_http_methods(["GET"])
