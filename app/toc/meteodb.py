@@ -24,11 +24,6 @@ def minTimestampKey(dictMeteo):
             minimum = keyMeteo
     return minimum
 
-def getCurrentMeteo():
-    currentTimeStamp = int(time.time())
-    timestampDB = currentTimeStamp - (currentTimeStamp%600)
-    return Data_meteo.objects.get(timestamps=timestampDB)
-
 def refresh_meteodb():
     nbValeurSMeteoParHeure = 6
 

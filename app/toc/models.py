@@ -181,6 +181,11 @@ class Data_meteo(models.Model):
     def __str__(self):
         return 'Timestamps = ' + str(self.timestamps) + ' Pluie = ' + str(self.pluie) + ' Pluie Convective= ' + str(self.pluie_convective) + ' Température = ' + str(self.temperature)
 
+def getCurrentMeteo():
+    currentTimeStamp = int(time.time())
+    timestampDB = currentTimeStamp - (currentTimeStamp%600)
+    return Data_meteo.objects.get(timestamps=timestampDB)
+
 class Station_velov(Lieu):
     number_station = models.IntegerField()
     nb_velos = models.IntegerField()
