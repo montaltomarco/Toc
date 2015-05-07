@@ -23,37 +23,28 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="Départ : "
-                android:id="@+id/textView12"
-                android:layout_gravity="center_horizontal|top"
-                android:textStyle="bold" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceLarge"
                 android:text="Météo :"
-                android:id="@+id/textView11"
+                android:id="@+id/textMeteo"
                 android:layout_gravity="center"
-                android:textStyle="bold" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="Durée prévue : "
-                android:id="@+id/textView16"
-                android:layout_gravity="left|bottom"
-                android:textStyle="bold" />
+                android:textSize="16dp" />
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="75dp"
+                android:layout_height="75dp"
                 android:id="@+id/imageView6"
                 android:layout_gravity="left|top"
                 android:src="@drawable/ic_launcher"
                 android:layout_marginLeft="30dp"
                 android:layout_marginTop="-5dp" />
+
+            <TextView
+                android:layout_width="207dp"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="Départ : "
+                android:id="@+id/textDepDest"
+                android:layout_gravity="right|top"
+                android:textSize="16dp" />
         </FrameLayout>
 
         <ListView

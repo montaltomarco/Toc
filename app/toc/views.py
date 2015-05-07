@@ -32,6 +32,7 @@ def inscription(request):
         return JsonResponse(response)
 
     elif request.method == 'POST':
+
         inscriptionForm = InscriptionForm()
         inscriptionForm.email = request.POST.get('email', '')
         inscriptionForm.password = request.POST.get('password', '')
@@ -41,6 +42,15 @@ def inscription(request):
         inscriptionForm.civilite = request.POST.get('civilite', '')
         inscriptionForm.adresse = request.POST.get('adresse', '')
         inscriptionForm.age = request.POST.get('age', '')
+
+        print request.POST.get('email', '')
+        print request.POST.get('password', '')
+        print request.POST.get('confirmezMdp', '')
+        print request.POST.get('nom', '')
+        print request.POST.get('prenom', '')
+        print request.POST.get('civilite', '')
+        print request.POST.get('adresse', '')
+        print request.POST.get('age', '')
 
         if not re.match(r"^[A-Za-z0-9\.\+_-]+@[A-Za-z0-9\._-]+\.[a-zA-Z]*$", inscriptionForm.email) or inscriptionForm.email=='' :
             response[u'status'] = u'error'
@@ -54,31 +64,45 @@ def inscription(request):
             response[u'message'] = u'Error - les deux mot de passe ne correspondent pas.'
             return JsonResponse(response)
 
-        if inscriptionForm.civilite:
-            if inscriptionForm.civilite!='Madame' and inscriptionForm.civilite!='Monsieur':
-                response[u'status'] = u'error'
-                response[u'message'] = u'Error - vous pouvez seulement etre un monsieur ou une madame.'
-                return JsonResponse(response)
-
         CreatePerson(form=inscriptionForm)
 
         response[u'status'] = u'ok'
         response[u'message'] = inscriptionForm.email
+        response[u'prenom'] = inscriptionForm.prenom
+
         return JsonResponse(response)
 
 @require_http_methods(["GET", "POST"])
 @csrf_exempt
 def login(request):
+
+    response={}
+
     if request.method == 'GET':
         return HttpResponse(" Error : Login Page Requires POST DATA <br>  ")
     elif request.method == 'POST':
-        mail = request.POST.get('mail', '')
+        mail = request.POST.get('email', '')
         password = request.POST.get('password', '')
-        p = Personne.objects.get(email=mail)
-        if p.mot_de_pass == password :
-            return HttpResponse("Login page <br> email is : "+ mail + ", Password is : " + password)
+        print mail
+        print password
+
+        try:
+            p = Personne.objects.get(email=mail)
+        except:
+            response[u'status'] = u'error'
+            return JsonResponse(response)
+        if p:
+            if p.mot_de_pass == password :
+                response[u'status'] = u'ok'
+                response[u'prenom'] = p.prenom
+
+                return JsonResponse(response)
+            else:
+                response[u'status'] = u'error'
+                return JsonResponse(response)
         else:
-            return HttpResponse("email invalid ou mot de passe erroné")
+                response[u'status'] = u'error'
+                return JsonResponse(response)
 
 @require_http_methods(["GET"])
 def getRoute(request):

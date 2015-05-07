@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 
 public class HomeActivity extends ActionBarActivity {
@@ -17,6 +18,12 @@ public class HomeActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        Bundle b = getIntent().getExtras();
+
+        if(b!=null) {
+            TextView text = (TextView)findViewById(R.id.textName);
+            text.setText("Bonjour " + b.getString("prenom"));
+        }
     }
 
 

@@ -8,7 +8,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import org.json.JSONObject;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -69,17 +72,18 @@ public class SignInActivity extends ActionBarActivity {
                 postRequest.setValeursPOST("adresse",adresse );
                 postRequest.setValeursPOST("age",age);
                 postRequest.setValeursPOST("confirmezMdp",confirmezMdp );
+                postRequest.setSignInActivity(this);
                 postRequest.execute(uri);
-
-                CharSequence text = "Inscription validée!";
-                int duration = Toast.LENGTH_SHORT;
-                Toast toast = Toast.makeText(getApplicationContext(), text, duration);
-                toast.show();
-
-                nextView = new Intent(getApplicationContext(),MenuActivity.class);
-                startActivity(nextView);
                 break;
         }
+    }
+
+    public void setPerson(String result){
+        Intent nextView = new Intent(getApplicationContext(),MenuActivity.class);
+        Bundle params = new Bundle();
+        params.putString("result", result); //Your id
+        nextView.putExtras(params); //Put your id to your next Intent
+        startActivity(nextView);
     }
 
 

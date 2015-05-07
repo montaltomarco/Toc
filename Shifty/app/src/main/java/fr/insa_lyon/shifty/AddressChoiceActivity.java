@@ -18,6 +18,8 @@ import android.widget.RadioGroup;
 public class AddressChoiceActivity extends ActionBarActivity {
 
     private JSONObject response;
+    private String nameDepart;
+    private String nameArrive;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,6 +93,7 @@ public class AddressChoiceActivity extends ActionBarActivity {
                     JSONObject obj = response.getJSONArray("firstAddress").getJSONObject(idx);
                     getRequest.setNameValuePairs("fromY", obj.getString("lat"));
                     getRequest.setNameValuePairs("fromX", obj.getString("lon"));
+                    nameDepart = obj.getString("name");
                     System.out.println("lat :" + obj.getString("lat"));
                     System.out.println("long :" + obj.getString("lon"));
 
@@ -101,6 +104,7 @@ public class AddressChoiceActivity extends ActionBarActivity {
                     JSONObject obj2 = response.getJSONArray("secondAddress").getJSONObject(idx2);
                     getRequest.setNameValuePairs("toY", obj2.getString("lat"));
                     getRequest.setNameValuePairs("toX", obj2.getString("lon"));
+                    nameArrive = obj2.getString("name");
                     System.out.println("lat2 :" + obj2.getString("lat"));
                     System.out.println("long2 :" + obj2.getString("lon"));
 
@@ -122,6 +126,8 @@ public class AddressChoiceActivity extends ActionBarActivity {
         Intent nextView = new Intent(getApplicationContext(),ItineraireActivity.class);
         Bundle params = new Bundle();
         params.putString("result", result); //Your id
+        params.putString("depart", nameDepart);
+        params.putString("arrive", nameArrive);
         nextView.putExtras(params); //Put your id to your next Intent
         startActivity(nextView);
     }

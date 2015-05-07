@@ -52,11 +52,18 @@ public class LogInActivity extends ActionBarActivity {
                 HttpPostRequest postRequest = new HttpPostRequest();
                 postRequest.setValeursPOST("email",email);
                 postRequest.setValeursPOST("password", password);
+                postRequest.setLogInActivity(this);
                 postRequest.execute(uri);
-                //on passe à la vue suivante
-                nextView = new Intent(getApplicationContext(),MenuActivity.class);
-                startActivity(nextView);
                 break;
         }
+    }
+
+    public void setPerson(String result){
+
+        Intent nextView = new Intent(getApplicationContext(),MenuActivity.class);
+        Bundle params = new Bundle();
+        params.putString("result", result); //Your id
+        nextView.putExtras(params); //Put your id to your next Intent
+        startActivity(nextView);
     }
 }

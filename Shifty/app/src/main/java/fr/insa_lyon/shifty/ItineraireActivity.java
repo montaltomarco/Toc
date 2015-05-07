@@ -10,6 +10,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -37,9 +38,15 @@ public class ItineraireActivity extends ActionBarActivity {
                 JSONArray array = new JSONArray(value);
                 ArrayList<String> listeRes = new ArrayList<String>();
 
-                for(int i=0; i<array.length(); i++)
+                TextView textDepDest = (TextView)findViewById(R.id.textDepDest);
+                textDepDest.setText("De " + b.getString("depart") + " à " + b.getString("arrive") + "");
+
+                TextView textMeteo = (TextView)findViewById(R.id.textMeteo);
+                textDepDest.setText("Température : " + array.getString(0) + ", " + array.getString(1));
+
+                for(int i=2; i<array.length()-1; i=i+2)
                 {
-                    listeRes.add(array.getString(i));
+                    listeRes.add(array.getString(i)+" : " + array.get(i+1));
                 }
                 mStrings=listeRes.toArray(new String[listeRes.size()]);
                 ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1, mStrings);

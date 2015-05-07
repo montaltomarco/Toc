@@ -20,4 +20,5 @@ def CreatePerson(form):
     new_personne.nom = form.nom
     new_personne.prenom = form.prenom
 
+    print "personne saved"
     new_personne.save()

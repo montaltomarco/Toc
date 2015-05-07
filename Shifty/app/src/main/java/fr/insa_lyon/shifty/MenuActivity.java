@@ -13,13 +13,38 @@ import org.json.JSONObject;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 
 public class MenuActivity extends ActionBarActivity {
 
+    private JSONObject response;
+    private String prenom;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
+
+        Bundle b = getIntent().getExtras();
+
+        if(b!=null)
+        {
+            String value = b.getString("result");
+
+            try {
+                response = new JSONObject(value);
+
+                TextView text = (TextView)findViewById(R.id.bonj_text);
+                text.setText("Bonjour " + response.getString("prenom"));
+                prenom = response.getString("prenom");
+
+                //recuperer la view qui correspond à l affichage du nom et prenom
+                //faire set de la view
+
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @Override
@@ -49,6 +74,9 @@ public class MenuActivity extends ActionBarActivity {
         switch (v.getId()) {
             case R.id.button_trajet:
                 nextView = new Intent(getApplicationContext(),HomeActivity.class);
+                Bundle params = new Bundle();
+                params.putString("prenom", prenom); //Your id
+                nextView.putExtras(params); //Put your id to your next Intent
                 startActivity(nextView);
                 break;
             case R.id.button_decon:
