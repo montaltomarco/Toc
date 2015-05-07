@@ -6,13 +6,15 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="fr.insa_lyon.shifty.MainActivity"
-    android:id="@+id/global">
+    android:id="@+id/global"
+    android:weightSum="1">
 
     <ScrollView android:id="@+id/login_form" android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
         <LinearLayout android:id="@+id/email_login_form" android:layout_width="match_parent"
-            android:layout_height="wrap_content" android:orientation="vertical">
+            android:layout_height="wrap_content" android:orientation="horizontal"
+            android:weightSum="1">
 
             <RadioGroup
                 android:layout_width="190dp"
@@ -35,90 +37,92 @@
                     android:checked="false" />
             </RadioGroup>
 
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textPersonName"
-                android:ems="10"
-                android:id="@+id/nom"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginBottom="10dp"
-                android:hint="@string/name" />
-
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textPersonName"
-                android:ems="10"
-                android:id="@+id/prenom"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginBottom="10dp"
-                android:hint="@string/first_name" />
-
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="numberSigned"
-                android:ems="10"
-                android:id="@+id/age"
-                android:layout_marginBottom="10dp"
-                android:hint="@string/age" />
-
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textPostalAddress"
-                android:id="@+id/adresse"
-                android:hint="@string/adress"
-                android:layout_marginBottom="10dp" />
-
-            <AutoCompleteTextView android:id="@+id/email" android:layout_width="match_parent"
-                android:layout_height="wrap_content" android:hint="@string/prompt_email"
-                android:inputType="textEmailAddress" android:maxLines="1"
-                android:singleLine="true"
-                android:layout_marginBottom="10dp" />
-
-            <EditText android:id="@+id/password" android:layout_width="match_parent"
-                android:layout_height="wrap_content" android:hint="@string/prompt_password"
-                android:imeActionId="@+id/login"
-                android:imeActionLabel="@string/action_sign_in_short"
-                android:imeOptions="actionUnspecified" android:inputType="textPassword"
-                android:maxLines="1" android:singleLine="true"
-                android:layout_marginBottom="10dp" />
-
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textPassword"
-                android:ems="10"
-                android:id="@+id/passwordConfirm"
-                android:layout_gravity="center_horizontal"
-                android:hint="@string/prompt_password_confirm"
-                android:layout_marginBottom="15dp" />
-
-            <ImageButton
+            <ImageView
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/imageButton" />
-
-            <ImageButton
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:id="@+id/sign_in_button"
-                android:layout_gravity="center_horizontal"
-                android:background="@drawable/mindmap"
-                android:onClick="ButtonOnClickSign"
-                android:clickable="false" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text="Inscription"
-                android:id="@+id/textView6"
-                android:layout_gravity="center_horizontal" />
+                android:layout_height="match_parent"
+                android:id="@+id/imageView4"
+                android:src="@drawable/bike"
+                android:layout_weight="0.31" />
 
         </LinearLayout>
     </ScrollView>
 
-</LinearLayout><!-- From: file:/Users/starwers13/Documents/4IF/PLD_Reseau/Toc/Shifty/app/src/main/res/layout/activity_sign_in.xml -->
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal">
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:ems="10"
+            android:id="@+id/nom"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="10dp"
+            android:hint="@string/name" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:ems="10"
+            android:id="@+id/prenom"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="10dp"
+            android:hint="@string/first_name" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPostalAddress"
+            android:id="@+id/adresse"
+            android:hint="@string/adress"
+            android:layout_marginBottom="10dp" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="numberSigned"
+            android:ems="10"
+            android:id="@+id/age"
+            android:layout_marginBottom="10dp"
+            android:hint="@string/age" />
+
+        <AutoCompleteTextView android:id="@+id/email" android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:hint="@string/prompt_email"
+            android:inputType="textEmailAddress" android:maxLines="1"
+            android:singleLine="true"
+            android:layout_marginBottom="10dp" />
+
+        <EditText android:id="@+id/password" android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:hint="@string/prompt_password"
+            android:imeActionId="@+id/login"
+            android:imeActionLabel="@string/action_sign_in_short"
+            android:imeOptions="actionUnspecified" android:inputType="textPassword"
+            android:maxLines="1" android:singleLine="true"
+            android:layout_marginBottom="10dp" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword"
+            android:ems="10"
+            android:id="@+id/passwordConfirm"
+            android:layout_gravity="center_horizontal"
+            android:hint="@string/prompt_password_confirm"
+            android:layout_marginBottom="15dp" />
+
+    </LinearLayout>
+
+    <Button
+        android:layout_width="356dp"
+        android:layout_height="wrap_content"
+        android:text="Validate"
+        android:id="@+id/button_inscr_validate"
+        android:background="#ffcbf2ff"
+        android:onClick="ButtonOnClickSign"
+        android:clickable="true" />
+
+</LinearLayout><!-- From: file:/Users/marcomontalto/Desktop/PERSONALE/Insa/4IF/2%20Semestre/Toc/Toc/Shifty/app/src/main/res/layout/activity_sign_in.xml -->

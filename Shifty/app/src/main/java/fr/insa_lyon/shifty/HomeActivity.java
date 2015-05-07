@@ -6,7 +6,9 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 
 
 public class HomeActivity extends ActionBarActivity {
@@ -53,9 +55,8 @@ public class HomeActivity extends ActionBarActivity {
                 getRequest.setNameValuePairs("secondAddress", arrivee);
                 getRequest.setActivityHome(this);
                 getRequest.execute(url);
-                break;
-            case R.id.SaveButton:
-                // Sauvegarder l'itinéraire dasn les favoris
+                ImageButton btnGrp1 = (ImageButton) findViewById(R.id.SearchButton);
+                btnGrp1.setClickable(false);
                 break;
         }
     }

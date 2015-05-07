@@ -9,7 +9,7 @@ from models import *
 import requests
 import json
 import re
-
+from django.core import serializers
 #Utils
 from utils import getCoordByNames
 from models import *
@@ -91,27 +91,61 @@ def getRoute(request):
     lieu_arr.lat = float(request.GET.get('toY', ''))
     #TODO:Recuperer une liste (cette ligne est suffisante?)
     transports = request.GET.get('transports', '')
-    print transports
+    #print transports
     lieu_dep.save()
     lieu_arr.save()
     transports = ["VLV","BLU"]
+
     trajet = Trajet()
     trajet.start_pos = lieu_dep
     trajet.end_pos = lieu_arr
 
+
     #TODO:Remplacer le faux user par celui de la session
     user = Personne()
-
-    obtenir_propositions(trajet,transports,user)
-
-
+    resp = get_stations_velov_bluely_combine(trajet,user)
+    data = []
+    print "-----------------------------------------------------------------------------------------------------"
+    #obtenir_propositions(trajet,transports,user)
+    #data = serializers.serialize("json", resp)
+    try:
+        temp = get_directions(lieu_dep.lat,lieu_dep.lon,resp[0][0].lat,resp[0][0].lon,"pedestrian")
+        for t in temp:
+            data.append(t.moyen_transport)
+            data.append(t.narrative)
+    except:
+        pass
+    try:
+        temp = get_directions(resp[0][0].lat,resp[0][0].lon, resp[1][0].lat,resp[1][0].lon,"bicycle")
+        for t in temp:
+            data.append(t.moyen_transport)
+            data.append(t.narrative)
+    except:
+        pass
+    try:
+        temp = get_directions(resp[1][0].lat,resp[1][0].lon, resp[2][0].lat,resp[2][0].lon,"fastest")
+        for t in temp:
+            data.append(t.moyen_transport)
+            data.append(t.narrative)
+    except:
+        temp = get_directions(resp[1][0].lat,resp[1][0].lon, lieu_dep.lat,lieu_dep.lon,"pedestrian")
+        for t in temp:
+            data.append("WALKING")
+            data.append(t.narrative)
+        pass
+    try:
+        temp = get_directions(resp[2][0].lat,resp[2][0].lon, lieu_dep.lat,lieu_dep.lon,"pedestrian")
+        for t in temp:
+            data.append("WALKING")
+            data.append(t.narrative)
+    except:
+        pass
     #r = (requests.get('http://open.mapquestapi.com/directions/v2/route?key=Fmjtd%7Cluur290anu%2Crl%3Do5-908a0y&from=45.7695736,4.8534248&to=49.46223865,3.82243905078971&routeType=bicycle&manMaps=false&shapeFormat=raw&generalize=0&unit=k').text)
     response_data = {}
-
     #response_data = {}
-
-    #return JsonResponse(r)
-    return HttpResponse("FE")
+        #print type(r[0])
+    #return JsonResponse(resp)
+    return HttpResponse(json.dumps(data))
 
 @require_http_methods(["GET"])
 def getCoordByAddressNames(request):

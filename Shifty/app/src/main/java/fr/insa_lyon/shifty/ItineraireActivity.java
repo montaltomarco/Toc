@@ -35,6 +35,8 @@ public class ItineraireActivity extends ListActivity {
             listeRes.add("AAAAAAAAAAAAAAAAAAAAAAAAAAa");
             listeRes.add("BBBBBBBBBBBBBBBBBBBBBBBBBB");
             mStrings=listeRes.toArray(new String[listeRes.size()]);
+            ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1, mStrings);
+            setListAdapter(adapter);
 
             /*try {
                 response = new JSONObject(value);
@@ -47,10 +49,6 @@ public class ItineraireActivity extends ListActivity {
                 e.printStackTrace();
             }*/
         }
-
-
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1, mStrings);
-        setListAdapter(adapter);
     }
 
 

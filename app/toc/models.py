@@ -5,6 +5,9 @@ from collections import *
 import requests
 import json
 import time
+from multiprocessing import Process,Lock
+import multiprocessing
+from multiprocessing.managers import SyncManager,BaseManager
 # Create your models here.
 
 def calculerDistance(depart,arrivee):
@@ -554,7 +557,77 @@ def get_stations_velov_bluely_combine(trajet,user):
         print dico_trajets[ordered_total_times[i]]
     return ordered_total_times
 
+def parallel_directions(fromCoordX,fromCoordY,toCoordX,toCoordY,dico_sections,no_section,lock_dico,lockdb,route_type = "bicycle"):
+    sections = get_directions(fromCoordX,fromCoordY,toCoordX,toCoordY,lockdb,route_type)
+    lock_dico.acquire()
+    dico_sections[no_section] = sections
+    lock_dico.release()
+    print "Termine pour thread "+str(no_section)
 
+def execute(fromCoordX,fromCoordY,toCoordX,toCoordY,lock,no_requete,tab_results,route_type = "bicycle"):
+    key = "Fmjtd%7Cluur290anu%2Crl%3Do5-908a0y"
+    r = requests.get('http://open.mapquestapi.com/directions/v2/route?key=%s&outFormat=json&routeType=%s&timeType=1&enhancedNarrative=true&locale=fr_FR&unit=k&from=%s,%s&to=%s,%s&drivingStyle=2&highwayEfficiency=21.0' %(key,route_type,fromCoordX,fromCoordY,toCoordX,toCoordY)).text
+    json_obj = json.loads(r)
+    lock.acquire()
+    tab_results[no_requete] = json_obj
+    lock.release()
+    print "Termine "+str(no_requete)
+
+def load_requests_and_execute(requests_tab):
+    lock = Lock()
+    manager = multiprocessing.Manager()
+    results = manager.dict()
+
+    process = []
+    for i in range(len(requests_tab)):
+        fX = requests_tab[i][0]
+        fY = requests_tab[i][1]
+        tX = requests_tab[i][2]
+        tY = requests_tab[i][3]
+        rt = requests_tab[i][4]
+        process.append(Process(target=execute,args=(fX,fY,tX,tY,lock,i,results,rt)))
+
+    for i in range(len(requests_tab)):
+        process[i].start()
+
+    for i in range(len(requests_tab)):
+        process[i].join()
+
+    tous_vehicules = []
+    for i in range(len(requests_tab)):
+        liste_sections = []
+        for man in results[i]['route']['legs'][0]['maneuvers']:
+            s = Section()
+            s.index = man['index']
+            s.direction = man['direction']
+            s.streets = man['streets']
+            s.maneuverNotes = man['maneuverNotes']
+            #print man['maneuverNotes']
+            s.distance = man['distance']
+            s.moyen_transport = man['transportMode']
+            s.signs = man['signs']
+            s.iconUrl = man['iconUrl']
+            s.directionName = man['directionName']
+            s.temps = man['time']
+            s.narrative = man['narrative']
+            l = Lieu()
+            l.lat = man['startPoint']['lat']
+            l.lon = man['startPoint']['lng']
+            l.adresse = man['streets']
+            l.save()
+            t = Trajet()
+            t.start_pos = l
+            #TODO:Debug this
+            t.end_pos = l
+            t.save()
+            s.trajet = t
+            s.turnType = man['turnType']
+            s.en_cours = False
+            s.taux_pollution = 0
+            s.save()
+            liste_sections.append(s)
+        tous_vehicules.append(liste_sections)
+    return tous_vehicules
 
 def get_directions(fromCoordX,fromCoordY,toCoordX,toCoordY,route_type = "bicycle"):
     #route_type = "bicycle" ou "pedestrian"
@@ -567,8 +640,13 @@ def get_directions(fromCoordX,fromCoordY,toCoordX,toCoordY,route_type = "bicycle
         s.index = man['index']
         s.direction = man['direction']
         s.streets = man['streets']
+<<<<<<< HEAD
         #s.maneuverNotes = man['maneuverNotes
         print man['maneuverNotes']
+=======
+        #s.maneuverNotes = man['maneuverNotes']
+        #print man['maneuverNotes']
+>>>>>>> 65fc868a280b05911dd2ce4a24fba41300d46e84
         s.distance = man['distance']
         s.moyen_transport = man['transportMode']
         s.signs = man['signs']
@@ -610,16 +688,24 @@ def obtenir_propositions(trajet,transports_demandes,personne):
             except Exception as error:
                 print "ERROR"
                 pass
-            print "--------"
-            print "Station dep "+str(stat_dep.lon)+" "+str(stat_dep.lat)
-            print "Station arr "+str(stat_arr.lon)+" "+str(stat_arr.lat)
-            sectionPiedD = get_directions(trajet.start_pos.lat,trajet.start_pos.lon,stat_dep.lat,stat_dep.lon,"pedestrian")
-            sectionVelov = get_directions(stat_dep.lat,stat_dep.lon,stat_arr.lat,stat_arr.lon)
+                break
+            requests = []
+            requests.append((trajet.start_pos.lat,trajet.start_pos.lon,stat_dep.lat,stat_dep.lon,"pedestrian"))
+            requests.append((stat_dep.lat,stat_dep.lon,stat_arr.lat,stat_arr.lon,"bicycle"))
+
+            resultVelov = load_requests_and_execute(requests)
+
+
 
             #Cas de la Pluie pendant le trajet avec des prcipitations suprieures  2mm
             tempsServeur = int(time.time()) + (5*60) #on ajoute 5 minutes car on concidère qu'on part 5 minutes aprs avoir lancé l'application
+<<<<<<< HEAD
             tempsMarchePied = sectionPiedD[0]
             tempsVelov = sectionVelov[0]
+=======
+            tempsMarchePied = resultVelov[0][0].temps
+            tempsVelov = resultVelov[1][0]
+>>>>>>> 65fc868a280b05911dd2ce4a24fba41300d46e84
 
             timestampVelovDepart = (tempsServeur + tempsMarchePied) - ((tempsServeur + tempsMarchePied)%600) #on veut tomber sur un bon timestamp en BD
 
@@ -652,6 +738,7 @@ def obtenir_propositions(trajet,transports_demandes,personne):
                 #stat_arr.lon = sectionVelov[idFinVelov]
                 #sectionVelov = get_directions(stat_dep.lat,stat_dep.lon,stat_arr.lat,stat_arr.lon)
 
+<<<<<<< HEAD
             sectionPiedF = get_directions(stat_arr.lat,stat_arr.lon,trajet.end_pos.lat,trajet.end_pos.lon,"pedestrian")
             print sectionVelov
             for section in sectionVelov:
@@ -663,6 +750,49 @@ def obtenir_propositions(trajet,transports_demandes,personne):
 
         if moyen_transport == "FOT":
             toto = False
+=======
+            resultVelov.append(get_directions(stat_arr.lat,stat_arr.lon,trajet.end_pos.lat,trajet.end_pos.lon,"pedestrian"))
+            #print sectionVelov
+            # for section in sectionVelov:
+            #     print "VLV X"+str(section.trajet.start_pos.lon)+" Y"+str(section.trajet.start_pos.lat)
+            # for section in sectionPiedD:
+            #     print "PDD"+section.narrative+" "+str(section.temps)
+            # for section in sectionPiedF:
+            #     print "PDF"+section.narrative+" "+str(section.temps)
+
+        if moyen_transport == "FOT":
+            toto = False
+
+        if moyen_transport == "BLU":
+            ((velovDO,velovDD,d1),(blueStatO,blueStatD,d2),(velovFO,velovFD,d3))= get_stations_velov_bluely_combine(trajet,personne)
+            requests = []
+            if velovDO != None:
+                #Le premier trajet se fait bien en velov
+                requests.append((trajet.start_pos.lat,trajet.start_pos.lon,velovDO.lat,velovDO.lon,"pedestrian"))
+                requests.append((velovDO.lat,velovDO.lon,velovDD.lat,velovDD.lon,"bicycle"))
+                requests.append((velovDD.lat,velovDD.lon,blueStatO.lat,blueStatO.lon,"pedestrian"))
+            else :
+                requests.append((trajet.start_pos.lat,trajet.start_pos.lon,blueStatO.lat,blueStatO.lon,"pedestrian"))
+
+            requests.append((blueStatO.lat,blueStatO.lon,blueStatD.lat,blueStatD.lon,"fastest")) #TODO
+            if velovFO != None:
+                #Le dernier trajet se fait bien en velov
+                requests.append((blueStatD.lat,blueStatD.lon,velovFO.lat,velovFO.lon,"pedestrian"))
+                requests.append((velovFO.lat,velovFO.lon,velovFD.lat,velovFD.lon,"bicycle"))
+                requests.append((velovFD.lat,velovFD.lon,trajet.end_pos.lat,trajet.end_pos.lon,"pedestrian"))
+            else :
+                requests.append((blueStatD.lat,blueStatD.lon,trajet.end_pos.lat,trajet.end_pos.lon,"pedestrian"))
+
+            result = load_requests_and_execute(requests)
+            for req in result:
+                print "+++++++++++++++++ Debut troncon ++++++++++++"
+                for sect in req:
+                    print ".................Debut section................"
+                    print sect.maneuverNotes
+                    print sect.narrative
+                    print " "
+                print " "
+>>>>>>> 65fc868a280b05911dd2ce4a24fba41300d46e84
     return True
 
 

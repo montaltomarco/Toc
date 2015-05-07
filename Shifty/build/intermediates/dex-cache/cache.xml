@@ -2,39 +2,39 @@
 <items version="2" >
 
     <item
-        jar="/Users/starwers13/Documents/4IF/PLD_Reseau/Toc/Shifty/app/build/intermediates/exploded-aar/com.android.support/support-v4/21.0.3/classes.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="2c91c949a45a21cdecf26e03951e46c7beec9ad8">
-        <dex dex="/Users/starwers13/Documents/4IF/PLD_Reseau/Toc/Shifty/app/build/intermediates/pre-dexed/debug/classes-97cab0c182851316b781548eead6a84b5cbf2555.jar" />
-    </item>
-    <item
-        jar="/Users/starwers13/Library/Android/sdk/extras/android/m2repository/com/android/support/support-annotations/21.0.3/support-annotations-21.0.3.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="4b74cefe1f0c1b819e7260c8627a14674e37fd35">
-        <dex dex="/Users/starwers13/Documents/4IF/PLD_Reseau/Toc/Shifty/app/build/intermediates/pre-dexed/debug/support-annotations-21.0.3-2442252cb95496ce7ce42332efcc4d3899ddb189.jar" />
-    </item>
-    <item
-        jar="/Users/starwers13/Documents/4IF/PLD_Reseau/Toc/Shifty/app/build/intermediates/exploded-aar/com.google.android.gms/play-services/6.5.87/classes.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="dd9247ea0fabe8ee479638c4b4a23e93752be256">
-        <dex dex="/Users/starwers13/Documents/4IF/PLD_Reseau/Toc/Shifty/app/build/intermediates/pre-dexed/debug/classes-c124d3c75e7c9e2799bdb796825254285b88a24c.jar" />
-    </item>
-    <item
-        jar="/Users/starwers13/Documents/4IF/PLD_Reseau/Toc/Shifty/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.3/classes.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="81d42bf983a8741f4888a6e333e454e4a5e0eeb7">
-        <dex dex="/Users/starwers13/Documents/4IF/PLD_Reseau/Toc/Shifty/app/build/intermediates/pre-dexed/debug/classes-f5b6bac43d16328b01f9910377085899a9d8daa8.jar" />
-    </item>
-    <item
-        jar="/Users/starwers13/Documents/4IF/PLD_Reseau/Toc/Shifty/app/build/intermediates/exploded-aar/com.android.support/support-v4/21.0.3/libs/internal_impl-21.0.3.jar"
+        jar="/Users/marcomontalto/Desktop/PERSONALE/Insa/4IF/2 Semestre/Toc/Toc/Shifty/app/build/intermediates/exploded-aar/com.android.support/support-v4/21.0.3/libs/internal_impl-21.0.3.jar"
         jumboMode="false"
         revision="21.1.2"
         sha1="01ec05bfbafcc07646ba813000bf2ef11742dd03">
-        <dex dex="/Users/starwers13/Documents/4IF/PLD_Reseau/Toc/Shifty/app/build/intermediates/pre-dexed/debug/internal_impl-21.0.3-b9d6ee23c7f2dacd3819501468c1252825689bce.jar" />
+        <dex dex="/Users/marcomontalto/Desktop/PERSONALE/Insa/4IF/2 Semestre/Toc/Toc/Shifty/app/build/intermediates/pre-dexed/debug/internal_impl-21.0.3-f30bece18fc75b5d15a6e370add0b5e2a563d7fa.jar" />
+    </item>
+    <item
+        jar="/Users/marcomontalto/Library/Android/sdk/extras/android/m2repository/com/android/support/support-annotations/21.0.3/support-annotations-21.0.3.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="4b74cefe1f0c1b819e7260c8627a14674e37fd35">
+        <dex dex="/Users/marcomontalto/Desktop/PERSONALE/Insa/4IF/2 Semestre/Toc/Toc/Shifty/app/build/intermediates/pre-dexed/debug/support-annotations-21.0.3-aa518c0f1e2142fa65325fae17f93021892e8814.jar" />
+    </item>
+    <item
+        jar="/Users/marcomontalto/Desktop/PERSONALE/Insa/4IF/2 Semestre/Toc/Toc/Shifty/app/build/intermediates/exploded-aar/com.google.android.gms/play-services/6.5.87/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="dd9247ea0fabe8ee479638c4b4a23e93752be256">
+        <dex dex="/Users/marcomontalto/Desktop/PERSONALE/Insa/4IF/2 Semestre/Toc/Toc/Shifty/app/build/intermediates/pre-dexed/debug/classes-53178d7298da6a42003ae5f9a55b398891f1ef71.jar" />
+    </item>
+    <item
+        jar="/Users/marcomontalto/Desktop/PERSONALE/Insa/4IF/2 Semestre/Toc/Toc/Shifty/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.3/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="81d42bf983a8741f4888a6e333e454e4a5e0eeb7">
+        <dex dex="/Users/marcomontalto/Desktop/PERSONALE/Insa/4IF/2 Semestre/Toc/Toc/Shifty/app/build/intermediates/pre-dexed/debug/classes-d00214bbe6d90a34ea70c37686f756c711642ef6.jar" />
+    </item>
+    <item
+        jar="/Users/marcomontalto/Desktop/PERSONALE/Insa/4IF/2 Semestre/Toc/Toc/Shifty/app/build/intermediates/exploded-aar/com.android.support/support-v4/21.0.3/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="2c91c949a45a21cdecf26e03951e46c7beec9ad8">
+        <dex dex="/Users/marcomontalto/Desktop/PERSONALE/Insa/4IF/2 Semestre/Toc/Toc/Shifty/app/build/intermediates/pre-dexed/debug/classes-a83c41459968d4a038b31d041be52b720ef041e9.jar" />
     </item>
 
 </items>

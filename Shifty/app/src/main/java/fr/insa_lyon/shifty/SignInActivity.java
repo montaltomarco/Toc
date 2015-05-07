@@ -8,6 +8,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.RadioGroup;
+import android.widget.Toast;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -49,7 +50,7 @@ public class SignInActivity extends ActionBarActivity {
     {
         Intent nextView;
         switch (v.getId()) {
-            case R.id.sign_in_button:
+            case R.id.button_inscr_validate:
                 String nom = ((EditText)findViewById(R.id.nom)).getText().toString();
                 String prenom = ((EditText)findViewById(R.id.prenom)).getText().toString();
                 String age = ((EditText)findViewById(R.id.age)).getText().toString();
@@ -70,7 +71,12 @@ public class SignInActivity extends ActionBarActivity {
                 postRequest.setValeursPOST("confirmezMdp",confirmezMdp );
                 postRequest.execute(uri);
 
-                nextView = new Intent(getApplicationContext(),LogInActivity.class);
+                CharSequence text = "Inscription validée!";
+                int duration = Toast.LENGTH_SHORT;
+                Toast toast = Toast.makeText(getApplicationContext(), text, duration);
+                toast.show();
+
+                nextView = new Intent(getApplicationContext(),MenuActivity.class);
                 startActivity(nextView);
                 break;
         }
