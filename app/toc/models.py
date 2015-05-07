@@ -177,8 +177,10 @@ class Data_meteo(models.Model):
     timestamps = models.IntegerField()
     pluie = models.FloatField()
     pluie_convective = models.FloatField()
+    temperature = models.FloatField()
     def __str__(self):
-        return 'Timestamps = ' + str(self.timestamps) + ' Pluie = ' + str(self.pluie) + ' Pluie Convective= ' + str(self.pluie_convective)
+        return 'Timestamps = ' + str(self.timestamps) + ' Pluie = ' + str(self.pluie) + ' Pluie Convective= ' + str(self.pluie_convective) + ' TempÃ©rature = ' + str(self.temperature)
+
 
 class Station_velov(Lieu):
     number_station = models.IntegerField()
@@ -553,9 +555,12 @@ def get_stations_velov_bluely_combine(trajet,user):
     ordered_total_times = sorted(dico_trajets.iterkeys())
     for i in range(5):
         print "porposition1"+str(i)
-        if ordered_total_times:
-            print dico_trajets[ordered_total_times[i]]
-    return dico_trajets[ordered_total_times[0]]
+        #print dico_trajets[ordered_total_times[i]]
+        try:
+            d = dico_trajets[ordered_total_times[0]]
+        except:
+            d="vide"
+    return d
 
 def parallel_directions(fromCoordX,fromCoordY,toCoordX,toCoordY,dico_sections,no_section,lock_dico,lockdb,route_type = "bicycle"):
     sections = get_directions(fromCoordX,fromCoordY,toCoordX,toCoordY,lockdb,route_type)
