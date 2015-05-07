@@ -553,7 +553,8 @@ def get_stations_velov_bluely_combine(trajet,user):
     ordered_total_times = sorted(dico_trajets.iterkeys())
     for i in range(5):
         print "porposition1"+str(i)
-        print dico_trajets[ordered_total_times[i]]
+        if ordered_total_times:
+            print dico_trajets[ordered_total_times[i]]
     return dico_trajets[ordered_total_times[0]]
 
 def parallel_directions(fromCoordX,fromCoordY,toCoordX,toCoordY,dico_sections,no_section,lock_dico,lockdb,route_type = "bicycle"):

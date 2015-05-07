@@ -300,7 +300,7 @@
     <!-- From: file:/Users/marcomontalto/Desktop/PERSONALE/Insa/4IF/2%20Semestre/Toc/Toc/Shifty/app/src/main/res/values/strings.xml -->
     <eat-comment/>
     <string name="title_activity_menu">Shifty - Menu Principale</string>
-    <string name="title_activity_result">Result</string>
+    <string name="title_activity_result">Voici votre itineraire : </string>
     <string name="title_activity_sign_in">Shifty - Inscription</string>
     <string name="title_activity_sign_up">Shifty - Connexion</string>
     <string name="title_choisis_points">Shifty - Choisis tes Adresses</string>

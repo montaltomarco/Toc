@@ -7,15 +7,17 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 
 
-public class ItineraireActivity extends ListActivity {
+public class ItineraireActivity extends ActionBarActivity {
 
     private String[] mStrings;
     private JSONObject response;
@@ -30,24 +32,24 @@ public class ItineraireActivity extends ListActivity {
         if(b!=null)
         {
             String value = b.getString("result");
-            ArrayList<String> listeRes = new ArrayList<String>();
-            listeRes.add(value);
-            listeRes.add("AAAAAAAAAAAAAAAAAAAAAAAAAAa");
-            listeRes.add("BBBBBBBBBBBBBBBBBBBBBBBBBB");
-            mStrings=listeRes.toArray(new String[listeRes.size()]);
-            ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1, mStrings);
-            setListAdapter(adapter);
+            try
+            {
+                JSONArray array = new JSONArray(value);
+                ArrayList<String> listeRes = new ArrayList<String>();
 
-            /*try {
-                response = new JSONObject(value);
-
-                for (int i = 0; i < response.getJSONArray("indications").length(); i++) {
-                    mStrings[i] = response.getJSONArray("indications").getJSONObject(i).getString("name");
+                for(int i=0; i<array.length(); i++)
+                {
+                    listeRes.add(array.getString(i));
                 }
+                mStrings=listeRes.toArray(new String[listeRes.size()]);
+                ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1, mStrings);
+                ListView liste = (ListView)findViewById(R.id.indications_id);
+                liste.setAdapter(adapter);
 
-            } catch (Exception e) {
-                e.printStackTrace();
-            }*/
+            }catch(Exception e){
+                e.getStackTrace();
+            }
+
         }
     }
 

@@ -6,8 +6,64 @@
     android:paddingBottom="@dimen/activity_vertical_margin"
     tools:context="fr.insa_lyon.shifty.ItineraireActivity">
 
-    <ListView android:id="@android:id/list" android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="#ffceff4e" />
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true">
 
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="97dp"
+            android:layout_gravity="center_horizontal"
+            android:background="#ff9adeff">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="Départ : "
+                android:id="@+id/textView12"
+                android:layout_gravity="center_horizontal|top"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="Météo :"
+                android:id="@+id/textView11"
+                android:layout_gravity="center"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="Durée prévue : "
+                android:id="@+id/textView16"
+                android:layout_gravity="left|bottom"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/imageView6"
+                android:layout_gravity="left|top"
+                android:src="@drawable/ic_launcher"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="-5dp" />
+        </FrameLayout>
+
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/indications_id"
+            android:divider="#ff000000"
+            android:dividerHeight="2dp"
+            android:drawSelectorOnTop="false"
+            android:footerDividersEnabled="false"
+            android:headerDividersEnabled="true" />
+    </LinearLayout>
 </RelativeLayout>

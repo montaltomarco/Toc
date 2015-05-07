@@ -89,8 +89,8 @@ public class AddressChoiceActivity extends ActionBarActivity {
                     View radioButton = rbtnGrp1.findViewById(radioButtonID);
                     int idx = rbtnGrp1.indexOfChild(radioButton);
                     JSONObject obj = response.getJSONArray("firstAddress").getJSONObject(idx);
-                    getRequest.setNameValuePairs("fromX", obj.getString("lat"));
-                    getRequest.setNameValuePairs("fromY", obj.getString("lon"));
+                    getRequest.setNameValuePairs("fromY", obj.getString("lat"));
+                    getRequest.setNameValuePairs("fromX", obj.getString("lon"));
                     System.out.println("lat :" + obj.getString("lat"));
                     System.out.println("long :" + obj.getString("lon"));
 
@@ -99,8 +99,8 @@ public class AddressChoiceActivity extends ActionBarActivity {
                     View radioButton2 = rbtnGrp2.findViewById(radioButtonID2);
                     int idx2 = rbtnGrp2.indexOfChild(radioButton2);
                     JSONObject obj2 = response.getJSONArray("secondAddress").getJSONObject(idx2);
-                    getRequest.setNameValuePairs("toX", obj.getString("lat"));
-                    getRequest.setNameValuePairs("toY", obj.getString("lon"));
+                    getRequest.setNameValuePairs("toY", obj2.getString("lat"));
+                    getRequest.setNameValuePairs("toX", obj2.getString("lon"));
                     System.out.println("lat2 :" + obj2.getString("lat"));
                     System.out.println("long2 :" + obj2.getString("lon"));
 
