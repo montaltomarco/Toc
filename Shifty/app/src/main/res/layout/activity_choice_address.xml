@@ -37,7 +37,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/radioButton_firstAddress2"
-            android:layout_gravity="right"
             android:checked="false"
             android:visibility="invisible" />
 
@@ -61,7 +60,6 @@
         android:orientation="horizontal"
         android:layout_width="392dp"
         android:layout_height="5dp"
-        android:layout_gravity="center_horizontal"
         android:background="#ff000000"
         android:layout_marginLeft="0dp"
         android:layout_marginBottom="0dp"
@@ -128,30 +126,27 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Nouvelle Recherche"
-            android:id="@+id/button_NouvelleRecherche"
-            android:background="#ffff1e1a"
-            android:layout_centerVertical="true"
-            android:layout_alignParentStart="true"
-            android:layout_marginStart="40dp"
-            android:layout_marginLeft="30dp"
-            android:onClick="ButtonOnClickValidate" />
+        android:layout_height="match_parent"
+        android:background="@android:color/holo_blue_light">
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Valider"
             android:id="@+id/button_Valider"
-            android:background="#ff2fff16"
-            android:layout_alignTop="@+id/button_NouvelleRecherche"
-            android:layout_toEndOf="@+id/button_NouvelleRecherche"
-            android:layout_marginStart="66dp"
-            android:onClick="Dummybutton" />
+            android:background="#ffd95e55"
+            android:onClick="Dummybutton"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:elegantTextHeight="false"
+            android:enabled="false"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:clickable="true"
+            android:textColor="#ff000000"
+            android:textStyle="bold" />
     </RelativeLayout>
 
 </LinearLayout>

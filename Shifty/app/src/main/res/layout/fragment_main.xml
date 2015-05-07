@@ -29,10 +29,13 @@
             android:id="@+id/frameLayoutHome">
 
             <FrameLayout
-                android:layout_width="251dp"
-                android:layout_height="130dp"
+                android:layout_width="266dp"
+                android:layout_height="144dp"
                 android:layout_gravity="center_horizontal|top"
-                android:outlineProvider="bounds">
+                android:outlineProvider="bounds"
+                android:background="#fffffecd"
+                android:id="@+id/frameInscr"
+                android:onClick="ButtonOnClick">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -43,7 +46,8 @@
                     android:layout_gravity="right|center_vertical"
                     android:textStyle="bold"
                     android:textIsSelectable="true"
-                    android:onClick="ButtonOnClick" />
+                    android:onClick="ButtonOnClick"
+                    android:layout_marginRight="40dp" />
 
                 <ImageButton
                     android:layout_width="90dp"
@@ -70,6 +74,14 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text="H4112 - All right reserved"
+                    android:id="@+id/textView14"
+                    android:layout_gravity="right|bottom" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:text="Contactez Nous : admin@shifty.fr"
                     android:id="@+id/textView2"
@@ -78,18 +90,14 @@
 
             </FrameLayout>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text="H4112 - All right reserved"
-                android:id="@+id/textView14"
-                android:layout_gravity="right|bottom" />
-
             <FrameLayout
-                android:layout_width="251dp"
-                android:layout_height="154dp"
-                android:layout_gravity="center">
+                android:layout_width="266dp"
+                android:layout_height="141dp"
+                android:layout_gravity="center"
+                android:background="#fffffecd"
+                android:id="@+id/frameConx"
+                android:longClickable="true"
+                android:onClick="ButtonOnClick">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -100,7 +108,8 @@
                     android:layout_gravity="right|center_vertical"
                     android:textStyle="bold"
                     android:textIsSelectable="true"
-                    android:onClick="ButtonOnClick" />
+                    android:onClick="ButtonOnClick"
+                    android:layout_marginRight="40dp" />
 
                 <ImageButton
                     android:layout_width="117dp"
@@ -116,6 +125,13 @@
                     android:layout_column="1"
                     android:layout_gravity="left|center_vertical"
                     android:clickable="true" />
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="392dp"
+                    android:layout_height="5dp"
+                    android:layout_gravity="center_horizontal|top"
+                    android:background="#ff000000"></LinearLayout>
             </FrameLayout>
 
             <ImageView
@@ -135,6 +151,7 @@
         android:text="Shifty"
         android:id="@+id/textViewWelcome"
         android:layout_alignParentTop="true"
-        android:textStyle="bold|italic" />
+        android:textStyle="bold|italic"
+        android:textColor="#ffff0003" />
 
 </RelativeLayout>

@@ -58,11 +58,19 @@ public class MainActivity extends ActionBarActivity {
                 nextView= new Intent(getApplicationContext(),SignInActivity.class);
                 startActivity(nextView);
                 break;
+            case R.id.frameInscr:
+                nextView= new Intent(getApplicationContext(),SignInActivity.class);
+                startActivity(nextView);
+                break;
             case R.id.ButtonLog:
                 nextView = new Intent(getApplicationContext(),LogInActivity.class);
                 startActivity(nextView);
                 break;
             case R.id.textConnexion:
+                nextView= new Intent(getApplicationContext(),LogInActivity.class);
+                startActivity(nextView);
+                break;
+            case R.id.frameConx:
                 nextView= new Intent(getApplicationContext(),LogInActivity.class);
                 startActivity(nextView);
                 break;

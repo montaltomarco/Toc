@@ -44,7 +44,7 @@ public class LogInActivity extends ActionBarActivity {
     public void ButtonOnClickLog(View v) {
         Intent nextView;
         switch (v.getId()) {
-            case R.id.connexionButton:
+            case R.id.buttonLogIn:
                 //On envoie les données
                 String email = ((EditText)findViewById(R.id.email)).getText().toString();
                 String password = ((EditText)findViewById(R.id.password)).getText().toString();
@@ -54,11 +54,7 @@ public class LogInActivity extends ActionBarActivity {
                 postRequest.setValeursPOST("password", password);
                 postRequest.execute(uri);
                 //on passe à la vue suivante
-                nextView = new Intent(getApplicationContext(),HomeActivity.class);
-                startActivity(nextView);
-                break;
-            case R.id.inscriptionButton:
-                nextView = new Intent(getApplicationContext(), SignInActivity.class);
+                nextView = new Intent(getApplicationContext(),MenuActivity.class);
                 startActivity(nextView);
                 break;
         }

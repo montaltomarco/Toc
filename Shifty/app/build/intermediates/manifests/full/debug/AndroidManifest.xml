@@ -47,10 +47,10 @@
         <activity
             android:name="fr.insa_lyon.shifty.HomeActivity"
             android:label="@string/title_activity_home"
-            android:parentActivityName="fr.insa_lyon.shifty.LogInActivity" >
+            android:parentActivityName="fr.insa_lyon.shifty.MenuActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="fr.insa_lyon.shifty.LogInActivity" />
+                android:value="fr.insa_lyon.shifty.MenuActivity" />
         </activity>
         <activity
             android:name="fr.insa_lyon.shifty.AddressChoiceActivity"
@@ -67,6 +67,10 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="fr.insa_lyon.shifty.AddressChoiceActivity" />
+        </activity>
+        <activity
+            android:name="fr.insa_lyon.shifty.MenuActivity"
+            android:label="@string/title_activity_menu" >
         </activity>
 
         <meta-data

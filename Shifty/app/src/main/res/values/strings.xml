@@ -7,15 +7,17 @@
     <string name="title_activity_sign_up">Shifty - Connexion</string>
     <string name="title_activity_sign_in">Shifty - Inscription</string>
     <string name="title_activity_drawer">DrawerActivity</string>
-    <string name="title_section1">Accueil</string>
-    <string name="title_section2">Connexion</string>
-    <string name="title_section3">Inscription</string>
+    <string name="title_section1">Shifty - Accueil</string>
+    <string name="title_section2">Shifty - Connexion</string>
+    <string name="title_section3">Shifty - Inscription</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="action_example">Example action</string>
-    <string name="title_activity_log_in">LogInActivity</string>
-    <string name="title_activity_home">Bienvenu !</string>
-    <string name="title_choisis_points">Choisis tes Adresses !</string>
+    <string name="title_activity_log_in">Shifty - Log In</string>
+    <string name="title_activity_home">Shifty - Recherche trajet</string>
+    <string name="title_choisis_points">Shifty - Choisis tes Adresses</string>
+    <string name="title_activity_menu">Shifty - Menu Principale</string>
+
 
     <string name="hint_depart">Votre adresse/station de départ</string>
     <string name="hint_arrivee">Votre adresse/station d\'arrivée</string>
